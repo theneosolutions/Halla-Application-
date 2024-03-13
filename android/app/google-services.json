@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "275688306512",
+    "project_id": "halla-b5f76",
+    "storage_bucket": "halla-b5f76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275688306512:android:1647a850c6e6e2522ade55",
+        "android_client_info": {
+          "package_name": "com.halla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275688306512-ppmoscb8ub8durnuott5r6mtph13c49o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.halla",
+            "certificate_hash": "5042fe6e495b52ce392435a91117b66e774f8087"
+          }
+        },
+        {
+          "client_id": "275688306512-3gl98v3c5gpq2fldt75ubpudgn9dmcd0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj8y7kl7RZn3eYG1Z43YL-1IxcgJfagjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275688306512-3gl98v3c5gpq2fldt75ubpudgn9dmcd0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
