@@ -13,7 +13,6 @@ import images from '../../index';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {SH, SF, SW, Colors} from '../../utils';
 import {confirmemail} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';

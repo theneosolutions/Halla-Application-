@@ -26,9 +26,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // import Share from 'react-native-share';
 const CreateEvent = ({navigation, route}) => {
   //  const {latitude = null, longitude = null, address = null} = route?.params;
-    // const { latitude, longitude, address } = route.params;
-// console.log('address',address)
-  //  console.log('address', latitude);
+    const { latitude, longitude, address } = route.params;
+  // console.log('address', address);
   const [date, setDate] = useState(new Date());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
@@ -41,8 +40,8 @@ const CreateEvent = ({navigation, route}) => {
   // console.log('selectedDateTime',selectedDateTime)
   const openImagePicker = () => {
     ImageCropPicker.openPicker({
-      width: 800,
-      height: 440,
+      width: 300,
+      height: 400,
       cropping: true,
     })
       .then(image => {
@@ -77,7 +76,6 @@ const CreateEvent = ({navigation, route}) => {
     try {
       const response = await ImageLink(data);
       console.log('Image upload response:', response.data);
-      console.log('response.data',response)
       setStoreImage(response.data.link);
       console.log('setStoreImage===========', storeImage);
       // Handle response as needed
@@ -86,7 +84,8 @@ const CreateEvent = ({navigation, route}) => {
       // Handle error
     }
   };
- /////////////imageapiend/////
+
+  /////////////imageapiend/////
 
   ///////////////dataapi//////////
   const createEventData = async () => {
@@ -94,14 +93,12 @@ const CreateEvent = ({navigation, route}) => {
     const data = {
       user: userInfo?.id,
       image: storeImage,
-      name: eventName,
-      eventDescription:eventDescription,
       eventDate: selectedDateTime,
       showQRCode: false,
-      address: route.params?.address,
-      latitude: route.params?.latitude,
-      longitude: route.params?.longitude,
-     
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
+      name: eventName,
       status:'draft'
     };
     navigation.navigate('Card', {
@@ -138,14 +135,14 @@ const CreateEvent = ({navigation, route}) => {
 
 		},
 	});
-  // const onPressSend = async (_formData) => {
-	// 	const resutl = await login(_formData.email, _formData.password);
-	// 	console.log("🚀 ~ onPressSend ~ resutl:", resutl)
-	// 	if(resutl?.data?.accessToken){
-	// 		Alert.alert('User login successfully!')
-	// 	}
+  const onPressSend = async (_formData) => {
+		const resutl = await login(_formData.email, _formData.password);
+		console.log("🚀 ~ onPressSend ~ resutl:", resutl)
+		if(resutl?.data?.accessToken){
+			Alert.alert('User login successfully!')
+		}
 
-	// };
+	};
 
   return (
     <View style={{flex: 1}}>
@@ -194,34 +191,30 @@ const CreateEvent = ({navigation, route}) => {
                   <Image
                     source={{uri: imagePath.path}}
                     style={{
-                      height: SH(200),
+                      height: SH(220),
                       width: '100%',
                       backgroundColor: 'lightGray',
-                      // justifyContent: 'center',
-                      borderTopLeftRadius: SF(20),
-                      borderBottomRightRadius:SF(20),
+                      justifyContent: 'center',
+                      borderRadius: SF(5),
                       overflow: 'hidden',
                       justifyContent: 'center',
-                      resizeMode:'contain'
-                      // position:'absolute',
                     }}
                   />
                 ) : (
-                  <Text style={{alignItems:'center',alignSelf:'center',color:'black',fontWeight:'600'}}>Select Image</Text>
+                  <Text>Select Image</Text>
                 )}
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleImageUpload}
               style={{
-                backgroundColor: '#293170',
+                backgroundColor: '#007BFF',
                 padding: 10,
-                borderTopLeftRadius: SF(20),
-                borderBottomRightRadius:SF(20),
+                borderRadius: 5,
                 alignItems: 'center',
                 marginHorizontal: 20,
               }}>
-              <Text style={{color: 'white',alignItem:'center',justifyContent:'center',fontWeight:'500'}}>Upload Image</Text>
+              <Text style={{color: 'white',alignItem:'center',justifyContent:'center'}}>Upload Image</Text>
             </TouchableOpacity>
             <View style={{margin: SW(5)}}>
               <Text
@@ -229,11 +222,10 @@ const CreateEvent = ({navigation, route}) => {
                   fontSize: SF(15),
                   color: 'black',
                   fontWeight: '600',
-                  padding: SW(4),
-                  marginTop:SH(3),
+                  padding: SW(14),
                   paddingHorizontal: SW(20),
                 }}>
-                Event Name:
+                Event Name
               </Text>
 
               <Input
@@ -241,22 +233,32 @@ const CreateEvent = ({navigation, route}) => {
                 placeholder="Type your event name"
                 onChangeText={text => setEventName(text)}
                 value={eventName}
-           
+                // maxLength={10}
               />
             </View>
             {errors.eventName && <Text style={[colors.red500, gutters.paddingLeft_10, gutters.marginVertical_5]}>{errors.eventName.message}</Text>}
+
+            {/* {submitted && eventName == '' ? (
+                <Text style={{fontSize: 12, color: 'red'}}>
+                  {t('eventName')}
+                </Text>
+              ) : null} */}
             <Text
               style={{
                 fontSize: SF(15),
                 color: 'black',
                 fontWeight: '600',
-                padding: SW(4),
-                marginTop:SH(4),
+                padding: SW(14),
                 paddingHorizontal: SW(25),
               }}>
-              Event Description:
+              Event Description
             </Text>
-            
+            {/* <Controller
+							control={control}
+							rules={{
+								required: true,
+							}}
+							render={({ field: { onChange, value } }) => ( */}
 
             <View style={{width: '97%', marginLeft: 5}}>
               <Input
@@ -264,10 +266,13 @@ const CreateEvent = ({navigation, route}) => {
                 placeholder="Type your event name"
                 onChangeText={text => setEventDescription(text)}
                 value={eventDescription}
-        
+                maxLength={10}
               />
             </View>
-             
+                  {/* )}    
+          />
+          {errors.eventDescription && <Text style={[colors.red500, gutters.paddingLeft_10, gutters.marginVertical_5]}>{errors.eventDescription.message}</Text>}
+ */}
 
         
           
@@ -278,11 +283,9 @@ const CreateEvent = ({navigation, route}) => {
                 color: 'black',
                 fontWeight: '600',
                 paddingHorizontal: SW(25),
-                marginTop:SH(16),
-
-                 paddingVertical: SH(8),
+                paddingVertical: SH(18),
               }}>
-              Select Date and Time:
+              Select Date and Time
             </Text>
             <TouchableOpacity
               onPress={() => setDatePickerVisible(true)}
@@ -290,9 +293,9 @@ const CreateEvent = ({navigation, route}) => {
                 width: '95%',
                 height: SH(55),
                 backgroundColor: 'white',
-                marginLeft: SW(10),
+                margin: SW(12),
 
-                // paddingVertical: SH(18),
+                paddingVertical: SH(18),
                 paddingHorizontal: SW(14),
                 borderTopLeftRadius: SF(12),
               }}>
@@ -301,12 +304,12 @@ const CreateEvent = ({navigation, route}) => {
                   backgroundColor: '#f8f9fc',
                   height: 55,
                   paddingLeft: 12,
-                  paddingVertical: 16,
+                  paddingVertical: 12,
                   borderWidth: 0.3,
                   borderTopLeftRadius: 20,
                   borderBottomRightRadius: 20,
-                  color: 'grey',
-                  fontWeight: '500',
+                  color: 'black',
+                  fontWeight: '700',
                 }}>
                 {selectedDateTime
                   ? selectedDateTime.toLocaleString()
@@ -327,9 +330,9 @@ const CreateEvent = ({navigation, route}) => {
                 setDatePickerVisible(false);
               }}
             />
-               {/* {submitted && setSelectedDateTime == '' ? (
+               {submitted && setSelectedDateTime == '' ? (
             <Text style={{fontSize: 12, color: 'red'}}>Enter your Date , Time</Text>
-          ) : null} */}
+          ) : null}
             <Spacing space={SH(30)} />
 
             <TouchableOpacity onPress={() => navigation.navigate('MapScreen')}>
@@ -339,8 +342,6 @@ const CreateEvent = ({navigation, route}) => {
                   width: '90%',
                   backgroundColor: 'gray',
                   margin: SW(15),
-                  borderTopLeftRadius:SF(30),
-                  borderBottomRightRadius:SF(30)
                 }}>
                 <Image
                   source={images.mapimg}
@@ -348,8 +349,6 @@ const CreateEvent = ({navigation, route}) => {
                     height: SH(210),
                     width: '100%',
                     justifyContent: 'center',
-                    borderTopLeftRadius:SF(30), 
-                    borderBottomRightRadius:SF(30)
                   }}
                 />
               </View>

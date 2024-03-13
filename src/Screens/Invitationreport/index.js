@@ -137,7 +137,7 @@ const handleSendInvites  = async (id) => {
             marginLeft: 120,
             borderTopLeftRadius: 14,
             borderBottomRightRadius: 14,
-            //  marginBottom: 25,
+             marginBottom: 25,
           }}>
           <Text style={{color: 'white', fontWeight: '600'}}>Draft</Text>
         </TouchableOpacity>
@@ -199,7 +199,7 @@ const handleSendInvites  = async (id) => {
             {/* Right side containing dropdown */}
             <View
               style={{
-                width: '35%',
+                width: '30%',
                 marginLeft: 110,
                 height: 15,
                 marginTop: 10,
@@ -214,26 +214,16 @@ const handleSendInvites  = async (id) => {
                 ]}
                 style={{
                   backgroundColor: '#293170',
+                  color: 'white', // Change background color
                   borderTopLeftRadius: 28,
-                  borderBottomRightRadius: 28,
-                  borderWidth: 1,
-                  borderColor: 'gray',
+                  borderBottomRightRadius: 28, // Change border radius
+                  borderWidth: 1, // Add border width if needed
+                  borderColor: 'gray', // Change border color
                 }}
-                itemStyle={{
-                  justifyContent: 'flex-start',
-                }}
-                labelStyle={{
-                  color: 'white',
-                }}
-                dropDownStyle={{
-                  backgroundColor: '#293170',
-                  borderTopLeftRadius: 28,
-                  borderBottomRightRadius: 28,
-                }}
-                placeholderStyle={{
-                  color: 'white', // Change placeholder color to white
-                }}
-              
+                //defaultValue={selectedOption}
+                containerStyle={SplashStyl.dropdownContainer}
+                //style={SplashStyl.dropdownStyle}
+                itemStyle={SplashStyl.dropdownItemStyle}
                 //dropDownStyle={SplashStyl.dropdownDropdownStyle}
                 onChangeValue={(value) => {
                   console.log(value);
@@ -246,7 +236,6 @@ const handleSendInvites  = async (id) => {
                 value={value}
                 setValue={setValue}
                 placeholder="Share"
-                placeholderTextColor={'white'}
               />
             </View>
             {/* Display selected option in a separate column */}

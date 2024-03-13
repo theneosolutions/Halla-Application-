@@ -184,7 +184,6 @@ const MessagingStyles = StyleSheet.create({
     margin: SW(20),
     borderTopLeftRadius: SF(30),
     borderBottomRightRadius: SF(30),
-
     borderWidth: 1,
   },
   flatlistView: {

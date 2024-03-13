@@ -398,5 +398,4 @@ useEffect(() => {
     </View>
   );
 };
-
 export default Home;

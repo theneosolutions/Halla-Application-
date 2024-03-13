@@ -12,7 +12,6 @@ import images from '../../index';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {SH, SF, SW, Colors} from '../../utils';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
@@ -30,7 +29,6 @@ const ResetPass = ({navigation, route}) => {
   const [password2, setpassword2] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

@@ -1,4 +1,4 @@
-import React, {useState, useRef,useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
@@ -63,7 +63,6 @@ const MapScreen = ({navigation}) => {
       longitude: newCoordinate.longitude,
     });
   };
-  useEffect(() => {
   Geolocation.getCurrentPosition(pos => {
     const crd = pos.coords;
     setPosition({
@@ -72,34 +71,13 @@ const MapScreen = ({navigation}) => {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
-    animateToCurrentLocation();
   });
-}, []);
-const animateToCurrentLocation = () => {
-  Geolocation.getCurrentPosition(pos => {
-    const crd = pos.coords;
-    const newPosition = {
-      latitude: crd.latitude,
-      longitude: crd.longitude,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    };
-    setPosition(newPosition);
-    mapRef.current?.animateToRegion({
-      ...newPosition,
-      latitudeDelta: newPosition.latitudeDelta / 2,
-      longitudeDelta: newPosition.longitudeDelta / 2,
-    });
-  });
-};
   const handleNavigateToCreateEvent = async () => {
     try {
       const placeAddress = await getPlaceNameFromLatLong(
         position.latitude,
         position.longitude,
-
       );
-      
       console.log(
         '🚀 ~ handleNavigateToCreateEvent ~ placeAddress:',
         placeAddress,
@@ -126,10 +104,8 @@ const animateToCurrentLocation = () => {
         .then(response => {
           console.log('🚀 ~ returnnewPromise ~ response.data:', response.data);
           if (response.data.status === 'OK') {
-            resolve(response.data.results[0].formatted_address);
           } else {
-            resolve('');
-            // resolve('address');
+            resolve('address');
             // reject('No results found');
           }
         })
@@ -189,10 +165,10 @@ const animateToCurrentLocation = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleZoomIn} style={styles.button}>
-          <IconA size={SF(27)} name="plus" color={'black'}/>
+          <IconA size={SF(27)} name="plus" />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleZoomOut} style={styles.button}>
-          <IconA size={SF(27)} name="minus" color={'black'}/>
+          <IconA size={SF(27)} name="minus" />
         </TouchableOpacity>
       </View>
       <TouchableOpacity
@@ -226,9 +202,9 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: SW(5),
-    fontWeight:'600'
-
-   
+    // height: SH(10),
+    // width: SW(50),
+    // backgroundColor: 'gray',
   },
   navigateButton: {
     backgroundColor: '#293170',
