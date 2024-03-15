@@ -33,7 +33,7 @@ const CreateEvent = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
-  const [imagePath, setImagePath] = useState('');
+  const [imagePath, setImagePath] = useState(null);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [storeImage, setStoreImage] = useState('');
@@ -50,7 +50,7 @@ const CreateEvent = ({navigation, route}) => {
         console.log('imagessss', image);
         if (image) {
           setImagePath(image);
-          console.log('setImagePath', setImagePath);
+          // console.log('setImagePath', setImagePath);
         } else {
           console.log('User cancelled image selection');
         }
@@ -208,7 +208,7 @@ const CreateEvent = ({navigation, route}) => {
                   <Image
                     source={{uri: imagePath.path}}
                     style={{
-                      // height: SH(200),
+                      height: SH(200),
                       width: '100%',
                       backgroundColor: 'lightGray',
                       borderTopLeftRadius: SF(20),
