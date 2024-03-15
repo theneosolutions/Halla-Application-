@@ -6,7 +6,7 @@ import socketIOClient from 'socket.io-client';
 // import {ANDROID, IOS} from '../constants/constants';
 // import {isIOS} from '../helper';
 
-const SOCKET_DEV = 'https://36e9-203-189-228-4.ngrok-free.app';
+const SOCKET_DEV = 'https://backend.halla.sa';
 
 export const SocketContext = React.createContext({socket: null});
 
