@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
       },
       slide: {
         //flex: 1,
-    marginLeft:15,
+    marginLeft:2,
         height: '70%',
         //alignItems: 'center',
         justifyContent: 'center',

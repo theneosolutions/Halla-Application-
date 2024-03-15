@@ -16,9 +16,10 @@ const AddNewGuest = props => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const { id } = props.route.params;
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
+    navigation.navigate('AddGuest', { id });
   };
 
   // Dummy data for the list of guests
@@ -58,7 +59,7 @@ const AddNewGuest = props => {
         <TouchableOpacity onPress={toggleDropdown}>
           <Egypto
             size={SF(20)}
-            name="dots-three-vertical"
+            name="plus"
             style={styles.headerIconRight}
           />
         </TouchableOpacity>

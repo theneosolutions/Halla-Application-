@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef,useEffect} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';

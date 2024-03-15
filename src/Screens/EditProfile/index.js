@@ -107,7 +107,7 @@ const EditProfile = props => {
                   borderRightWidth: 0.2,
                   color: 'gray',
                   height: '70%',
-                  borderRightColor: 'gray',
+                  borderRightColor: 'black',
                 }}>
                 <Text style={ProfileTabStyle.linetext}>999</Text>
                 <Text style={ProfileTabStyle.seclinetext}>Following</Text>

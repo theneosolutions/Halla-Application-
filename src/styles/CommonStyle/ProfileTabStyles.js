@@ -10,13 +10,13 @@ const ProfileTabStyles = StyleSheet.create({
     borderRightWidth: 0.2,
     color: 'gray',
     height: '70%',
-    borderRightColor: 'gray',
+    borderRightColor: 'black',
   },
   onesidebox: {
     borderRightWidth: 0.2,
     color: 'gray',
     height: '70%',
-    borderRightColor: 'gray',
+    borderRightColor: 'black',
   },
   basicMemberStyle: {
     fontSize: 10,
@@ -63,6 +63,7 @@ const ProfileTabStyles = StyleSheet.create({
     paddingTop: SH(26),
     // borderRadius: SH(300),
     // backgroundColor: 'gray',
+    color:"black",
     marginLeft: SW(10),
   },
   UserName: {
@@ -313,7 +314,8 @@ const ProfileTabStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     borderTopWidth: 0.2,
-    borderTopColor: Colors.gray_text_color, // Choose your desired color
+    borderTopColor: Colors.gray_text_color,
+     borderColor:'black' // Choose your desired color
 
     // marginTop: SH(5), // Adjust as needed
   },
@@ -336,6 +338,7 @@ const ProfileTabStyles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     borderBottomWidth: 0.2,
+    borderColor:'black',
     margin: SH(8),
   },
   mainboxViewJohn: {
@@ -358,6 +361,7 @@ const ProfileTabStyles = StyleSheet.create({
     marginTop: SH(2),
     color: 'black',
     borderBottomWidth: 0.5,
+    borderColor:'black'
   },
   profiledetailboxview: {
     height: SH(40),
@@ -422,6 +426,7 @@ const ProfileTabStyles = StyleSheet.create({
     // backgroundColor: 'yellow',
     marginLeft: 'auto',
     paddingTop: SH(15),
+    color:'black'
     // padding: SW(5),
   },
   johnboxtwo: {
