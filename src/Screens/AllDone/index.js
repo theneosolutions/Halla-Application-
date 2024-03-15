@@ -19,7 +19,9 @@ const AllDone = ({navigation}) => {
           backgroundColor: 'white',
           alignItem: 'center',
           justifyContents: 'center',
-          margin:40
+          margin:40,
+          backgroundColor:'white'
+
           
         }}>
         <Image
@@ -27,9 +29,9 @@ const AllDone = ({navigation}) => {
           style={{
             height: 200,
             width: 200,
-            justifyContents: 'center',
-            marginTop: 60,
-            marginLeft: 100,
+            
+             marginTop: 60,
+            margin: 50,
           }}
         />
         <Text
@@ -52,7 +54,7 @@ const AllDone = ({navigation}) => {
             borderTopLeftRadius: 20,
             borderBottomRightRadius: 20,
             alignItem: 'center',
-            marginLeft: 90,
+            marginLeft: 75,
           }}>
           <Text
             style={{

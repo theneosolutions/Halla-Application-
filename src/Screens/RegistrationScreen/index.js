@@ -7,17 +7,16 @@ import {
   ImageBackground,
   Animated,
 } from 'react-native';
-
 import images from '../../index';
 import {SH, SF, SW, Colors} from '../../utils';
 import Icon from 'react-native-vector-icons/AntDesign';
-import SplashStyl from '../../styles/CommonStyle/SplashStyl';
+// import styles from '../../styles/CommonStyle/styles';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
-import Login from '../../styles/CommonStyle/LoginScreenStyle';
+// import Login from '../../styles/CommonStyle/LoginScreenStyle';
 import {onGoogleButtonPress} from '../../SocailLogins/index';
-
+import styles from './styles';
 const RegistrationScreen = ({navigation}) => {
   const {t, i18n} = useTranslation();
   const [backgroundIndex, setBackgroundIndex] = useState(0);
@@ -39,40 +38,40 @@ const RegistrationScreen = ({navigation}) => {
   };
 
   return (
-    <View style={SplashStyl.Container}>
+    <View style={styles.Container}>
       <View
-        style={SplashStyl.HalfView}>
-        <Image source={images.halalogo} style={SplashStyl.imgstyle} />
+        style={styles.HalfView}>
+        <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
 
    
-      <View style={SplashStyl.buttonContainer}>
+      <View style={styles.buttonContainer}>
         {Platform.OS === 'ios' ? (
           <>
             <TouchableOpacity
-              style={SplashStyl.touchablestyleIcon}
+              style={styles.touchablestyleIcon}
               onPress={() => navigation.navigate('AppleLogin')}>
               <View>
                 <IconF
                   size={SF(20)}
                   name="apple"
-                  style={SplashStyl.Iconstyle}
+                  style={styles.Iconstyle}
                   color={'white'}
                 />
-                <Text style={SplashStyl.btntext}>continue_with_apple</Text>
+                <Text style={styles.btntext}>continue_with_apple</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              style={SplashStyl.touchablestyle}
+              style={styles.touchablestyle}
               onPress={() => navigation.navigate('PhoneOrEmailLogin')}>
               <View>
                 <IconF
                   size={SF(20)}
                   name="phone"
-                  style={SplashStyl.Iconstyle}
+                  // style={styles.Iconstyle}
                   color={'white'}
                 />
-                <Text style={SplashStyl.btntext}>
+                <Text style={styles.btntext}>
                   continue_with_phone_or_email
                 </Text>
               </View>
@@ -82,7 +81,7 @@ const RegistrationScreen = ({navigation}) => {
           <View style={{width: '90%'}}>
             <TouchableOpacity
               style={
-                SplashStyl.touchablestyleIcon
+                styles.touchablestyleIcon
               
                 
                 
@@ -97,17 +96,17 @@ const RegistrationScreen = ({navigation}) => {
                 <IconF
                   size={SF(20)}
                   name="phone"
-                  style={SplashStyl.Iconstyle}
+                   style={styles.Iconstyle}
                   color={'white'}
                 />
-                <Text style={SplashStyl.Continuebtntext}>
+                <Text style={styles.Continuebtntext}>
                   {t('continue_with_phone_or_email')}
                 </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={
-                SplashStyl.touchablestyleIcon
+                styles.touchablestyleIcon
                
               }
               onPress={onGoogleLogin}>
@@ -115,9 +114,9 @@ const RegistrationScreen = ({navigation}) => {
               <Image
                 source={images.google}
                 size={SF(27)}
-                style={SplashStyl.GoogleIconstyle}
+                 style={styles.GoogleIconstyle}
               />
-              <Text style={SplashStyl.btntext}>
+              <Text style={styles.Continuebtntext}>
                 {t('continue_with_google')}
               </Text>
       
@@ -129,7 +128,7 @@ const RegistrationScreen = ({navigation}) => {
         <Image
           source={images.wallbackground}
           size={SF(27)}
-          style={SplashStyl.googleimg}
+          style={styles.googleimg}
         />
       </View>
     </View>

@@ -25,37 +25,24 @@ import images from '../../index';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useTranslation} from 'react-i18next';
 import {SF, SW, SH, Colors} from '../../utils';
-
 import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
-
 import notifee from '@notifee/react-native';
-
-///////////////onbutton notification//foreground message //////////
-
+import styles from './styles';
 const Home = () => {
   const navigation = useNavigation();
   const screenWidth = Dimensions.get('window').width;
   const {t} = useTranslation();
   const [loading, setLoading] = useState(true);
-  const [upcomingEventsData, setUpcomingEventsData] = useState([
-    // Your list of upcoming events data
-    {id: 1, title: 'Event 1'},
-    {id: 2, title: 'Event 2'},
-    {id: 3, title: 'Event 3'},
-    // Add more data as needed
-  ]);
   const[card,setCard]=useState('')
+const [events, setEvents] = useState([]);
 
 ////////////get api by userid//////////////
 
 const handleGetByUserId  = async () => {
   try {
     const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'))
-
-    // console.log('useridddddd', Gettingtoken.user.id);
-
     const response = await getEventWithUserId(Gettingtoken.id); // Pass user ID if requitransparent
-    // console.log('Events:.....======', response);
+    console.log('Events:.....==========', response);
     setCard(response.data.data);
     // console.log('data========',response.data)
     setLoading(false);
@@ -146,7 +133,7 @@ useEffect(() => {
         <Image
           source={item.image5}
           style={{
-            height: SH(200),
+            // height: SH(200),
             width: SW(400),
             //borderRadius: 23,
             borderTopRightRadius: 40,
@@ -258,12 +245,7 @@ useEffect(() => {
   };
   return (
     <View
-      style={{
-        flex: 1,
-        width: '100%',
-        height: 'auto',
-        backgroundColor: 'white',
-      }}>
+      style={styles.container}>
       <Search />
       <View style={HomeTabStyle.Container}>
         <View style={{marginBottom: 60}}>
@@ -295,7 +277,7 @@ useEffect(() => {
               
               <View>
               
-                <View
+                 <View
                   style={{
                     height: '30%',
                     backgroundColor: 'transparent',
@@ -305,30 +287,21 @@ useEffect(() => {
                     marginLeft:16,
                     borderTopLeftRadius: 30,
                     borderBottomRightRadius: 30,
-                  }}>
-                  <AppIntroSlider
-                    renderItem={_renderItem}
-                    data={card}
-                    // onDone={_onDone}
-                  />
-                  {/* Your specific view components can go here */}
-                </View>
-                <Spacing space={SH(30)} />
-                {/* </View> */}
-                {/* //////////////// */}
-                {/* </View> */}
-                {/* <FlatList
-                    data={recentconversation}
-                    renderItem={topslider}
-                    keyExtractor={item => item.id}
-                    horizontal={true} // Set to true if you want a horizontal list
-                    //   numColumns={10} // Set the number of columns based on your design
-                  /> */}
-                {/* </View> */}
-                {/* <View style={{flexDirection: 'row'}}>
-                  <Text style={HomeTabStyle.catigoryheading}>Categories</Text>
-                  <Text style={HomeTabStyle.seemoreheading}>See more</Text>
-                </View> */}
+                  }}> 
+                     {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
+      ) : (
+        <View style={{ height: '30%', backgroundColor: 'transparent', width: SW(350), marginTop: 14, marginLeft: 16, borderTopLeftRadius: 30, borderBottomRightRadius: 30 }}>
+          <AppIntroSlider
+            renderItem={_renderItem}
+            data={card}
+          />
+        </View>
+      )}
+
+                 </View>
+              
+               
                 <ScrollView
                   keyboardShouldPersistTaps="handled"
                   contentContainerStyle={Style.ScrollViewTestHeight}>
@@ -425,63 +398,5 @@ useEffect(() => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  slide: {
-    //flex: 1,
-marginLeft:15,
-    height: '70%',
-    //alignItems: 'center',
-    justifyContent: 'center',
-    //backgroundColor: '#f2f2f4',
-// backgroundColor:'transparent',
-    borderBottomRightRadius: 20,
-  },
-  title: {
-    fontSize: 15,
-    fontWeight: '600',
-    color:'black',
-    paddingHorizontal:16
-    //marginBottom: 20,
-  },
-  images: {
-    height: SH(200),
-    width: SW(320),
-    //borderRadius: 23,
- 
-    
-   
-    borderTopLeftRadius: 40,
-                    borderBottomRightRadius: 40,
-    //borderBottomLeftradius: 20,
-    marginTop:55,
-    marginBottom: 1,
-  },
-  text: {
-    marginRight: 'auto',
-    fontWeight: '700',
-    color: 'black',
-    marginTop:5,
-    //textAlign: 'center',
-    fontSize: 10,
-    marginLeft: 15,
 
-    // marginHorizontal: 30,
-  },
-  text2: {
-    marginLeft: 'auto',
-    fontWeight: '700',
-    color: 'black',
-    //textAlign: 'center',
-    fontSize: 12,
-    marginLeft: 14,
-    
-    // marginHorizontal: 30,
-  },
-});
 export default Home;

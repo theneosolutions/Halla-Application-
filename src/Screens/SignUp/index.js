@@ -1,18 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Modal,
-  ActivityIndicator,
-} from 'react-native';
+import {View,Text, ScrollView,Image,TextInput,TouchableOpacity,Alert,StyleSheet, TouchableWithoutFeedback,Keyboard,Modal,ActivityIndicator} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Button, Container, Input, Spacing} from '../../Components';
 import Feather from 'react-native-vector-icons/Feather';
@@ -62,6 +49,14 @@ const SignUp = () => {
     }
   }, [firstName,lastName, email,password1, password2]);
 
+
+
+
+
+  // const backtoscreen = () => {
+  //   setCurrentComponent('');
+  //   navigation.navigate('Home');
+  // };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -71,8 +66,8 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    if (selectedOption === 'email'){
-      setButtonEnable( firstName != '' &&
+    if (
+      firstName != '' &&
       // !specialCharacters.test(firstName) &&
       lastName != '' &&
       // !specialCharacters.test(lastName) &&
@@ -83,8 +78,10 @@ const SignUp = () => {
       /[A-Z]/.test(password1) &&
       specialCharacters.test(password1) &&
       /[0-9]/.test(password1) &&
-      password1 == password2 
-    ) 
+      password1 == password2
+    ) {
+      setButtonEnable(true);
+    } else {
       setButtonEnable(false);
     }
   }, [firstName, lastName, email, password1, password2]);
@@ -135,7 +132,7 @@ const SignUp = () => {
         setCurrentComponent('signUpError');
       }
       setBtnLoading(false);
-       setButtonEnable(false);
+      // setButtonEnable(false);
     } catch (error) {
     setBtnLoading(false);
 
@@ -402,8 +399,28 @@ const SignUp = () => {
           ) : null}
 
           <Spacing space={SH(20)} />
-
-          {buttonEnable ? (
+          <TouchableOpacity
+  style={{
+    ...SplashStyl.touchablestyle,
+    backgroundColor: buttonEnable ? '#293170' : '#ccc',
+  }}
+  onPress={handleSignUp}
+  disabled={!buttonEnable}>
+  <View
+    style={{
+      flexDirection: 'row',
+      paddingHorizontal: '5%',
+      justifyContent: 'center',
+      height:50
+    }}>
+    {btnLoading ? (
+      <ActivityIndicator color="white" />
+    ) : (
+      <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
+    )}
+  </View>
+</TouchableOpacity>
+          {/* {buttonEnable ? (
             <TouchableOpacity
               style={SplashStyl.touchablestyle}
               onPress={handleSignUp}>
@@ -433,7 +450,7 @@ const SignUp = () => {
                 <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
               </View>
             </View>
-          )}
+          )} */}
           <Spacing space={SH(20)} />
           <View style={Login.NotRegisterView}>
             <Text style={Login.NotRegisterText}>{t('Haveanaccount')}</Text>

@@ -15,9 +15,9 @@ import {
 } from 'react-native';
 import {Button, Container, Input, Spacing} from '../../Components';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import Login from '../../styles/CommonStyle/LoginScreenStyle';
-import Style from '../../styles/CommonStyle/Style';
+import styles from './styles';
+// import Login from '../../styles/CommonStyle/LoginScreenStyle';
+// import Style from '../../styles/CommonStyle/Style';
 import {onGoogleButtonPress} from '../../SocailLogins/index';
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
@@ -39,10 +39,9 @@ import {signInPhone, signInEmail} from '../../Services/ApiList';
 const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
 import {setItemInLocalStorage} from '../../Services/Api';
 import Languages from '../../Language/i18n';
-// import {setItemInLocalStorage} from '../../Services/Api';
-// import {useAppDispatch} from '../../Services/redux/ReduxHelper';
+
 import {heightPercent} from '../../utils/dimensions';
-const GoogleLogin = () => {
+const Login = () => {
   const {Colors} = useTheme();
   const {t, i18n} = useTranslation();
   //const Login = useMemo(() => Login(Colors), [Colors]);
@@ -244,13 +243,13 @@ const GoogleLogin = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={Login.MinViewScreen}>
+      <View style={styles.MinViewScreen}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={Style.ScrollViewStyles}>
-          <View style={Login.AccountView}>
-            <Text style={Login.Loginheader}>{t('LoginAccount')}</Text>
-            <Text style={Login.LoginText}>{t('Hello')}</Text>
+          contentContainerStyle={styles.ScrollViewStyles}>
+          <View style={styles.AccountView}>
+            <Text style={styles.Loginheader}>{t('LoginAccount')}</Text>
+            <Text style={styles.LoginText}>{t('Hello')}</Text>
           </View>
           <Spacing space={40} />
           <View
@@ -265,6 +264,7 @@ const GoogleLogin = () => {
               borderColor: 'black',
               borderBottomRightRadius: 22,
               borderTopLeftRadius: 22,
+              backgroundColor:'red'
             }}>
             <TouchableOpacity
               onPress={() => setSelectedOption('email')}
@@ -476,7 +476,7 @@ const GoogleLogin = () => {
           )}
           <View style={{width:150,marginLeft:'auto'}}>
           <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
-            <Text style={Login.ForgetPasswordStyles}>
+            <Text style={styles.ForgetPasswordStyles}>
               {t('ForgotPassword')}
             </Text>
           </TouchableOpacity> 
@@ -529,19 +529,19 @@ const GoogleLogin = () => {
 
           <TouchableOpacity onPress={onGoogleLogin}>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <Text style={Login.Signuptext}>{t('signupwith')}</Text>
+              <Text style={styles.Signuptext}>{t('signupwith')}</Text>
               <Image
                 source={images.google}
                 size={SF(27)}
                 style={{height:16,width:16,marginTop:10,marginLeft:10,marginRight:3}}
               />
-              <Text style={Login.googletext}>{t('Google')}</Text>
+              <Text style={styles.googletext}>{t('Google')}</Text>
             </View>
             <Spacing space={SH(20)} />
           </TouchableOpacity>
 
-          <View style={Login.NotRegisterView}>
-            <Text style={Login.NotRegisterText}>{t('Notregister')}</Text>
+          <View style={styles.NotRegisterView}>
+            <Text style={styles.NotRegisterText}>{t('Notregister')}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
               <Text style={{fontSize:13,fontWeight:'600',color:'black',paddingLeft:2}}>{t('Createaccount')}</Text>
             </TouchableOpacity>
@@ -568,30 +568,30 @@ const GoogleLogin = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
-export default GoogleLogin;
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 20,
+//   },
+//   input: {
+//     height: 40,
+//     borderColor: 'gray',
+//     borderWidth: 1,
+//     marginBottom: 10,
+//     paddingHorizontal: 10,
+//   },
+//   error: {
+//     color: 'red',
+//     marginBottom: 10,
+//   },
+//   button: {
+//     backgroundColor: 'blue',
+//     padding: 10,
+//     borderRadius: 5,
+//     alignItems: 'center',
+//   },
+//   buttonText: {
+//     color: 'white',
+//     fontSize: 18,
+//   },
+// });
+export default Login;

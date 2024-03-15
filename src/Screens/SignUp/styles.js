@@ -1,27 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {Fonts, SF, SH, SW, Colors} from '../../utils';
-const LoginScreenStyle = StyleSheet.create({
-
-
-
-
-////////////Login/////
-
-////////////EndLogin///
-
-
-
-
-
-
-
-
-/////////////SignUp//////////
-
-
-
-
-
+import styles from '../SplashScreen/styles';
+const styles = StyleSheet.create({
 
 MinViewScreen: {
  
@@ -611,4 +591,4 @@ AccountView: {
     width: SW(100),
   },
 });
-export default LoginScreenStyle;
+export default styles;

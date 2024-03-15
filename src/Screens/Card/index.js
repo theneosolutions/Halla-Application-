@@ -6,7 +6,7 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Modal,Button
+  Modal,Button,Alert
 } from 'react-native';
 import axios from 'axios';
 import {getFromLocalStorage} from '../../Services/Api';
@@ -14,6 +14,7 @@ import { createEventInfo,GetCardInfo } from '../../Services/ApiList';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {SH, SF, SW, Colors} from '../../utils';
 import { useNavigation } from '@react-navigation/native';
+
 const Card = props => {
   const navigation = useNavigation();
   //  const {eventData} =props.route; 
@@ -30,7 +31,16 @@ useEffect(() => {
 
 const GetCardDataInfo = async () => {
   const response = await GetCardInfo();
-  setCardsData(response.data.data);
+
+  console.log('response',response)
+  if(!response){
+    Alert.alert('Event is not created')
+  }
+  else{
+    setCardsData(response?.data?.data);
+    Alert.alert('Event is successfully created')
+  }
+ 
 };
 
 const handleImageClick = async item => {

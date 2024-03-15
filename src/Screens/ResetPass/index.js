@@ -7,19 +7,18 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
-  StyleSheet,
 } from 'react-native';
-
 import images from '../../index';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
-import SplashStyl from '../../styles/CommonStyle/SplashStyl';
+
 import {SH, SF, SW, Colors} from '../../utils';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
 import {resetpass} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
+import styles from './styles';
 
 const ResetPass = ({navigation, route}) => {
   const {email, otp} = route.params;
@@ -31,12 +30,7 @@ const ResetPass = ({navigation, route}) => {
   const [password2, setpassword2] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
-  //console.log('otp=========', otp);
-  //   useEffect(() => {
-  //     setTimeout(() => {
-  //       //navigation.navigate('RegistrationScreen');
-  //     }, 1000);
-  //   }, [navigation]);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -62,73 +56,40 @@ const ResetPass = ({navigation, route}) => {
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={SplashStyl.Container}>
+     
+      <View style={styles.Container}>
         <View
-          style={{
-            flex: 0.6,
-            //backgroundColor: 'green',
-            width: '100%',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}>
+          style={styles.firstHalfView}>
           <Text
-            style={{
-              color: '#293170',
-              fontWeight: '800',
-              justifyContent: 'center',
-              alignItem: 'center',
-              textAlign: 'center',
-              fontSize: SF(20),
-              margin: 3,
-            }}>
+            style={styles.boldText}>
             {t('ResetPassword')}
           </Text>
           <Text
-            style={{
-              color: 'gray',
-              fontWeight: '500',
-              justifyContent: 'center',
-              alignItem: 'center',
-              textAlign: 'center',
-              fontSize: SF(13),
-              margin: 20,
-            }}>
+            style={styles.lightText}>
             {t('resetpasstext')}
           </Text>
           <Image
             source={images.halalogo}
-            style={{
-              height: SH(100),
-              width: SW(50),
-              justifyContent: 'center',
-              alignSelf: 'center',
-              marginTop: SH(5),
-            }}
+            style={styles.imgstyle}
           />
-          {/* <Image source={images.halalogo} style={SplashStyl.imgstyle} /> */}
+       
         </View>
 
         <View
-          style={{
-            flex: 0.1,
-            //backgroundColor: 'red',
-            width: '100%',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}>
+          style={styles.touchableView}>
           <TouchableOpacity
-            style={SplashStyl.touchablestyleW}
+            style={styles.touchablestyleW}
             //onPress={() => navigation.navigate('Forgotemail')}
           >
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
                 name="lock"
                 size={SF(20)}
-                style={SplashStyl.iconStyleeye}
+                style={styles.iconStyleeye}
                 color={Colors.black}
               />
               <TextInput
-                style={SplashStyl.input}
+                style={styles.input}
                 placeholder={t('Enteryourpassword')}
                 value={password1}
                 onChangeText={setPassword1}
@@ -139,7 +100,7 @@ const ResetPass = ({navigation, route}) => {
                 <FontAwesome
                   name={showPassword ? 'eye-slash' : 'eye'}
                   size={SF(20)}
-                  style={SplashStyl.iconStyle}
+                  style={styles.iconStyle}
                   color={Colors.black}
                 />
               </TouchableOpacity>
@@ -147,18 +108,18 @@ const ResetPass = ({navigation, route}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={SplashStyl.touchablestyleW}
+            style={styles.touchablestyleW}
             //onPress={() => navigation.navigate('Forgotemail')}
           >
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
                 name="lock"
                 size={SF(20)}
-                style={SplashStyl.iconStyleeye}
+                style={styles.iconStyleeye}
                 color={Colors.black}
               />
               <TextInput
-                style={SplashStyl.input}
+                style={styles.input}
                 placeholder={t('Enteryourpassword')}
                 value={password2}
                 onChangeText={setpassword2}
@@ -169,7 +130,7 @@ const ResetPass = ({navigation, route}) => {
                 <FontAwesome
                   name={showPassword ? 'eye-slash' : 'eye'}
                   size={SF(20)}
-                  style={SplashStyl.iconStyle}
+                  style={styles.iconStyle}
                   color={Colors.black}
                 />
               </TouchableOpacity>
@@ -184,13 +145,7 @@ const ResetPass = ({navigation, route}) => {
           ) : null}
         </View>
         <View
-          style={{
-            flex: 0.3,
-            //backgroundColor: 'pink',
-            width: '100%',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}>
+          style={styles.ButtonView}>
           <TouchableOpacity
             style={[
               styles.button,
@@ -205,39 +160,9 @@ const ResetPass = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       </View>
+
     </TouchableWithoutFeedback>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 20,
-    marginTop: 20,
-    marginLeft: 20,
-  },
-  button: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderTopLeftRadius: SF(15),
-    borderBottomRightRadius: SF(15),
-    width: '80%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 40,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
+
 export default ResetPass;

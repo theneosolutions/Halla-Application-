@@ -1,28 +1,31 @@
 import {StyleSheet} from 'react-native';
 import {Fonts, SF, SH, SW, Colors} from '../../utils';
-const LoginScreenStyle = StyleSheet.create({
 
-
-
-
-////////////Login/////
-
-////////////EndLogin///
-
-
-
-
-
-
-
-
-/////////////SignUp//////////
-
-
-
-
-
-
+const styles = StyleSheet.create({
+    container: {
+        padding: 20,
+      },
+      input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 10,
+        paddingHorizontal: 10,
+      },
+      error: {
+        color: 'red',
+        marginBottom: 10,
+      },
+      button: {
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+      },
+      buttonText: {
+        color: 'white',
+        fontSize: 18,
+      },
 MinViewScreen: {
  
   alignItems: 'center',
@@ -611,4 +614,4 @@ AccountView: {
     width: SW(100),
   },
 });
-export default LoginScreenStyle;
+export default styles;
