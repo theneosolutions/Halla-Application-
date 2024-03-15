@@ -19,6 +19,7 @@ import ImagePicker from '../../Screens/ImagePicker/index';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import AddGuest from '../../Screens/AddGuest/index';
 // import * as Animatable from 'react-native-animatable';
 // import Feather from 'react-native-vector-icons/Feather';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -93,6 +94,7 @@ const AuthStack = () => {
         component={GoogleLogin}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="AddGuest" component={AddGuest}   options={{headerShown: false}}/>
       <Stack.Screen
         name="ForgotPass"
         component={ForgotPass}
@@ -228,7 +230,7 @@ const TabNavigator = ({ navigation, route }) => {
       />
        <Tab.Screen
         name="messages"
-        component={MessagesV1}
+        component={MessageV2}
         options={{
           headerShown: false,
           tabBarItemStyle: {

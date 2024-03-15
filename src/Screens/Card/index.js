@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const Card = props => {
   const navigation = useNavigation();
-  //  const {eventData} =props.route; 
+  //  const {eventData} =props.route;
    const {eventData} = props.route.params;
    console.log('eventData',eventData)
    // Extracting eventData from props.route.params
@@ -28,10 +28,8 @@ const Card = props => {
 useEffect(() => {
   GetCardDataInfo();
 }, []);
-
 const GetCardDataInfo = async () => {
   const response = await GetCardInfo();
-
   console.log('response',response)
   if(!response){
     Alert.alert('Event is not created')
@@ -40,14 +38,11 @@ const GetCardDataInfo = async () => {
     setCardsData(response?.data?.data);
     Alert.alert('Event is successfully created')
   }
- 
 };
-
 const handleImageClick = async item => {
   setSelectedCard(item);
   setShowModal(true);
 };
-
 const handleConfirm = async () => {
   try {
     const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
@@ -60,7 +55,6 @@ const handleConfirm = async () => {
     console.log('Error:', error);
   }
 };
-
 const renderCardItem = ({item}) => (
   <TouchableOpacity
     onPress={() => handleImageClick(item)}
@@ -68,7 +62,6 @@ const renderCardItem = ({item}) => (
     <Image source={{uri: item.image}} style={styles.image} />
   </TouchableOpacity>
 );
-
   return (
     <View style={styles.container}>
     <FlatList
@@ -78,7 +71,6 @@ const renderCardItem = ({item}) => (
       numColumns={2}
     />
     <Modal visible={showModal} animationType="slide">
-
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
       <TouchableOpacity   onPress={() => setShowModal(false)}  style={{
@@ -99,16 +91,12 @@ const renderCardItem = ({item}) => (
                   color={'black'}
                 />
             {/* <Text style={{color:'black',fontSize:12,fontWeight:'700',selfAlign:'center',paddingHorizontal:18,paddingVertical:5}}>Cancel</Text>*/}
-            </TouchableOpacity> 
-       
-      
+            </TouchableOpacity>
         <Image source={{uri: selectedCard?.image}} style={styles.modalImage} />
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
           <TouchableOpacity onPress={handleConfirm} style={{height:35,width:230,backgroundColor:'white',borderTopLeftRadius:8,borderBottomRightRadius:8,margin:5}}>
             <Text style={{color:'black',fontSize:16,fontWeight:'600',selfAlign:'center',textAlign:'center',paddingVertical:5}}>Confirm</Text></TouchableOpacity>
         {/* <Button title="Confirm" onPress={handleConfirm} /> */}
-      
-       
         </View>
       </View>
       </View>
@@ -116,7 +104,6 @@ const renderCardItem = ({item}) => (
   </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,7 +113,6 @@ const styles = StyleSheet.create({
      flex: 1,
      margin: 10,
     selfAlign:'center',
-   
      shadowOffset: {
        width: '100%',
        height: 2,
@@ -169,7 +155,6 @@ const styles = StyleSheet.create({
      marginTop:150,
     margin:80,
     borderRadius:20
-
   },
   modalText: {
     fontSize: 20,
@@ -184,5 +169,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-
 export default Card;

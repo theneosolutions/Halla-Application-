@@ -42,7 +42,7 @@ const handleGetByUserId  = async () => {
   try {
     const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'))
     const response = await getEventWithUserId(Gettingtoken.id); // Pass user ID if requitransparent
-    console.log('Events:.....==========', response);
+    console.log('Events:.....======', response);
     setCard(response.data.data);
     // console.log('data========',response.data)
     setLoading(false);
@@ -243,9 +243,16 @@ useEffect(() => {
       longitude: null,
     });
   };
+
   return (
     <View
-      style={styles.container}>
+      style={{
+        flex: 1,
+        width: '100%',
+        // marginBottom:80,
+        // height: 'auto',
+        backgroundColor: 'white',
+      }}>
       <Search />
       <View style={HomeTabStyle.Container}>
         <View style={{marginBottom: 60}}>
@@ -358,7 +365,7 @@ useEffect(() => {
                     />
                   </View>
                 </ScrollView>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={{
                     height: '5%',
                     width: '50%',
@@ -372,11 +379,11 @@ useEffect(() => {
                   <Text style={{color: 'white', fontWeight: '600'}}>
                     Top Picks
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
 
-            <View
+            {/* <View
               style={{
                 height: '22%',
                 // backgroundColor: '#f2f2f4',
@@ -391,11 +398,66 @@ useEffect(() => {
                 data={slides}
                 onDone={_onDone}
               />
-            </View>
+            </View> */}
           </ScrollView>
         </View>
       </View>
     </View>
   );
+ 
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  slide: {
+    //flex: 1,
+marginLeft:15,
+    height: '70%',
+    //alignItems: 'center',
+    justifyContent: 'center',
+    //backgroundColor: '#F2F2F4',
+// backgroundColor:'transparent',
+    borderBottomRightRadius: 20,
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: '600',
+    color:'black',
+    paddingHorizontal:16
+    //marginBottom: 20,
+  },
+  images: {
+    height: SH(200),
+    width: SW(320),
+    //borderRadius: 23,
+    borderTopLeftRadius: 40,
+                    borderBottomRightRadius: 40,
+    //borderBottomLeftradius: 20,
+    marginTop:55,
+    marginBottom: 1,
+  },
+  text: {
+    marginRight: 'auto',
+    fontWeight: '700',
+    color: 'black',
+    marginTop:5,
+    //textAlign: 'center',
+    fontSize: 10,
+    marginLeft: 15,
+    // marginHorizontal: 30,
+  },
+  text2: {
+    marginLeft: 'auto',
+    fontWeight: '700',
+    color: 'black',
+    //textAlign: 'center',
+    fontSize: 12,
+    marginLeft: 14,
+    // marginHorizontal: 30,
+  },
+});
 export default Home;

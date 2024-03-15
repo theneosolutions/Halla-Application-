@@ -7,7 +7,7 @@ import {SH, SF, SW, Colors} from '../../utils';
 import {setItemInLocalStorage} from '../../Services/Api';
 import {GOOGLE_MAPS_APIKEY} from '../../Services/ApiList';
 import axios from 'axios';
-const MapScreen = ({navigation}) => {
+const MapScreen = ({navigation,route}) => {
 
   const mapRef = useRef(null);
   const [position, setPosition] = useState({
@@ -51,10 +51,11 @@ const MapScreen = ({navigation}) => {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
-    const placeAddress = await getPlaceNameFromLatLong(
-      newCoordinate.latitude,
-      newCoordinate.longitude,
-    );
+    const placeAddress = 'Address'
+    // await getPlaceNameFromLatLong(
+    //   newCoordinate.latitude,
+    //   newCoordinate.longitude,
+    // );
     console.log('🚀 ~ handleMarkerDragEnd ~ placeAddress:', placeAddress);
     // Optionally, you can also update the map region to the new location
     mapRef.current?.animateToRegion({
@@ -63,6 +64,7 @@ const MapScreen = ({navigation}) => {
       longitude: newCoordinate.longitude,
     });
   };
+  useEffect(() => {
   Geolocation.getCurrentPosition(pos => {
     const crd = pos.coords;
     setPosition({
@@ -71,22 +73,45 @@ const MapScreen = ({navigation}) => {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
+    animateToCurrentLocation();
   });
+}, []);
+const animateToCurrentLocation = () => {
+  Geolocation.getCurrentPosition(pos => {
+    const crd = pos.coords;
+    const newPosition = {
+      latitude: crd.latitude,
+      longitude: crd.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+    setPosition(newPosition);
+    mapRef.current?.animateToRegion({
+      ...newPosition,
+      latitudeDelta: newPosition.latitudeDelta / 2,
+      longitudeDelta: newPosition.longitudeDelta / 2,
+    });
+  });
+};
   const handleNavigateToCreateEvent = async () => {
     try {
-      const placeAddress = await getPlaceNameFromLatLong(
-        position.latitude,
-        position.longitude,
-      );
-      console.log(
-        '🚀 ~ handleNavigateToCreateEvent ~ placeAddress:',
-        placeAddress,
-      );
+      const placeAddress = 'Address'
+      // await getPlaceNameFromLatLong(
+      //   position.latitude,
+      //   position.longitude,
+
+      // );
+      
+      // console.log(
+      //   '🚀 ~ handleNavigateToCreateEvent ~ placeAddress:',
+      //   placeAddress,
+      // );
 
       navigation.navigate('CreateEvent', {
         latitude: position.latitude,
         longitude: position.longitude,
         address: placeAddress, // Assuming 'formatted_address' is the key for the address in the response
+        eventData:props.route.params?.eventData
       });
     } catch (error) {
       console.error('Error getting place address:', error);
@@ -104,12 +129,16 @@ const MapScreen = ({navigation}) => {
         .then(response => {
           console.log('🚀 ~ returnnewPromise ~ response.data:', response.data);
           if (response.data.status === 'OK') {
+            resolve(response.data.results[0].formatted_address);
           } else {
+            // resolve('');
             resolve('address');
             // reject('No results found');
           }
         })
         .catch(function (error) {
+          resolve('address');
+
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
@@ -165,14 +194,21 @@ const MapScreen = ({navigation}) => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleZoomIn} style={styles.button}>
-          <IconA size={SF(27)} name="plus" />
+          <IconA size={SF(27)} name="plus" color={'black'}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleZoomOut} style={styles.button}>
-          <IconA size={SF(27)} name="minus" />
+          <IconA size={SF(27)} name="minus" color={'black'}/>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        onPress={handleNavigateToCreateEvent}
+        onPress={()=>{
+          navigation.navigate('CreateEvent', {
+            latitude: position.latitude,
+            longitude: position.longitude,
+            address: 'placeAddress', // Assuming 'formatted_address' is the key for the address in the response
+            eventData:route.params?.eventData
+          });
+        }}
         style={styles.navigateButton}>
         <Text style={styles.navigateButtonText}>Confirm Location</Text>
       </TouchableOpacity>

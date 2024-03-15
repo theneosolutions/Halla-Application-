@@ -23,11 +23,13 @@ import SplashStyl from '../../styles/CommonStyle/SplashStyl';
 import * as yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 // import Share from 'react-native-share';
 const CreateEvent = ({navigation, route}) => {
   //  const {latitude = null, longitude = null, address = null} = route?.params;
-    const { latitude, longitude, address } = route.params;
-  // console.log('address', address);
+    // const { latitude, longitude, address } = route.params;
+// console.log('address',address)
+  //  console.log('address', latitude);
   const [date, setDate] = useState(new Date());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
@@ -37,11 +39,11 @@ const CreateEvent = ({navigation, route}) => {
   const [storeImage, setStoreImage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
-  // console.log('selectedDateTime',selectedDateTime)
+//  console.log('selectedDateTime',selectedDateTime)
   const openImagePicker = () => {
     ImageCropPicker.openPicker({
-      width: 300,
-      height: 400,
+      width: 800,
+      height: 440,
       cropping: true,
     })
       .then(image => {
@@ -57,25 +59,22 @@ const CreateEvent = ({navigation, route}) => {
         console.log('Error choosing from gallery:', error);
       });
   };
-
- 
   ////////////imageapi/////////
   const handleImageUpload = async () => {
     if (!imagePath) {
       console.log('No image selected');
       return;
     }
-
     const data = new FormData();
     data.append('file', {
       uri: imagePath.path,
       type: 'image/jpeg', // You may need to adjust the type based on the image format
       name: 'image.jpg', // You can change the name as needed
     });
-
     try {
       const response = await ImageLink(data);
       console.log('Image upload response:', response.data);
+      console.log('response.data',response)
       setStoreImage(response.data.link);
       console.log('setStoreImage===========', storeImage);
       // Handle response as needed
@@ -84,33 +83,58 @@ const CreateEvent = ({navigation, route}) => {
       // Handle error
     }
   };
-
-  /////////////imageapiend/////
-
+ /////////////imageapiend/////
   ///////////////dataapi//////////
   const createEventData = async () => {
     const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
     const data = {
       user: userInfo?.id,
       image: storeImage,
+      name: eventName,
+      eventDescription:eventDescription,
       eventDate: selectedDateTime,
       showQRCode: false,
-      address: address,
-      latitude: latitude,
-      longitude: longitude,
-      name: eventName,
+      address: route.params?.address,
+      latitude: route.params?.latitude,
+      longitude: route.params?.longitude,
       status:'draft'
     };
     navigation.navigate('Card', {
       eventData: data,
     });
- 
   };
   //////////////enddataapi///////
-
-
-
-
+  const eventDataDetail = async () => {
+    const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
+    const data = {
+      user: userInfo?.id,
+      image: storeImage,
+      name: eventName,
+      eventDescription:eventDescription,
+      eventDate: selectedDateTime,
+      showQRCode: false,
+      address: route.params?.address,
+      latitude: route.params?.latitude,
+      longitude: route.params?.longitude,
+      status:'draft'
+    };
+    navigation.navigate('MapScreen', {
+      eventData: data,
+    });
+  };
+  useEffect(()=>{
+    if(route.params?.eventData){
+      const event = route.params?.eventData;
+      setEventName(event?.name)
+      setStoreImage(event?.image)
+      setImagePath({path:event?.image})
+      setEventDescription(event?.eventDescription)
+      setSelectedDateTime(event?.eventDate)
+      // setEventName(event?.name)
+      // setEventName(event?.name)
+      // setEventName(event?.name)
+    }
+  },[])
   const schema = yup.object().shape({
     eventName: yup.string().required('Email is required'),
     eventDescription: yup.string().required('Password is required'),
@@ -120,30 +144,23 @@ const CreateEvent = ({navigation, route}) => {
     storeImage:yup.string().required('storeImage is required'),
   });
   const { control, handleSubmit, formState: { errors }, } = useForm({
-		resolver: yupResolver(schema),
-		defaultValues: {
-			eventName: '',
-			eventDescription: '',
+    resolver: yupResolver(schema),
+    defaultValues: {
+      eventName: '',
+      eventDescription: '',
       selectedDateTime:'',
       latitude:'',
       longitude:'',
       storeImage:''
-
-
-
-
-
-		},
-	});
-  const onPressSend = async (_formData) => {
-		const resutl = await login(_formData.email, _formData.password);
-		console.log("🚀 ~ onPressSend ~ resutl:", resutl)
-		if(resutl?.data?.accessToken){
-			Alert.alert('User login successfully!')
-		}
-
-	};
-
+    },
+  });
+  // const onPressSend = async (_formData) => {
+  //  const resutl = await login(_formData.email, _formData.password);
+  //  console.log(":rocket: ~ onPressSend ~ resutl:", resutl)
+  //  if(resutl?.data?.accessToken){
+  //    Alert.alert('User login successfully!')
+  //  }
+  // };
   return (
     <View style={{flex: 1}}>
       <View style={MessagingStyles.BackgroundWhite}>
@@ -156,7 +173,7 @@ const CreateEvent = ({navigation, route}) => {
                 width: '99%',
                 flexDirection: 'row',
                 height: 50,
-                backgroundColor: '#f9f8fc',
+                backgroundColor: '#F9F8FC',
                 padding: SW(10),
               }}>
               <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -191,30 +208,32 @@ const CreateEvent = ({navigation, route}) => {
                   <Image
                     source={{uri: imagePath.path}}
                     style={{
-                      height: SH(220),
+                      // height: SH(200),
                       width: '100%',
                       backgroundColor: 'lightGray',
-                      justifyContent: 'center',
-                      borderRadius: SF(5),
+                      borderTopLeftRadius: SF(20),
+                      borderBottomRightRadius:SF(20),
                       overflow: 'hidden',
-                      justifyContent: 'center',
+                      resizeMode:'contain'
+                      // position:'absolute',
                     }}
                   />
                 ) : (
-                  <Text>Select Image</Text>
+                  <Text style={{alignItems:'center',alignSelf:'center',color:'black',fontWeight:'600'}}>Select Image</Text>
                 )}
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleImageUpload}
               style={{
-                backgroundColor: '#007BFF',
+                backgroundColor: '#293170',
                 padding: 10,
-                borderRadius: 5,
+                borderTopLeftRadius: SF(20),
+                borderBottomRightRadius:SF(20),
                 alignItems: 'center',
                 marginHorizontal: 20,
               }}>
-              <Text style={{color: 'white',alignItem:'center',justifyContent:'center'}}>Upload Image</Text>
+              <Text style={{color: 'white',alignItem:'center',justifyContent:'center',fontWeight:'500'}}>Upload Image</Text>
             </TouchableOpacity>
             <View style={{margin: SW(5)}}>
               <Text
@@ -222,60 +241,39 @@ const CreateEvent = ({navigation, route}) => {
                   fontSize: SF(15),
                   color: 'black',
                   fontWeight: '600',
-                  padding: SW(14),
+                  padding: SW(4),
+                  marginTop:SH(3),
                   paddingHorizontal: SW(20),
                 }}>
-                Event Name
+                Event Name:
               </Text>
-
               <Input
                 inputStyle={Scanstyle.InputStyles}
                 placeholder="Type your event name"
                 onChangeText={text => setEventName(text)}
                 value={eventName}
-                // maxLength={10}
               />
             </View>
             {errors.eventName && <Text style={[colors.red500, gutters.paddingLeft_10, gutters.marginVertical_5]}>{errors.eventName.message}</Text>}
-
-            {/* {submitted && eventName == '' ? (
-                <Text style={{fontSize: 12, color: 'red'}}>
-                  {t('eventName')}
-                </Text>
-              ) : null} */}
             <Text
               style={{
                 fontSize: SF(15),
                 color: 'black',
                 fontWeight: '600',
-                padding: SW(14),
+                padding: SW(4),
+                marginTop:SH(4),
                 paddingHorizontal: SW(25),
               }}>
-              Event Description
+              Event Description:
             </Text>
-            {/* <Controller
-							control={control}
-							rules={{
-								required: true,
-							}}
-							render={({ field: { onChange, value } }) => ( */}
-
             <View style={{width: '97%', marginLeft: 5}}>
               <Input
                 inputStyle={Scanstyle.InputStyles}
                 placeholder="Type your event name"
                 onChangeText={text => setEventDescription(text)}
                 value={eventDescription}
-                maxLength={10}
               />
             </View>
-                  {/* )}    
-          />
-          {errors.eventDescription && <Text style={[colors.red500, gutters.paddingLeft_10, gutters.marginVertical_5]}>{errors.eventDescription.message}</Text>}
- */}
-
-        
-          
             {/* <Spacing space={SH(10)} /> */}
             <Text
               style={{
@@ -283,9 +281,10 @@ const CreateEvent = ({navigation, route}) => {
                 color: 'black',
                 fontWeight: '600',
                 paddingHorizontal: SW(25),
-                paddingVertical: SH(18),
+                marginTop:SH(16),
+                 paddingVertical: SH(8),
               }}>
-              Select Date and Time
+              Select Date and Time:
             </Text>
             <TouchableOpacity
               onPress={() => setDatePickerVisible(true)}
@@ -293,30 +292,28 @@ const CreateEvent = ({navigation, route}) => {
                 width: '95%',
                 height: SH(55),
                 backgroundColor: 'white',
-                margin: SW(12),
-
-                paddingVertical: SH(18),
+                marginLeft: SW(10),
+                // paddingVertical: SH(18),
                 paddingHorizontal: SW(14),
                 borderTopLeftRadius: SF(12),
               }}>
               <Text
                 style={{
-                  backgroundColor: '#f8f9fc',
+                  backgroundColor: '#F8F9FC',
                   height: 55,
                   paddingLeft: 12,
-                  paddingVertical: 12,
+                  paddingVertical: 16,
                   borderWidth: 0.3,
                   borderTopLeftRadius: 20,
                   borderBottomRightRadius: 20,
-                  color: 'black',
-                  fontWeight: '700',
+                  color: 'grey',
+                  fontWeight: '500',
                 }}>
                 {selectedDateTime
                   ? selectedDateTime.toLocaleString()
                   : 'Select Date and Time'}
               </Text>
             </TouchableOpacity>
-
             <DatePicker
               modal
               open={isDatePickerVisible}
@@ -330,18 +327,19 @@ const CreateEvent = ({navigation, route}) => {
                 setDatePickerVisible(false);
               }}
             />
-               {submitted && setSelectedDateTime == '' ? (
+               {/* {submitted && setSelectedDateTime == '' ? (
             <Text style={{fontSize: 12, color: 'red'}}>Enter your Date , Time</Text>
-          ) : null}
+          ) : null} */}
             <Spacing space={SH(30)} />
-
-            <TouchableOpacity onPress={() => navigation.navigate('MapScreen')}>
+            <TouchableOpacity onPress={eventDataDetail}>
               <View
                 style={{
                   height: SH(200),
                   width: '90%',
                   backgroundColor: 'gray',
                   margin: SW(15),
+                  borderTopLeftRadius:SF(30),
+                  borderBottomRightRadius:SF(30)
                 }}>
                 <Image
                   source={images.mapimg}
@@ -349,6 +347,8 @@ const CreateEvent = ({navigation, route}) => {
                     height: SH(210),
                     width: '100%',
                     justifyContent: 'center',
+                    borderTopLeftRadius:SF(30),
+                    borderBottomRightRadius:SF(30)
                   }}
                 />
               </View>
@@ -382,8 +382,6 @@ const CreateEvent = ({navigation, route}) => {
                   Save
                 </Text>
               </TouchableOpacity>
-
-     
               <TouchableOpacity
                  onPress={createEventData}
                 // onPress={() => navigation.navigate('Card')}
@@ -407,7 +405,6 @@ const CreateEvent = ({navigation, route}) => {
                   Continue
                 </Text>
               </TouchableOpacity>
-                
             </View>
             <Spacing space={SH(30)} />
           </ScrollView>
@@ -416,5 +413,4 @@ const CreateEvent = ({navigation, route}) => {
     </View>
   );
 };
-
 export default CreateEvent;

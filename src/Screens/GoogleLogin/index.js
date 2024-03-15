@@ -187,8 +187,8 @@ const GoogleLogin = () => {
       if (response?.data) {
         // setMessage(response?.data?.message);
         const {accessToken, id, email} = response?.data;
-         setItemInLocalStorage('@UserToken', accessToken);
-         setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user));
+        setItemInLocalStorage('@UserToken', accessToken);
+        setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user));
         // setItemInLocalStorage('@UserId', response?.data?.user?.id);
         setCurrentComponent('login');
 

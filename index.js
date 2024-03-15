@@ -9,6 +9,7 @@ import './src/Language/i18n';
 import 'intl-pluralrules';
 import {Provider} from 'react-redux';
 import {store} from './src/Services/redux/store';
+import { SocketProvider } from './src/socket'; 
 // import {initializeApp} from '@react-native-firebase/app';
 
 // Initialize Firebase
@@ -16,7 +17,9 @@ import {store} from './src/Services/redux/store';
 // import messaging from '@react-native-firebase/messaging';
 const RNRedux = () => (
   <Provider store={store}>
-    <App />
+    <SocketProvider>
+      <App />
+    </SocketProvider>
   </Provider>
 );
 AppRegistry.registerComponent(appName, () => RNRedux);

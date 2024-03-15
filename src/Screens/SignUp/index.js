@@ -15,7 +15,6 @@ import SplashStyl from '../../styles/CommonStyle/SplashStyl';
 import {signUp} from '../../Services/ApiList';
 import {setItemInLocalStorage} from '../../Services/Api';
 import {useAppDispatch} from '../../Services/redux/ReduxHelper';
-
 const SignUp = () => {
   const {dispatchUserData} = useAppDispatch();
   const {t} = useTranslation();
@@ -37,7 +36,6 @@ const SignUp = () => {
   const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const [btnLoading, setBtnLoading] = useState(false);
-
   useEffect(() => {
     if (selectedOption === 'firstName') {
       // Enable button if email and password are valid
@@ -48,11 +46,6 @@ const SignUp = () => {
       // navigation.navigate('OTPVerify');
     }
   }, [firstName,lastName, email,password1, password2]);
-
-
-
-
-
   // const backtoscreen = () => {
   //   setCurrentComponent('');
   //   navigation.navigate('Home');
@@ -60,11 +53,9 @@ const SignUp = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
   const togglePasswordVisibilityone = () => {
     setshowPassword1(!showPassword1);
   };
-
   useEffect(() => {
     if (
       firstName != '' &&
@@ -72,7 +63,6 @@ const SignUp = () => {
       lastName != '' &&
       // !specialCharacters.test(lastName) &&
       email != '' &&
-     
       password1.length >= 8 &&
       /[a-z]/.test(password1) &&
       /[A-Z]/.test(password1) &&
@@ -85,7 +75,6 @@ const SignUp = () => {
       setButtonEnable(false);
     }
   }, [firstName, lastName, email, password1, password2]);
-
   const setUserData = async data => {
     const userObject = {
       accessToken: data.accessToken,
@@ -113,7 +102,6 @@ const SignUp = () => {
         password2: password2,
         referredBy: 'abcde', // Assuming referredBy always "string"
       };
-
       setButtonEnable(false);
       const response = await signUp(data);
       setUserData(response?.data);
@@ -123,11 +111,8 @@ const SignUp = () => {
       if (response?.data) {
         setMessage('User Register Successfully');
     // setBtnLoading(false);
-
         setCurrentComponent('signUpSuccess');
       } else if (response?.response?.data?.message) {
-  
-
         setMessage(response?.response?.data?.message);
         setCurrentComponent('signUpError');
       }
@@ -135,7 +120,6 @@ const SignUp = () => {
       // setButtonEnable(false);
     } catch (error) {
     setBtnLoading(false);
-
       console.error('SignUp Error:', error);
     }
     setButtonEnable(false);
@@ -159,9 +143,7 @@ const SignUp = () => {
             <Text style={Login.Loginheader}>{t('SignUp')}</Text>
             <Text style={Login.LoginText}>{t('signuptext')}</Text>
           </View>
-
           <Spacing space={SH(60)} />
-
           <TouchableOpacity style={SplashStyl.touchablestyleW}>
             <View style={{flexDirection: 'row'}}>
               <Entypo
@@ -170,7 +152,6 @@ const SignUp = () => {
                 style={SplashStyl.iconStylemail}
                 color={'#293170'}
               />
-
               <TextInput
                 style={SplashStyl.withouticoninput}
                 placeholder="FirstName"
@@ -180,8 +161,6 @@ const SignUp = () => {
                   setFirstName(val), setSubmitted(true);
                 }}
               />
-
-            
             </View>
           </TouchableOpacity>
           {submitted && firstName == '' ? (
@@ -233,7 +212,6 @@ const SignUp = () => {
           {submitted && email == '' ? (
             <Text style={styles.error}>Enter your email.</Text>
           ) : null}
-
           <TouchableOpacity style={SplashStyl.touchablestyleW}>
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
@@ -244,9 +222,7 @@ const SignUp = () => {
                   paddingHorizontal: SW(3),
                   marginLeft: 8,
                   color: '#293170',
-                
                 }}
-              
               />
               <TextInput
                 style={SplashStyl.input}
@@ -397,7 +373,6 @@ const SignUp = () => {
               Password not matched
             </Text>
           ) : null}
-
           <Spacing space={SH(20)} />
           <TouchableOpacity
   style={{
@@ -420,38 +395,7 @@ const SignUp = () => {
     )}
   </View>
 </TouchableOpacity>
-          {/* {buttonEnable ? (
-            <TouchableOpacity
-              style={SplashStyl.touchablestyle}
-              onPress={handleSignUp}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  paddingHorizontal: '5%',
-                  justifyContent: 'center',
-                }}>
-                    {btnLoading ? (
-                  <ActivityIndicator color="red"  />
-                ) : (
-
-                <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
-                )}
-              </View>
-            </TouchableOpacity>
-         ) : (
-            <View
-              style={{...SplashStyl.touchablestyle, backgroundColor: '#ccc'}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  paddingHorizontal: '5%',
-                  justifyContent: 'center',
-                }}>
-                <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
-              </View>
-            </View>
-          )} */}
-          <Spacing space={SH(20)} />
+<Spacing space={SH(20)} />
           <View style={Login.NotRegisterView}>
             <Text style={Login.NotRegisterText}>{t('Haveanaccount')}</Text>
             <TouchableOpacity
@@ -502,7 +446,6 @@ const SignUp = () => {
     </TouchableWithoutFeedback>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     padding: 20,
@@ -531,5 +474,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
-
 export default SignUp;
