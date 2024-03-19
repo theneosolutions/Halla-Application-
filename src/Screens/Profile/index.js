@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useMemo} from 'react';
+
+import React, {useMemo,useState,useEffect} from 'react';
 import {View, Text, TouchableOpacity, Image, Modal} from 'react-native';
 import FeIcon from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/EvilIcons';
@@ -8,117 +9,97 @@ import IconE from 'react-native-vector-icons/Entypo';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconMI from 'react-native-vector-icons/MaterialIcons';
 import ProfileTabStyle from '../../styles/CommonStyle/ProfileTabStyles';
-import Style from '../../styles/CommonStyle/Style';
-import {Button, Spacing, Input} from '../../Components';
-import {SH, SF, SW, Colors} from '../../utils';
 import images from '../../index';
-// import RouteName from '../../../routes/RouteName';
+import {SH, SF, SW, Colors} from '../../utils';
+import styles from './styles';
 import {useTranslation} from 'react-i18next';
 import {useNavigation, useTheme} from '@react-navigation/native';
-import {StyleSheet} from '../../../node_modules/react-native/types/index';
+import {getFromLocalStorage} from '../../Services/Api';
+import {getProfileWithUserId} from '../../Services/ApiList';
 
 const Profile = props => {
   const {Colors} = useTheme();
-  
-  //const ProfileTabStyle = useMemo(() => ProfileTabStyles(Colors), [Colors]);
   const navigation = useNavigation();
   const {t} = useTranslation();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalcontent, setmodalcontent] = useState(0);
-  const [passwordVisibilityold, setpasswordVisibilityold] = useState(true);
-  const [passwordVisibilitynew, setpasswordVisibilitynew] = useState(true);
-  const [passwordVisibilityconfirm, setPasswordVisibilityconfirm] =
-    useState(true);
 
-  const stateArray = {
-    Oldpassword: '',
-    Newpassword: '',
-    email: '',
-    Confirmpassword: '',
-    number: null,
-  };
-  const [state, setState] = useState(stateArray);
-
-  const onChangeText = text => {
-    if (text === 'Oldpassword')
-      setpasswordVisibilityold(!passwordVisibilityold);
-    if (text === 'Newpassword')
-      setpasswordVisibilitynew(!passwordVisibilitynew);
-    if (text === 'Confirmpassword')
-      setPasswordVisibilityconfirm(!passwordVisibilityconfirm);
-  };
-
+  const [loading, setLoading] = useState(true);
+  const [profileData, setProfileData] = useState(null);
   useEffect(() => {
-    navigation.addListener('focus', () => {
-      setModalVisible(false);
-      setmodalcontent(0);
-    });
-  }, [navigation]);
-  const handleUsernamePress = () => {
-    // Handle press for the "Username" section
-    console.log('Username section pressed');
-    // Add your logic or navigation here
-  };
+    const fetchData = async (id) => {
+      try {
+        const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+        const response = await getProfileWithUserId(Gettingtoken.id);
+        console.log('profilee:.....======---', response?.data?.createdAt);
+        setProfileData(response.data);
+        console.log('setProfileData=====',profileData?.firstName)
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+  
+    fetchData(); 
+  
+  }, []);
+  
   return (
     <View style={{flex: 1}}>
-      <View style={ProfileTabStyle.BackgroundWhite}>
-        <View style={ProfileTabStyle.whilistminbody}>
-          {/* ////////////////////jhonsmith//////////////// */}
+      <View style={styles.BackgroundWhite}>
+        <View style={styles.whilistminbody}>
+     
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-            <View style={ProfileTabStyle.mainboxViewJohn}>
+            <View style={styles.mainboxViewJohn}>
               <Image
-                style={ProfileTabStyle.LeftImageStyles}
+                style={styles.LeftImageStyles}
                 resizeMode="cover"
-                source={images.User_image_one_profile}
+                source={{uri: profileData?.profilePhoto}} 
               />
               <View>
-                <Text style={ProfileTabStyle.johnboxtwo}>Jhon Smith</Text>
-                <Text style={ProfileTabStyle.basicMemberStyle}>
-                  Basic Member
+                <Text style={styles.johnboxtwo}>{profileData?.firstName}</Text> 
+               <Text style={styles.basicMemberStyle}>
+                {profileData?.email}
                 </Text>
               </View>
 
               <IconF
                 size={SF(20)}
                 name="right"
-                style={ProfileTabStyle.Jognboxthree}
-                // color={Colors.black_text_color}
+                style={styles.Jognboxthree}
+   
               />
             </View>
           </TouchableOpacity>
           {/* ///////////////// */}
 
-          <View style={ProfileTabStyle.accountview}>
-            <Text style={ProfileTabStyle.accountstyle}>Account</Text>
+          <View style={styles.accountview}>
+            <Text style={styles.accountstyle}>Account</Text>
           </View>
 
           {/* /////////////johnsmith///////////// */}
-
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+<TouchableOpacity onPress={()=> navigation.navigate('ConfirmPassword')}>
+   <View style={styles.mainsecboxViewJohn}>
             <IconE
               size={SF(20)}
               name="lock"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
             />
-
-            <Text style={ProfileTabStyle.johnboxtwo}>Change Password</Text>
-
+           <Text style={styles.johnboxtwo}>Change Password</Text>
             <IconF
               size={SF(20)}
               name="right"
-              style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
-            />
+              style={styles.Jognboxthree}
+             />
           </View>
+</TouchableOpacity>
+         
           {/* ///////////////////////// */}
 
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+          <View style={styles.mainsecboxViewJohn}>
             <IconM
               size={SF(20)}
               name="bell-ring"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
+        
             />
 
             <Text style={ProfileTabStyle.johnboxtwo}>OrderManagement</Text>
@@ -127,7 +108,7 @@ const Profile = props => {
               size={SF(20)}
               name="right"
               style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
+          
             />
           </View>
 
@@ -136,8 +117,8 @@ const Profile = props => {
             <FeIcon
               size={SF(20)}
               name="settings"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
+   
             />
 
             <Text style={ProfileTabStyle.johnboxtwo}>Document Management</Text>
@@ -146,7 +127,7 @@ const Profile = props => {
               size={SF(20)}
               name="right"
               style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
+     
             />
           </View>
 
@@ -155,8 +136,8 @@ const Profile = props => {
             <IconMI
               size={SF(20)}
               name="payment"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
+             
             />
 
             <Text style={ProfileTabStyle.johnboxtwo}>Payment</Text>
@@ -165,7 +146,7 @@ const Profile = props => {
               size={SF(20)}
               name="right"
               style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
+            
             />
           </View>
 
@@ -174,8 +155,8 @@ const Profile = props => {
             <IconMI
               size={SF(20)}
               name="align-horizontal-left"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
+           
             />
 
             <Text style={ProfileTabStyle.johnboxtwo}>Sign Out</Text>
@@ -184,7 +165,7 @@ const Profile = props => {
               size={SF(20)}
               name="right"
               style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
+        
             />
           </View>
 
@@ -198,8 +179,8 @@ const Profile = props => {
             <IconMI
               size={SF(20)}
               name="align-horizontal-left"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
+          
             />
 
             <Text style={ProfileTabStyle.johnboxtwo}>Newsletter</Text>
@@ -208,7 +189,7 @@ const Profile = props => {
               size={SF(20)}
               name="right"
               style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
+            
             />
           </View>
           {/* //////////////////////////////////// */}
@@ -216,8 +197,8 @@ const Profile = props => {
             <IconMI
               size={SF(20)}
               name="align-horizontal-left"
-              style={ProfileTabStyle.LeftIconStyles}
-              // color={Colors.black_text_color}
+              style={styles.LeftIconStyles}
+
             />
 
             <Text style={ProfileTabStyle.johnboxtwo}>Text Message</Text>
@@ -226,7 +207,7 @@ const Profile = props => {
               size={SF(20)}
               name="right"
               style={ProfileTabStyle.Jognboxthree}
-              // color={Colors.black_text_color}
+         
             />
           </View>
           {/* //////////////////////////////////// */}
@@ -235,8 +216,8 @@ const Profile = props => {
               <IconMI
                 size={SF(20)}
                 name="align-horizontal-left"
-                style={ProfileTabStyle.LeftIconStyles}
-                // color={Colors.black_text_color}
+                style={styles.LeftIconStyles}
+            
               />
 
               <Text style={ProfileTabStyle.johnboxtwo}>Phone Call</Text>
@@ -245,7 +226,7 @@ const Profile = props => {
                 size={SF(20)}
                 name="right"
                 style={ProfileTabStyle.Jognboxthree}
-                // color={Colors.black_text_color}
+             
               />
             </View>
           </TouchableOpacity>
@@ -255,8 +236,8 @@ const Profile = props => {
               <IconMI
                 size={SF(20)}
                 name="align-horizontal-left"
-                style={ProfileTabStyle.LeftIconStyles}
-                // color={Colors.black_text_color}
+                style={styles.LeftIconStyles}
+          
               />
 
               <Text style={ProfileTabStyle.johnboxtwo}>Phone Call</Text>
@@ -265,7 +246,7 @@ const Profile = props => {
                 size={SF(20)}
                 name="right"
                 style={ProfileTabStyle.Jognboxthree}
-                // color={Colors.black_text_color}
+           
               />
             </View>
           </TouchableOpacity>
@@ -276,8 +257,8 @@ const Profile = props => {
               <IconMI
                 size={SF(20)}
                 name="align-horizontal-left"
-                style={ProfileTabStyle.LeftIconStyles}
-                // color={Colors.black_text_color}
+                style={styles.LeftIconStyles}
+           
               />
 
               <Text style={ProfileTabStyle.johnboxtwo}> Currency</Text>
@@ -289,14 +270,148 @@ const Profile = props => {
                 size={SF(20)}
                 name="right"
                 style={ProfileTabStyle.Jognboxthree}
-                // color={Colors.black_text_color}
+          
               />
             </View>
           </TouchableOpacity>
-          {/* ////////////////////////////////// */}
+     
         </View>
       </View>
     </View>
   );
 };
 export default Profile;
+
+// import React, {useState, useEffect, useMemo} from 'react';
+// import {View,
+//   Text,
+//   TouchableOpacity,
+//   Image,
+//   Modal,
+//   StyleSheet,
+// } from 'react-native';
+// import Icon from 'react-native-vector-icons/EvilIcons';
+// import IconF from 'react-native-vector-icons/AntDesign';
+// import IconG from 'react-native-vector-icons/Ionicons';
+// import images from '../../index';
+// import {SH, SF, SW, Colors} from '../../utils';
+// import {useTranslation} from 'react-i18next';
+// import {useNavigation, useTheme} from '@react-navigation/native';
+// import styles from './styles';
+// import {getFromLocalStorage} from '../../Services/Api';
+// import {getProfileWithUserId} from '../../Services/ApiList';
+
+// const Profile = props => {
+//   const navigation = useNavigation();
+//   const {t} = useTranslation();
+//   const [loading, setLoading] = useState(true);
+//   const [profileData, setProfileData] = useState(null);
+//   useEffect(() => {
+//     const fetchData = async (id) => {
+//       try {
+//         const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+//         const response = await getProfileWithUserId(Gettingtoken.id);
+//         console.log('profilee:.....======', response.data.createdAt);
+//         setProfileData(response.data);
+//         console.log('setProfileData',profileData.firstName)
+//         setLoading(false);
+//       } catch (error) {
+//         console.error('Error fetching profile:', error);
+//       }
+//     };
+  
+//     fetchData(); 
+  
+//   }, []);
+  
+//  return (
+//     <View style={{flex: 1}}>
+//       <View style={styles.BackgroundWhite}>
+//         <View style={styles.whilistminbody}>
+//         <View style={styles.headerContainer}>
+//             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+//               <IconF
+//                 size={SF(20)}
+//                 name="left"
+//                 style={styles.headerIcon}
+//               />
+//             </TouchableOpacity>
+//             <Text style={styles.headerText}>Profile</Text>
+           
+//           </View>
+
+//           <View style={styles.ImagCenter}>
+//           <View>
+//             <Image
+//               style={styles.ImageStyles}
+//               resizeMode="cover"
+             
+//                 source={{ uri: profileData.profilePhoto}} 
+//             />
+//             <Text style={styles.UserName}>{profileData.firstName}</Text>
+//           </View>
+//         </View>
+//         <View style={styles.ProfileDetailesMinview}>
+//           {/* ///////////////////////williomjonson//////////////// */}
+//           <View style={styles.profiledetailboxview}>
+//             <Text style={styles.boxone}>WilliomsonJhon</Text>
+//             <Text style={styles.boxtwo}></Text>
+//             <Icon
+//               size={SF(30)}
+//               name="pencil"
+//               style={styles.boxthree}
+//             />
+//           </View>
+//           {/* //////////////////Williomjanson/////////////////// */}
+//           <View style={styles.profiledetailboxview}>
+//             <Text style={styles.boxone}>+880 000 111 333</Text>
+//             <Text style={styles.boxtwo}></Text>
+//             <Icon
+//               size={SF(30)}
+//               name="pencil"
+//               style={styles.boxthree}
+//               />
+//           </View>
+//           {/* //////////////////Williomjanson/////////////////// */}
+//           <View style={styles.profiledetailboxview}>
+//             <Text style={styles.boxone}>email@website.com</Text>
+//             <Text style={styles.boxtwo}></Text>
+//             <Icon
+//               size={SF(30)}
+//               name="pencil"
+//              style={styles.boxthree}
+//             />
+//           </View>
+
+//           {/* //////////////////Williomjanson/////////////////// */}
+//           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+//             <View style={styles.profiledetailboxview}>
+//               <Text style={styles.boxone}>
+//                 email@website.com{'\n'}Fusce Rd.Frederick Nebraska
+//               </Text>
+//               <Text style={styles.boxtwo}></Text>
+//               <Icon
+//                 size={SF(30)}
+//                 name="pencil"
+//                 style={styles.boxthree}
+
+//               />
+//             </View>
+//           </TouchableOpacity>
+//           {/* /////////////////////////////// */}
+
+//           <TouchableOpacity
+//             style={styles.savebtn}
+//             onPress={() => navigation.navigate('ChatScreen')}>
+//             <Text style={styles.savebtntext}>Save Now</Text>
+//           </TouchableOpacity>
+//         </View>
+        
+//         </View>
+//       </View>
+//     </View>
+//   );
+// };
+// export default Profile;
+
+

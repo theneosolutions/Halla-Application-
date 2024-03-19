@@ -32,11 +32,11 @@ const GetCardDataInfo = async () => {
   const response = await GetCardInfo();
   console.log('response',response)
   if(!response){
-    Alert.alert('Event is not created')
+   // Alert.alert('Event is not created')
   }
   else{
     setCardsData(response?.data?.data);
-    Alert.alert('Event is successfully created')
+    // Alert.alert('Event is successfully created')
   }
 };
 const handleImageClick = async item => {

@@ -8,10 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,ScrollView
 } from 'react-native';
-
 import images from '../../index';
-import IconF from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SH, SF, SW, Colors} from '../../utils';
 import {confirmemail} from '../../Services/ApiList';
@@ -50,30 +47,16 @@ const Forgotemail = ({navigation}) => {
 
   return (
     <ScrollView>
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-       <View style={styles.Container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.Container}>
               <View   style={styles.firstHalfView}>
-          <Text  style={styles.forgotstyle}>  Forgot Password</Text>
-          <Text style={styles.textStyle}>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sintvelit officia consequat duis enim velit mollit.</Text>
-          <View style={styles.imageview}>
-              <Image source={images.halalogo} style={styles.imgstyle} />
-          </View>
-        
+                 <Text  style={styles.forgotstyle}>  Forgot Password</Text>
+                 <Text style={styles.textStyle}>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sintvelit officia consequat duis enim velit mollit.</Text>
+             <View style={styles.imageview}>
+                <Image source={images.halalogo} style={styles.imgstyle} />
+           </View>
         </View>
-
-   
-      
-          <Text
-            style={{
-          
-      marginRight:'auto',
-        color:'black',
-        paddingLeft:50,
-        fontWeight:'500',
-              fontSize: SF(15),
-            }}>
-            {t('Email')}
-          </Text>
+         <Text   style={styles.LabelEmail}>  {t('Email')}  </Text>
       
           <TouchableOpacity
             style={styles.touchablestyleW}
@@ -96,25 +79,14 @@ const Forgotemail = ({navigation}) => {
           </TouchableOpacity>
         
         <View
-          style={{
-            height:100,
-            // flex: 0.2,
-           
-            width: '100%',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}>
+          style={styles.ContinuTouchView}>
           <TouchableOpacity
             style={styles.touchablestyle}
-            onPress={() => forgotpass()}
-
-     
-          >
+            onPress={() => forgotpass()}>
             <Text style={styles.btntext}>{t('Continue')}</Text>
           </TouchableOpacity>
         </View>
-  
-      </View>
+   </View>
   
     </TouchableWithoutFeedback>
     </ScrollView>

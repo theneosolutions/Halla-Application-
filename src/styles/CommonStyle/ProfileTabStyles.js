@@ -54,15 +54,12 @@ const ProfileTabStyles = StyleSheet.create({
     borderRadius: SH(300),
     backgroundColor: 'gray',
     marginLeft: SW(5),
-    // justifyContent: 'center',
-    // alignItems: 'center',
+   
   },
   LeftIconStyles: {
     width: SW(30),
     height: SH(70),
     paddingTop: SH(26),
-    // borderRadius: SH(300),
-    // backgroundColor: 'gray',
     color:"black",
     marginLeft: SW(10),
   },
@@ -280,12 +277,10 @@ const ProfileTabStyles = StyleSheet.create({
   },
   btnview: {
     flexDirection: 'row',
-    // width: SW(300),
-    // backgroundColor: 'red',
+  
     justifyContent: 'center',
     margin: SH(20),
-    // alignItems: 'center',
-    // alignContent: 'center',
+
   },
   ActiveButton: {
     height: SH(40),
@@ -393,6 +388,7 @@ const ProfileTabStyles = StyleSheet.create({
     // backgroundColor: 'yellow',
     marginLeft: 'auto',
     paddingTop: SH(8),
+    color:'black'
     // padding: SW(5),
   },
   savebtn: {
@@ -423,17 +419,15 @@ const ProfileTabStyles = StyleSheet.create({
   Jognboxthree: {
     height: SH(50),
     width: SW(40),
-    // backgroundColor: 'yellow',
     marginLeft: 'auto',
     paddingTop: SH(15),
     color:'black'
-    // padding: SW(5),
+
   },
   johnboxtwo: {
     height: SH(30),
     width: SW(180),
     color: Colors.black_text_color,
-    //backgroundColor: 'purple',
     paddingLeft: SW(10),
     paddingTop: SH(4),
     fontSize: SF(18),
@@ -447,9 +441,7 @@ const ProfileTabStyles = StyleSheet.create({
     borderTopLeftRadius: 18,
     borderBottomRightRadius: 18,
     marginTop: SH(2),
-    // paddingTop: SH(10),
-    // fontSize: SF(17),
-    // color: 'black',
+   
   },
   accountstyle: {
     fontSize: SF(17),

@@ -1,23 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-  Animated,
-} from 'react-native';
+import {View,Image,Text,TouchableOpacity,Animated} from 'react-native';
 import images from '../../index';
 import {SH, SF, SW, Colors} from '../../utils';
 import Icon from 'react-native-vector-icons/AntDesign';
-// import styles from '../../styles/CommonStyle/styles';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
-// import Login from '../../styles/CommonStyle/LoginScreenStyle';
 import {onGoogleButtonPress} from '../../SocailLogins/index';
 import styles from './styles';
-const RegistrationScreen = ({navigation}) => {
+ const RegistrationScreen = ({navigation}) => {
   const {t, i18n} = useTranslation();
   const [backgroundIndex, setBackgroundIndex] = useState(0);
   const [opacity] = useState(new Animated.Value(1));
@@ -43,13 +34,10 @@ const RegistrationScreen = ({navigation}) => {
         style={styles.HalfView}>
         <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
-
-   
-      <View style={styles.buttonContainer}>
+    <View style={styles.buttonContainer}>
         {Platform.OS === 'ios' ? (
           <>
-            <TouchableOpacity
-              style={styles.touchablestyleIcon}
+          <TouchableOpacity  style={styles.touchablestyleIcon}
               onPress={() => navigation.navigate('AppleLogin')}>
               <View>
                 <IconF
@@ -59,35 +47,28 @@ const RegistrationScreen = ({navigation}) => {
                   color={'white'}
                 />
                 <Text style={styles.btntext}>continue_with_apple</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.touchablestyle}
+               </View>
+          </TouchableOpacity>
+          <TouchableOpacity  style={styles.touchablestyle}
               onPress={() => navigation.navigate('PhoneOrEmailLogin')}>
               <View>
                 <IconF
                   size={SF(20)}
                   name="phone"
-                  // style={styles.Iconstyle}
                   color={'white'}
                 />
                 <Text style={styles.btntext}>
-                  continue_with_phone_or_email
+                  {('continue_with_phone_or_email')}
                 </Text>
               </View>
-            </TouchableOpacity>
+          </TouchableOpacity>
           </>
         ) : (
           <View style={{width: '90%'}}>
             <TouchableOpacity
-              style={
-                styles.touchablestyleIcon
-              
-                
-                
-              }
-              onPress={() => navigation.navigate('GoogleLogin')}>
-              <View
+              style={styles.touchablestyleIcon}
+                 onPress={() => navigation.navigate('Login')}>
+               <View
                 style={{
                   flexDirection: 'row',
                   paddingHorizontal: '10%',

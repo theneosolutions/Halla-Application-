@@ -124,6 +124,7 @@ const ContactScreen = ({ route,...props }) => {
 
     const openModal = () => {
         setShowModal(true);
+       
     };
 
     const closeModal = () => {
@@ -142,7 +143,11 @@ const ContactScreen = ({ route,...props }) => {
         // Logic to add the new contact to the list
         // You can implement this based on your requirements
         // For simplicity, I'm just logging the new contact data here
-        console.log('New contact data:', newContactData);
+        // console.log('New contact datammm:', newContactData);
+        // console.log('setContacts',setContacts)
+        console.log("🚀 ~ handleAddContact ~ contacts:", newContactData)
+        const contact = {...newContactData,fullNumber:`${newContactData.callingCode}${newContactData.phoneNumber}`}
+        setContacts([contact,...contacts]); // Add the new contact
         // Close the modal
         closeModal();
     };

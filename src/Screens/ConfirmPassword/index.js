@@ -6,66 +6,91 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback,ScrollView
 } from 'react-native';
 import images from '../../index';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {SH, SF, SW, Colors} from '../../utils';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
-import {resetpass} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import styles from './styles';
+import {updatepass} from '../../Services/ApiList';
 
-const ResetPass = ({navigation, route}) => {
-  const {email, otp} = route.params;
+const ConfimrPassword = ({navigation}) => {
+//   const {email, otp} = route.params;
 
-  console.log('email=========', email);
-  console.log('otp=========', otp);
+//   console.log('email=========', email);
+//   console.log('otp=========', otp);
   const [password1, setPassword1] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordone, setShowPasswordone] = useState(false);
+  const [showPasswordtwo, setShowPasswordtwo] = useState(false);
   const [password2, setpassword2] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
+  const[password,setPassword]=useState(false)
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPasswordone(!showPasswordone);
+  };
+  const togglePasswordVisibilitytwo = () => {
+    setShowPasswordtwo(!showPasswordtwo);
   };
   const {t, i18n} = useTranslation();
 
-  const resetpassword = async () => {
+  const HandleUpdatePassword = async () => {
     const token = await getFromLocalStorage('@UserToken');
     const data = {
-      password1: password1,
-      password2: password2,
-      email: email,
-      otp: parseFloat(otp.join('')),
-    };
+            password1: password1,
+            password2: password2,
+            password: password
+          };
     console.log('data=======', data);
     const response = await resetpass(data);
     console.log('resetPassword==========', response);
     navigation.navigate('ResetPassDone');
   };
-  const otpverifyfunction = () => {
-    resetpassword();
-    navigation.navigate('ResetPassDone');
-  };
+      // navigation.navigate('ResetPassDone');
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        
          <View style={styles.Container}>
+       
            <View style={styles.firstHalfView}>
-              <Text style={styles.boldText}>{t('ResetPassword')}
+              <Text style={styles.boldText}>Confirm Password
              </Text>
              <Text
              style={styles.lightText}>
             {t('resetpasstext')}
             </Text>
+            
             <Image
             source={images.halalogo}
             style={styles.imgstyle} />
           </View>
-
-        <View
+          <ScrollView style={{flex:1,marginTop:30}}>
+       <View
           style={styles.touchableView}>
+                   <TouchableOpacity  style={styles.touchablestyleW}>
+              <View style={{flexDirection: 'row'}}>
+                <FontAwesome
+                name="lock"
+                size={SF(20)}
+                style={styles.iconStyleeye}
+                color={Colors.black}
+                />
+              <TextInput
+                style={styles.input}
+                placeholder={t('Enteryourpassword')}
+                value={password}
+                onChangeText={setPassword}
+                placeholderTextColor={'black'}
+         
+                />
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+               
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchablestyleW}>
             <View style={{flexDirection: 'row'}}>
@@ -81,11 +106,11 @@ const ResetPass = ({navigation, route}) => {
                 value={password1}
                 onChangeText={setPassword1}
                 placeholderTextColor={'black'}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showPasswordone}
               />
               <TouchableOpacity onPress={togglePasswordVisibility}>
                 <FontAwesome
-                  name={showPassword ? 'eye-slash' : 'eye'}
+                  name={showPasswordone ? 'eye-slash' : 'eye'}
                   size={SF(20)}
                   style={styles.iconStyle}
                   color={Colors.black}
@@ -110,11 +135,11 @@ const ResetPass = ({navigation, route}) => {
                 value={password2}
                 onChangeText={setpassword2}
                 placeholderTextColor={'black'}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showPasswordtwo}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
+              <TouchableOpacity onPress={togglePasswordVisibilitytwo}>
                 <FontAwesome
-                  name={showPassword ? 'eye-slash' : 'eye'}
+                  name={showPasswordtwo ? 'eye-slash' : 'eye'}
                   size={SF(20)}
                   style={styles.iconStyle}
                   color={Colors.black}
@@ -122,6 +147,7 @@ const ResetPass = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
+    
           {submitted && password2 == '' ? (
             <Text style={styles.error}>Confirm your password</Text>
           ) : password1 != password2 ? (
@@ -141,14 +167,16 @@ const ResetPass = ({navigation, route}) => {
               },
             ]}
             disabled={password1 !== password2}
-            onPress={resetpassword}>
+              onPress={HandleUpdatePassword()}> 
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
+        </ScrollView>
       </View>
 
     </TouchableWithoutFeedback>
   );
 };
 
-export default ResetPass;
+export default ConfimrPassword;
+

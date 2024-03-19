@@ -8,12 +8,8 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-
 import images from '../../index';
-import IconF from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
-// import SplashStyl from '../../styles/CommonStyle/SplashStyl';
 import {SH, SF, SW, Colors} from '../../utils';
 import {useTranslation} from 'react-i18next';
 import Languages from '../../Language/i18n';
@@ -36,9 +32,7 @@ const OTPVerify = ({navigation, route}) => {
       otpTextInputRefs.current[index + 1].focus();
     }
   };
-
- 
-  return (
+return (
     <View style={styles.Container}>
       <View
         style={styles.firstView}>
@@ -52,8 +46,7 @@ const OTPVerify = ({navigation, route}) => {
         </Text>
         <Image
           source={images.halalogo}
-          style={styles.imgstyle}
-        />
+          style={styles.imgstyle}/>
       </View>
 
       <View
@@ -77,16 +70,14 @@ const OTPVerify = ({navigation, route}) => {
         </View>
      
         <TouchableOpacity 
-        // onPress={handleResendOTP}
+      
         >
           <Text
             style={styles.codeExpireStyle}>
             {t('CodeExpires')}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-        // onPress={handleResendOTP}
-        >
+        <TouchableOpacity>
           <View style={styles.dontreviewopt}>
             <Text style={styles.lighttextgray}>
               {t('dontrecevidOTP')}
@@ -100,7 +91,6 @@ const OTPVerify = ({navigation, route}) => {
       </View>
         <TouchableOpacity
           style={styles.touchablestyle}
-          //onPress={otpverifyfunction}
           onPress={() => navigation.navigate('ResetPass', {email, otp})}>
           <Text style={styles.btntext}>{t('Continue')}</Text>
         </TouchableOpacity>

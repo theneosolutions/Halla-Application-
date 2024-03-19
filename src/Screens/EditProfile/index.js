@@ -1,198 +1,154 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Modal,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Image, Modal,TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import IconF from 'react-native-vector-icons/AntDesign';
 import IconG from 'react-native-vector-icons/Ionicons';
-import ProfileTabStyle from '../../styles/CommonStyle/ProfileTabStyles';
-import Style from '../../styles/CommonStyle/Style';
-import {Button, Spacing, Input} from '../../Components';
 import {SH, SF, SW, Colors} from '../../utils';
 import images from '../../index';
-// import RouteName from '../../../routes/RouteName';
 import {useTranslation} from 'react-i18next';
 import {useNavigation, useTheme} from '@react-navigation/native';
-
-const EditProfile = props => {
+import styles from './styles';
+import {getFromLocalStorage} from '../../Services/Api';
+import {getProfileWithUserId} from '../../Services/ApiList';
+const EditDetail = props => {
   const {Colors} = useTheme();
-  //const ProfileTabStyle = useMemo(() => ProfileTabStyles(Colors), [Colors]);
   const navigation = useNavigation();
   const {t} = useTranslation();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalcontent, setmodalcontent] = useState(0);
-  const [passwordVisibilityold, setpasswordVisibilityold] = useState(true);
-  const [passwordVisibilitynew, setpasswordVisibilitynew] = useState(true);
-  const [passwordVisibilityconfirm, setPasswordVisibilityconfirm] =
-    useState(true);
 
-  const stateArray = {
-    Oldpassword: '',
-    Newpassword: '',
-    email: '',
-    Confirmpassword: '',
-    number: null,
-  };
-  const [state, setState] = useState(stateArray);
-
-  const onChangeText = text => {
-    if (text === 'Oldpassword')
-      setpasswordVisibilityold(!passwordVisibilityold);
-    if (text === 'Newpassword')
-      setpasswordVisibilitynew(!passwordVisibilitynew);
-    if (text === 'Confirmpassword')
-      setPasswordVisibilityconfirm(!passwordVisibilityconfirm);
-  };
-
+  const [loading, setLoading] = useState(true);
+  const [profileData, setProfileData] = useState(null);
+  const [editUsernameModalVisible, setEditUsernameModalVisible] = useState(false);
+  const [username, setUsername] = useState('');
   useEffect(() => {
-    navigation.addListener('focus', () => {
-      setModalVisible(false);
-      setmodalcontent(0);
-    });
-  }, [navigation]);
-  const handleUsernamePress = () => {
-    // Handle press for the "Username" section
-    console.log('Username section pressed');
-    // Add your logic or navigation here
+    const fetchData = async (id) => {
+      try {
+        const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+        const response = await getProfileWithUserId(Gettingtoken.id);
+        console.log('profilee:.....======', response.data.createdAt);
+        setProfileData(response.data);
+        console.log('setProfileData=====------',profileData.username)
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+  
+    fetchData(); 
+  
+  }, []);
+
+  const handleEditUsername = () => {
+    setEditUsernameModalVisible(true);
   };
-  return (
-    <View style={{flex: 1}}>
-      <View style={ProfileTabStyle.BackgroundWhite}>
-        <View style={ProfileTabStyle.whilistminbody}>
-          <Text style={ProfileTabStyle.UserName}>
-            {t('Your Profile Information')}
-          </Text>
-          <View style={ProfileTabStyle.ImagCenter}>
-            <View>
-              <Image
-                style={ProfileTabStyle.ImageStyles}
-                resizeMode="cover"
-                source={images.User_image_one_profile}
+
+  const handleSaveUsername = () => {
+    setEditUsernameModalVisible(false);
+    // You can add your logic here to update the username
+  };
+  const closeModal = () => {
+    setEditUsernameModalVisible(false);}
+   return (
+    <View style={styles.BackgroundWhite}>
+      <View style={styles.whilistminbody}>
+        <View style={styles.ImagCenter}>
+          <View>
+            <Image
+              style={styles.ImageStyles}
+              resizeMode="cover"
+              source={{uri:profileData?.profilePhoto}}
+            />
+            <Text style={styles.UserName}>{profileData?.firstName}{profileData?.lastName}</Text>
+          </View>
+        </View>
+        <View style={styles.ProfileDetailesMinview}>
+          {/* ///////////////////////williomjonson//////////////// */}
+          <View style={styles.profiledetailboxview}>
+            <Text style={styles.boxone}>{profileData?.username}</Text>
+            <Text style={styles.boxtwo}></Text>
+            <TouchableOpacity onPress={handleEditUsername}>
+               <Icon
+              size={SF(30)}
+              name="pencil"
+              style={styles.boxthree}
+            />
+            </TouchableOpacity>
+           
+          </View>
+          {/* //////////////////Williomjanson/////////////////// */}
+          <View style={styles.profiledetailboxview}>
+            <Text style={styles.boxone}>+880 000 111 333</Text>
+            <Text style={styles.boxtwo}></Text>
+            <Icon
+              size={SF(30)}
+              name="pencil"
+              style={styles.boxthree}
+              />
+          </View>
+          {/* //////////////////Williomjanson/////////////////// */}
+          <View style={styles.profiledetailboxview}>
+            <Text style={styles.boxone}>email@website.com</Text>
+            <Text style={styles.boxtwo}></Text>
+            <Icon
+              size={SF(30)}
+              name="pencil"
+             style={styles.boxthree}
+            />
+          </View>
+
+          {/* //////////////////Williomjanson/////////////////// */}
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <View style={styles.profiledetailboxview}>
+              <Text style={styles.boxone}>
+                email@website.com{'\n'}Fusce Rd.Frederick Nebraska
+              </Text>
+              <Text style={styles.boxtwo}></Text>
+              <Icon
+                size={SF(30)}
+                name="pencil"
+                style={styles.boxthree}
+
               />
             </View>
-          </View>
-          <View style={ProfileTabStyle.ProfileDetailesMinview}>
-            <Text style={ProfileTabStyle.InfoProFile}>Jhon Smith</Text>
-            <Text style={ProfileTabStyle.EditProFile}>{t('New York')}</Text>
+          </TouchableOpacity>
+          {/* /////////////////////////////// */}
 
-            <View style={ProfileTabStyle.btnview}>
-              <TouchableOpacity
-                style={ProfileTabStyle.ActiveButton}
-                onPress={() => navigation.navigate('ProfileDetail')}>
-                <Text style={ProfileTabStyle.textstyle}>Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={ProfileTabStyle.ActiveButton}
-                onPress={() => navigation.navigate('SettingScreen')}>
-                <Text style={ProfileTabStyle.textstyle}>Follow</Text>
-              </TouchableOpacity>
-            </View>
+          {/* <TouchableOpacity
+            style={styles.savebtn}
+            onPress={() => navigation.navigate('ChatScreen')}>
+            <Text style={styles.savebtntext}>Save Now</Text>
+          </TouchableOpacity> */}
 
-            <View style={ProfileTabStyle.boxView}>
-              <View style={ProfileTabStyle.folowerLineView}>
-                <Text style={ProfileTabStyle.linetext}>800</Text>
-                <Text style={ProfileTabStyle.seclinetext}>Event</Text>
-              </View>
-              <View style={ProfileTabStyle.onesidebox}>
-                <Text style={ProfileTabStyle.linetext}>7979</Text>
-                <Text style={ProfileTabStyle.seclinetext}>Follower</Text>
-              </View>
-              <View
-                style={{
-                  borderRightWidth: 0.2,
-                  color: 'gray',
-                  height: '70%',
-                  borderRightColor: 'black',
-                }}>
-                <Text style={ProfileTabStyle.linetext}>999</Text>
-                <Text style={ProfileTabStyle.seclinetext}>Following</Text>
+           {/* Edit Username Modal */}
+           <Modal
+            animationType="slide"
+            transparent={true}
+            visible={editUsernameModalVisible}
+            onRequestClose={() => setEditUsernameModalVisible(false)}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter new username"
+                  value={username}
+                  onChangeText={setUsername}
+                />
+                <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity style={styles.modalButton} onPress={handleSaveUsername}>
+                  <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                </View>
+              
               </View>
             </View>
-            {/* /////////////earning///////////// */}
-            <TouchableOpacity
-              onPress={() => navigation.navigate('invitationreport')}>
-              <View style={ProfileTabStyle.mainboxView}>
-                <Text style={ProfileTabStyle.boxone}>Earning</Text>
-                <Text style={ProfileTabStyle.boxtwo}></Text>
-                <IconF
-                  size={SF(20)}
-                  name="right"
-                  style={ProfileTabStyle.boxthree}
-                  // color={Colors.black_text_color}
-                />
-              </View>
-            </TouchableOpacity>
-            {/* ////////////Favorities////////////////// */}
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SettingScreen')}>
-              <View style={ProfileTabStyle.mainboxView}>
-                <Text style={ProfileTabStyle.boxone}>Favorites</Text>
-                <Text style={ProfileTabStyle.boxtwo}>20 Event</Text>
-                <IconF
-                  size={SF(20)}
-                  name="right"
-                  style={ProfileTabStyle.boxthree}
-                  // color={Colors.black_text_color}
-                />
-              </View>
-            </TouchableOpacity>
-            {/* ////////////////EventGoing/////////////////////// */}
-
-            <TouchableOpacity onPress={() => navigation.navigate('MessageV2')}>
-              <View style={ProfileTabStyle.mainboxView}>
-                <Text style={ProfileTabStyle.boxone}>Event Going</Text>
-                <Text style={ProfileTabStyle.boxtwo}>20 Event</Text>
-                <IconF
-                  size={SF(20)}
-                  name="right"
-                  style={ProfileTabStyle.boxthree}
-                  // color={Colors.black_text_color}
-                />
-              </View>
-            </TouchableOpacity>
-
-            {/* /////////////////////Edit Profile///////////////////// */}
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ProfileDetail')}>
-              <View style={ProfileTabStyle.mainboxView}>
-                <Text style={ProfileTabStyle.boxone}>Edit Profile</Text>
-                <Text style={ProfileTabStyle.boxtwo}></Text>
-                <IconF
-                  size={SF(20)}
-                  name="right"
-                  style={ProfileTabStyle.boxthree}
-                  // color={Colors.black_text_color}
-                />
-              </View>
-            </TouchableOpacity>
-            {/* ///////////////Setting////////////////////////// */}
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ProfileDetail')}>
-              <View style={ProfileTabStyle.mainboxView}>
-                <Text style={ProfileTabStyle.boxone}>Edit Setting</Text>
-                <Text style={ProfileTabStyle.boxtwo}></Text>
-                <IconF
-                  size={SF(20)}
-                  name="right"
-                  style={ProfileTabStyle.boxthree}
-                  // color={Colors.black_text_color}
-                />
-              </View>
-            </TouchableOpacity>
-
-            {/* /////////////////////////////////////////////// */}
-          </View>
+          </Modal>
         </View>
       </View>
     </View>
   );
 };
-export default EditProfile;
+export default EditDetail;
+
+

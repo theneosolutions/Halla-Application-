@@ -1,6 +1,6 @@
 import api from './Api';
 const baseUrl = 'https://backend.halla.sa';
-export const GOOGLE_MAPS_APIKEY = 'AIzaSyB3fZvHRP8c7AfQUWGWLTRJqsyCFrgGQWA';
+export const GOOGLE_MAPS_APIKEY = 'AIzaSyAFZBGvY2p25djzXAG-0p3vq42SzGw9WxQ';
 
 export const signUp = async data => {
   const url = `/api/auth/sign-up`;
@@ -28,6 +28,12 @@ export const resetpass = async data => {
   const res = await api(baseUrl, url, data, 'POST', false, false);
   return res;
 };
+export const updatepass = async data => {
+  const url = `/api/auth/update-password`;
+  const res = await api(baseUrl, url, data, 'POST', true, false);
+  return res;
+};
+
 export const otpVerify = async data => {
   const url = `/api/auth/otp/verify`;
   const res = await api(baseUrl, url, data, 'POST', false, false);
@@ -63,6 +69,12 @@ export const GetCardInfo = async () => {
 };
 export const getEventWithUserId = async user => {
   const url = `/api/events/byUserId/${user}?order=DESC&page=1&take=100&filter=monthly`;
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  return res;
+};
+
+export const getProfileWithUserId = async id => {
+  const url = `/api/users/${id}`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
 };

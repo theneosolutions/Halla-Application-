@@ -64,8 +64,6 @@ btntext: {
   color: 'white',
   fontSize: SF(16),
   fontWeight: '700',
-  // alignItems: 'center',
-  //paddingLeft: SW(110),
 },
 //////////splashscreenend/////
 
@@ -235,16 +233,11 @@ touchablestyleIcon: {
     width: '78%',
     alignSelf: 'center',
     marginVertical: 5,
-
     paddingHorizontal: 3,
     paddingVertical: 1,
-    //width: SW(280),
-    //justifyContent: 'center',
-    //alignContent: 'center',
     borderColor: '#293170',
     borderWidth: 0.6,
     backgroundColor: 'white',
-    //borderBottomLeftRadius: SF(4),
     borderTopLeftRadius: SF(20),
     borderBottomRightRadius: SF(20),
   },

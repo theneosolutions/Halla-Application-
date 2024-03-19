@@ -12,7 +12,6 @@ import {
 // import usePushNotification from '../utils/PushNotification_helper';
 import {useTranslation} from 'react-i18next';
 import images from '../../index';
-// import SplashStyl from '../styles/CommonStyle/SplashStyl';
 import styles from './styles';
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
@@ -93,11 +92,7 @@ i18n.use(initReactI18next).init({
     i18n.changeLanguage(newLanguage); 
     setLanguage(newLanguage);
   };
-  const DisplayNotify = () => {
-    // onDisplayNotification();
-    navigation.navigate('RegistrationScreen');
-  };
-
+ 
 
 //   // const checkToken = async () => {
 //     // try {
@@ -148,8 +143,8 @@ i18n.use(initReactI18next).init({
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.touchablestyle}
-            onPress={DisplayNotify}>
-            {/* // onPress={() => navigation.navigate('RegistrationScreen')}> */}
+           
+            onPress={() => navigation.navigate('RegistrationScreen')}> 
             <Text style={styles.btntext}>{t('started')}</Text>
           </TouchableOpacity>
         </View>

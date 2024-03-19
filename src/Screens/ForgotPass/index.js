@@ -10,61 +10,34 @@ import {SH, SF, SW, Colors} from '../../utils';
 import Login from '../../styles/CommonStyle/LoginScreenStyle';
 import {useTranslation} from 'react-i18next';
 import Languages from '../../Language/i18n';
+import styles from './styles';
 const ForgotPass = ({navigation}) => {
   const {t, i18n} = useTranslation();
-  //   useEffect(() => {
-  //     setTimeout(() => {
-  //       //navigation.navigate('RegistrationScreen');
-  //     }, 1000);
-  //   }, [navigation]);
-
   return (
-    <View style={SplashStyl.Container}>
+    <View style={styles.Container}>
       <View
-        style={{
-          flex: 0.4,
-          //backgroundColor: 'green',
-          width: '100%',
-          justifyContent: 'center',
-          alignItem: 'center',
-        }}>
+        style={styles.firstHalfView}>
         <Text
-          style={{
-            color: '#293170',
-            fontWeight: '800',
-            justifyContent: 'center',
-            alignItem: 'center',
-            textAlign: 'center',
-            fontSize: SF(20),
-            margin: 20,
-          }}>
+          style={styles.forgotstyle}>
           {t('ForgotPassword')}
         </Text>
-        <Image source={images.halalogo} style={SplashStyl.imgstyleS} />
+        <Image source={images.halalogo} style={styles.imgstyleS} />
       </View>
-
-      {/* <Text>Event Management made easy</Text> */}
       <View
-        style={{
-          flex: 0.4,
-          //backgroundColor: 'red',
-          width: '100%',
-          justifyContent: 'center',
-          alignItem: 'center',
-        }}>
+        style={styles.secondHalfView}>
         <TouchableOpacity
-          style={SplashStyl.touchablestyleW}
+          style={styles.touchablestyleW}
           onPress={() => navigation.navigate('Forgotemail')}>
           <View style={{flexDirection: 'row'}}>
             <FontC
               size={SF(20)}
               name="email-outline"
-              style={SplashStyl.Iconstyle}
+              style={styles.Iconstyle}
               color={'black'}
             />
             <View style={{flexDirection: 'column'}}>
-              <Text style={SplashStyl.btntextB}>{t('ResetviaEmail')}</Text>
-              <Text style={SplashStyl.btntextS}>
+              <Text style={styles.btntextB}>{t('ResetviaEmail')}</Text>
+              <Text style={styles.btntextS}>
                 Link reset will be send to your email address
               </Text>
             </View>
@@ -87,7 +60,7 @@ const ForgotPass = ({navigation}) => {
                 Link reset will be send to your email address
               </Text>
             </View>
-            {/* <Text style={SplashStyl.btntextB}>{t('SendviaSMS')}</Text> */}
+     
           </View>
         </TouchableOpacity>
       </View>
@@ -104,13 +77,6 @@ const ForgotPass = ({navigation}) => {
           onPress={() => navigation.navigate('OTPVerify')}>
           <Text style={SplashStyl.btntext}>{t('SendRequest')}</Text>
         </TouchableOpacity>
-
-        {/* <View style={Login.NotRegisterView}>
-          <Text style={Login.NotRegisterText}>{t('Notregister')}</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={Login.NotRegisterText}>{t('Createaccount')}</Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
     </View>
   );

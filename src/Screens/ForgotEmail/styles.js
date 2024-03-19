@@ -39,11 +39,12 @@ imgstyle: {
     //marginBottom: SH(10),
   },
   textStyle:{
-width:260,
+width:280,
 textAlign:'center',
 justifyContent:'center',
 alignSelf:'center',
-color:'black'
+color:'black',
+fontWeight:'400'
   },
 
   Iconstyle: {
@@ -91,5 +92,19 @@ borderBottomRightRadius: SF(20),
   fontWeight: '700',
   alignSelf:'center'
   },
+  LabelEmail:{
+    marginRight:'auto',
+    color:'black',
+    paddingLeft:50,
+    fontWeight:'500',
+    fontSize: SF(15),
+  },
+  ContinuTouchView:{
+    height:100,
+     width: '100%',
+     justifyContent: 'center',
+      alignItem: 'center',
+  }
+
 });
 export default styles;

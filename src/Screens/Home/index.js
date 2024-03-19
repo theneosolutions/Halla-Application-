@@ -83,38 +83,20 @@ useEffect(() => {
     }
     console.log("🚀 ~ Home ~ item:", item)
     return (
-      
-      <View style={styles.slide}>
-       
-       
-        <TouchableOpacity
-        
-        onPress={() => navigation.navigate('Invitationreport', { id: item.id })}>
-         
+       <View style={styles.slide}>
+          <TouchableOpacity
+                 onPress={() => {
+                  console.log("🚀 ~ Home ~ test:", item.id)
+                  navigation.navigate('Invitationreport', {id: item.id })
+                 }}>
           <Image source={{uri:item.image}} style={styles.images} />
-        </TouchableOpacity>
-        <View style={{flexDirection:'row',backgroundColor:'transparent',justifyContent:'spcae-between'}}>
+          </TouchableOpacity>
+        {/* <View style={{flexDirection:'row',backgroundColor:'transparent',justifyContent:'spcae-between'}}>
                <Text style={styles.title}>{item.name}</Text>
-             <Text style={{marginLeft:60,fontSize:12,fontWeight:'700',marginTop:2,color:'black'}}>{item.eventDate}</Text>
-            </View>
-        <View style={{flexDirection:'column'}}>
-          <Text style={styles.text2}>{item.latitude}</Text>
-          <Text style={styles.text2}>{item.longitude}</Text>
-          </View>
-        <TouchableOpacity
-          style={{
-            height: '14%',
-            width: '35%',
-            backgroundColor: '#293170',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginLeft: 120,
-            borderTopLeftRadius: 14,
-            borderBottomRightRadius: 14,
-             marginBottom: 25,
-          }}>
-          <Text style={{color: 'white', fontWeight: '600'}}>Draft</Text>
-        </TouchableOpacity>
+               <Text style={styles.datastyle}>{item.eventDate}</Text>
+        </View> */}
+      
+   
       </View>
     );
   };
@@ -243,7 +225,7 @@ useEffect(() => {
         width: '100%',
         // marginBottom:80,
         // height: 'auto',
-        backgroundColor: 'white',
+        backgroundColor: '#f8f9fc',
       }}>
       <Search />
       <View style={HomeTabStyle.Container}>
@@ -279,10 +261,10 @@ useEffect(() => {
                  <View
                   style={{
                     height: '30%',
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'red',
                     width: SW(350),
                     // marginBottom: 14,
-                    marginTop: 14,
+                    // marginTop: 14,
                     marginLeft:16,
                     borderTopLeftRadius: 30,
                     borderBottomRightRadius: 30,
@@ -290,7 +272,7 @@ useEffect(() => {
                      {loading ? (
         <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
       ) : (
-        <View style={{ height: '30%', backgroundColor: 'transparent', width: SW(350), marginTop: 14, marginLeft: 16, borderTopLeftRadius: 30, borderBottomRightRadius: 30 }}>
+        <View style={{ height: 220, backgroundColor: 'white', width: SW(350), borderTopLeftRadius: 30, borderBottomRightRadius: 30 }}>
           <AppIntroSlider
             renderItem={_renderItem}
             data={card}

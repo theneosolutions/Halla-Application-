@@ -43,14 +43,13 @@ const HomeTabStyle = StyleSheet.create({
     paddingHorizontal: SH(10),
   },
   BgColorView: {
-    padding: SH(20),
+    padding: SH(10),
     // margin: SH(5),
     justifyContent: 'center',
     borderBottomRightRadius: SF(40),
     borderBottomLeftRadius: SF(40),
 
     backgroundColor: Colors.darkBlue,
-  
   },
   BgColorTransparent: {
     backgroundColor: 'transparent',
@@ -72,15 +71,10 @@ const HomeTabStyle = StyleSheet.create({
     backgroundColor: Colors.white_text_color,
     flexDirection: 'row',
     alignItems: 'center',
-
-    // justifyContent: 'space-between',
     marginHorizontal: SW(20),
     borderTopLeftRadius: SH(20),
     borderBottomRightRadius: SH(20),
-    // height: SH(55),
     width: '90%',
-
-    // paddingRight: SH(20),
   },
   InputSpaceView: {
     width: widthPercent(79),

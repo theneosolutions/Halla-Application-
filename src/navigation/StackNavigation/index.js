@@ -1,7 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-import SplashScreen from '../../Screens/SplashScreen';
+import SplashScreen from '../../Screens/SplashScreen/index';
 import ChatScreen from '../../Screens/ChatScreen/index';
 import Profile from '../../Screens/Profile/index';
 import Scan from '../../Screens/Scan/index';
@@ -12,29 +11,17 @@ import ProfileDetail from '../../Screens/ProfileDetail/index';
 import MessagesV1 from '../../Screens/MessagesV1/index';
 import MessageV2 from '../../Screens/MessageV2/index';
 import RegistrationScreen from '../../Screens/RegistrationScreen/index';
-import AppleLogin from '../../Screens/AppleLogin/index';
-import GoogleLogin from '../../Screens/GoogleLogin/index';
+// import AppleLogin from '../../Screens/AppleLogin/index';
+// import GoogleLogin from '../../Screens/GoogleLogin/index';
 import MapScreen from '../../Screens/MapScreen/index';
 import ImagePicker from '../../Screens/ImagePicker/index';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import AddGuest from '../../Screens/AddGuest/index';
-// import * as Animatable from 'react-native-animatable';
-// import Feather from 'react-native-vector-icons/Feather';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
-// import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../../Screens/Card/index';
 import EditProfile from '../../Screens/EditProfile/index';
-
-import {
-  StatusBar,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text, Dimensions, Image
-} from 'react-native';
+import {StatusBar,View,StyleSheet, TouchableOpacity,Text, Dimensions, Image} from 'react-native';
 import Invitationreport from '../../Screens/Invitationreport/index';
 import React, {useState} from 'react';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -54,6 +41,8 @@ import AllDone from '../../Screens/AllDone/index';
 import { getPathDown } from "./curve";
 import { Svg, Path } from "react-native-svg";
 import { scale } from "react-native-size-scaling";
+ import Login from '../../Screens/Login/index';
+import ConfirmPassword from '../../Screens/ConfirmPassword/index';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,6 +58,17 @@ const AuthStack = () => {
         component={SplashScreen}
         options={{headerShown: false}}
       />
+         <Stack.Screen
+        name="RegistrationScreen"
+        component={RegistrationScreen}
+        options={{headerShown: false}}
+      />
+  <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name="ImagePicker"
         component={ImagePicker}
@@ -79,22 +79,10 @@ const AuthStack = () => {
         component={MapScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="RegistrationScreen"
-        component={RegistrationScreen}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="AppleLogin"
-        component={AppleLogin}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="GoogleLogin"
-        component={GoogleLogin}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen name="AddGuest" component={AddGuest}   options={{headerShown: false}}/>
+  
+      <Stack.Screen name="AddGuest" 
+      component={AddGuest}   
+      options={{headerShown: false}}/>
       <Stack.Screen
         name="ForgotPass"
         component={ForgotPass}
@@ -176,18 +164,13 @@ const AuthStack = () => {
       />
       <Stack.Screen name="SettingScreen" component={SettingScreen} />
       <Stack.Screen name="ProfileDetail" component={ProfileDetail} />
+      <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="MessagesV1" component={MessagesV1} />
       <Stack.Screen name="MessageV2" component={MessageV2} />
-      <Stack.Screen
-        name="Card"
-        component={Card}
-        options={{headerShown: false}}
+      <Stack.Screen  name="Card"  component={Card}  options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="AllDone"
-        component={AllDone}
-        options={{headerShown: true}}
+      <Stack.Screen name="AllDone" component={AllDone} options={{headerShown: true}}
       />
     </Stack.Navigator>
   );

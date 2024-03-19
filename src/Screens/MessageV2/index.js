@@ -37,13 +37,6 @@ const ChatListingScreen = () => {
     }, [])
   );
 
-  // useEffect(() => {
-  //   if (chatData.length === 0) {
-  //     fetchData();
-  //   }
-  // }, [chatData]);
-
-  // Dummy data for chat list
   const chatListData = chatData.length > 0 ? chatData : null;
 
   const navigateToChatDetail = (chatItem) => {

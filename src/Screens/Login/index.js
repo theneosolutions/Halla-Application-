@@ -1,27 +1,13 @@
+
 import React, {useState, useMemo, useEffect} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-  StyleSheet,
-  Modal,
-  ActivityIndicator,
-} from 'react-native';
+import {View,Text,ScrollView,Image,TextInput,TouchableOpacity,
+  TouchableWithoutFeedback,Keyboard,Alert,StyleSheet,
+  Modal,ActivityIndicator} from 'react-native';
 import {Button, Container, Input, Spacing} from '../../Components';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import styles from './styles';
-// import Login from '../../styles/CommonStyle/LoginScreenStyle';
-// import Style from '../../styles/CommonStyle/Style';
 import {onGoogleButtonPress} from '../../SocailLogins/index';
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
-
 import ConfirmationPopup from '../../utils/ConfirmationPopUp';
 // import {
 //   NotificationServices,
@@ -30,7 +16,6 @@ import ConfirmationPopup from '../../utils/ConfirmationPopUp';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import {SH, SF, SW, Colors} from '../../utils';
-import IconG from 'react-native-vector-icons/Ionicons';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import images from '../../index';
 import {useTranslation} from 'react-i18next';
@@ -39,12 +24,12 @@ import {signInPhone, signInEmail} from '../../Services/ApiList';
 const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
 import {setItemInLocalStorage} from '../../Services/Api';
 import Languages from '../../Language/i18n';
+import styles from './styles';
 
-import {heightPercent} from '../../utils/dimensions';
 const Login = () => {
   const {Colors} = useTheme();
   const {t, i18n} = useTranslation();
-  //const Login = useMemo(() => Login(Colors), [Colors]);
+
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [passwordVisibility, setpasswordVisibility] = useState(true);
@@ -64,12 +49,12 @@ const Login = () => {
 
   useEffect(() => {
     if (selectedOption === 'email') {
-      // Enable button if email and password are valid
+  
       setButtonEnable(email !== '' && password !== '');
     } else if (selectedOption === 'phoneNumber') {
-      // Enable button if phone number is valid
+   
       setButtonEnable(phoneNumber.length === 10);
-      // navigation.navigate('OTPVerify');
+   
     }
   }, [email, password, phoneNumber]);
 
@@ -82,7 +67,7 @@ const Login = () => {
     if (text === 'TextInputPassword')
       setpasswordVisibility(!passwordVisibility);
   };
-  // const {t} = useTranslation();
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -104,18 +89,11 @@ const Login = () => {
           '🚀 ~ file: index.js:71 ~ onGoogleButtonPress ~ res.data:',
           res.data,
         );
-        // setCredentials({
-        //   ...credentials,
-        //   email: res?.data?.user?.email,
-        //   password:res?.data?.user?.password
-        // });
+    
       })
       .catch(err => {
         console.log('errerrrrrr');
-        // console.log(
-        //   '🚀 ~ file: index.js:74 ~ onGoogleButtonPress ~ err.data:',
-        //   err.data,
-        // );
+        
       });
   };
 
@@ -129,12 +107,7 @@ const Login = () => {
 
     try {
       const response = await signInPhone(data);
-      // console.log(
-      //   'Response from signInEmail::: .',
-      //   response.response.data.statusCode,
-      // );
-
-      if (response.response.data.statusCode == 200) {
+    if (response.response.data.statusCode == 200) {
         navigation.navigate('OTPVerify');
       } else {
         Snackbar.show({
@@ -154,27 +127,10 @@ const Login = () => {
       });
     }
   };
-  // const setUserData = async data => {
-  //   const userObject = {
-  //     accessToken: data.accessToken,
-  //     id: data.user.id,
-  //     email: data.user.email,
-  //     lastName: data.user.lastName,
-  //     firstName: data.user.firstName,
-  //     username: data.user.username,
-  //     profilePhoto: data.user.profilePhoto,
-  //   };
-  //   console.log('==================', userObject);
-  //   dispatchUserData(userObject);
-  //   await setItemInLocalStorage('@UserToken', userObject.accessToken);
-  //   await setItemInLocalStorage('@UserInfo', JSON.stringify(userObject));
-  //   console.log('userObjectuserObject', userObject);
-  // };
+
   const signInWithEmailAndPassword = async () => {
     setBtnLoading(true);
     const data = {
-      // emailOrUsername: email,
-      // password: password,
       emailOrUsername: email,
       password: password,
     };
@@ -182,25 +138,19 @@ const Login = () => {
     try {
       const response = await signInEmail(data);
       console.log('Response from signInEmail..: ', response);
-      // setUserData(response?.data);
-      if (response?.data) {
-        // setMessage(response?.data?.message);
-        const {accessToken, id, email} = response?.data;
-         setItemInLocalStorage('@UserToken', accessToken);
-         setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user));
-        // setItemInLocalStorage('@UserId', response?.data?.user?.id);
+        if (response?.data) {
+       const {accessToken, id, email} = response?.data;
+        setItemInLocalStorage('@UserToken', accessToken);
+        setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user));
         setCurrentComponent('login');
 
-        // Success message received from the API, navigate to Home screen or perform other actions
-        // navigation.navigate('Home');
       } else if (response?.response?.data?.message) {
         Snackbar.show({
           text: 'Email or password is invalid',
           duration: Snackbar.LENGTH_SHORT,
           backgroundColor: 'red',
         });
-        // Display an alert for invalid credentials
-        // Alert.alert('Error', 'Invalid credentials');
+       
       }
       setBtnLoading(false);
     } catch (error) {
@@ -211,33 +161,24 @@ const Login = () => {
       });
       setBtnLoading(false);
       console.log('Error signing in:', error);
-      //Alert.alert('Error', 'Something went wrong. Please try again later.');
+      
     }
   };
   const handleProceed = () => {
-    // Navigate to the GoogleLogin screen
+
     navigation.navigate('GoogleLogin');
   };
   const closeModalAndNavigate = () => {
-    // Close the success modal
     setSuccessModalVisible(false);
-    // Navigate to the Home screen
     navigation.navigate('Home');
   };
 
   const handleSignIn = async () => {
     if (selectedOption === 'email') {
-      // Call signInEmail method
       await signInWithEmailAndPassword();
 
-      //const response = await signInEmail({email, password});
-      // Handle response
     } else if (selectedOption === 'phoneNumber') {
       await signipwithPhoneNumber();
-
-      // Call signInPhone method
-      // const response = await signInPhone({callingCode: '+92', phoneNumber});
-      // Handle response
     }
   };
 
@@ -253,39 +194,25 @@ const Login = () => {
           </View>
           <Spacing space={40} />
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderWidth: 1,
-              width: '80%',
-              overflow: 'hidden',
-              // height: 57,
-              borderColor: 'black',
-              borderBottomRightRadius: 22,
-              borderTopLeftRadius: 22,
-              backgroundColor:'red'
-            }}>
+            style={styles.EmailPhoneView}>
             <TouchableOpacity
               onPress={() => setSelectedOption('email')}
               style={{
                 width: '50%',
                 height: 57,
-                // borderWidth: 1,
-                // borderColor: '#293170',
                 borderTopLeftRadius: 20,
-                overflow: 'hidden',
-                backgroundColor:
-                  selectedOption === 'email' ? '#293170' : 'white',
+                overflow: 'hidden', 
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
+                backgroundColor:
+                  selectedOption === 'email' ? '#293170' : 'white',
+               
               }}>
               <MaterialCommunityIcons
                 name="email-outline"
                 size={20}
                 color={selectedOption === 'email' ? 'white' : 'black'}
-                // style={SplashStyl.iconStylemail}
               />
               <Text
                 style={{
@@ -312,7 +239,6 @@ const Login = () => {
                 name="phone"
                 size={20}
                 color={selectedOption === 'phonenumber' ? 'white' : 'black'}
-                // style={SplashStyl.iconStylemail}
               />
               <Text
                 style={{
@@ -329,8 +255,7 @@ const Login = () => {
             <>
               <Spacing space={30} />
               <TouchableOpacity
-                style={SplashStyl.touchablestyleW}
-                //onPress={() => navigation.navigate('Forgotemail')}
+                style={styles.touchablestyleW}
               >
                 <View
                   style={{flexDirection: 'row', width: '98%', padding: SH(5)}}>
@@ -340,7 +265,7 @@ const Login = () => {
                     style={SplashStyl.iconStylemail}
                   />
                   <TextInput
-                    style={SplashStyl.input}
+                    style={styles.input}
                     placeholder={t('Email_Error')}
                     value={email}
                     color={'black'}
@@ -348,7 +273,6 @@ const Login = () => {
                     onChangeText={text => {
                       setEmail(text), setSubmitted(true);
                     }}
-                    // secureTextEntry={!showPassword}
                   />
 
                   <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -369,8 +293,7 @@ const Login = () => {
 
               <Spacing space={1} />
               <TouchableOpacity
-                style={SplashStyl.touchablestyleW}
-                //onPress={() => navigation.navigate('Forgotemail')}
+                style={styles.touchablestyleW}
               >
                 <View
                   style={{
@@ -383,10 +306,9 @@ const Login = () => {
                     name="lock"
                     size={SF(20)}
                     style={SplashStyl.iconStyleeye}
-                    // color={'black'}
                   />
                   <TextInput
-                    style={SplashStyl.input}
+                    style={styles.input}
                     placeholder={t('Enteryourpassword')}
                     value={password}
                     color={'black'}
@@ -401,7 +323,6 @@ const Login = () => {
                       name={showPassword ? 'eye-slash' : 'eye'}
                       size={SF(20)}
                       style={SplashStyl.iconStyle}
-                      // color={'black'}
                     />
                   </TouchableOpacity>
                 </View>
@@ -416,9 +337,7 @@ const Login = () => {
           {selectedOption === 'phonenumber' && (
             <>
               <TouchableOpacity
-                style={SplashStyl.touchablestyleW}
-                //onPress={() => navigation.navigate('Forgotemail')}
-              >
+                style={styles.touchablestyleW}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -433,7 +352,7 @@ const Login = () => {
                   />
 
                   <TextInput
-                    style={SplashStyl.input}
+                    style={styles.input}
                     placeholder={t('PhoneNumber')}
                     value={phoneNumber}
                     color={'black'}
@@ -441,7 +360,6 @@ const Login = () => {
                     onChangeText={val => {
                       setPhoneNumber(val), setSubmitted(true);
                     }}
-                    // secureTextEntry={!showPassword}
                   />
                   <TouchableOpacity onPress={togglePasswordVisibility}>
                     <FontAwesome
@@ -456,7 +374,7 @@ const Login = () => {
               {submitted && phoneNumber == '' ? (
                 <Text
                   style={{
-                    //...mainStyle.errorText,
+               
                     color: 'red',
                   }}>
                   {t('NUMBER_ERROR')}
@@ -464,7 +382,7 @@ const Login = () => {
               ) : submitted && phoneNumber.length >= 12 ? (
                 <Text
                   style={{
-                    //...mainStyle.errorText,
+              
                     color: 'red',
                   }}>
                   must contain 10 numbers
@@ -481,47 +399,28 @@ const Login = () => {
             </Text>
           </TouchableOpacity> 
           </View>
-
-          {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
-            <Text style={Login.ForgetPasswordStyles}>
-              {t('ForgotPassword')}
-            </Text>
-          </TouchableOpacity> */}
           <Spacing space={SH(20)} />
 
           {buttonEnable ? (
             <TouchableOpacity
-              style={SplashStyl.touchablestyle}
-              // onPress={handleSignUp}>
+              style={styles.touchablestyle}
               onPress={handleSignIn}>
               <View
-                style={{
-                  flexDirection: 'row',
-                  paddingHorizontal: '5%',
-                  justifyContent: 'center',
-                  height: SH(60),
-                  alignItems: 'center',
-                }}>
+                style={styles.signInView}>
                 {btnLoading ? (
                   <ActivityIndicator color="#FFF" />
                 ) : (
 
-                  <Text style={SplashStyl.btntext}>{t('SignIn')}</Text>
+                  <Text style={styles.btntext}>{t('SignIn')}</Text>
                 )}
               </View>
             </TouchableOpacity>
           ) : (
             <View
-              style={{...SplashStyl.touchablestyle, backgroundColor: '#ccc'}}>
+              style={{...styles.touchablestyle,backgroundColor: '#ccc'}}>
               <View
-                style={{
-                  flexDirection: 'row',
-                  paddingHorizontal: '5%',
-                  justifyContent: 'center',
-                  height: SH(55),
-                  alignItems: 'center',
-                }}>
-                <Text style={SplashStyl.btntext}>{t('SignIn')}</Text>
+                style={styles.signInView}>
+                <Text style={styles.btntext}>{t('SignIn')}</Text>
               </View>
             </View>
           )}
@@ -568,30 +467,4 @@ const Login = () => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 20,
-//   },
-//   input: {
-//     height: 40,
-//     borderColor: 'gray',
-//     borderWidth: 1,
-//     marginBottom: 10,
-//     paddingHorizontal: 10,
-//   },
-//   error: {
-//     color: 'red',
-//     marginBottom: 10,
-//   },
-//   button: {
-//     backgroundColor: 'blue',
-//     padding: 10,
-//     borderRadius: 5,
-//     alignItems: 'center',
-//   },
-//   buttonText: {
-//     color: 'white',
-//     fontSize: 18,
-//   },
-// });
 export default Login;

@@ -44,9 +44,6 @@ AccountView: {
     color: 'black',
     fontWeight: '800',
     textAlign: 'center',
-    //paddingLeft: SH(10),
-    // color: Colors.theme_background_han_Purple,
-    // textAlign: 'center',
     fontFamily: Fonts.Poppins_Medium,
   },
   LoginText: {
