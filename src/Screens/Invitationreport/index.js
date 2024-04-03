@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect,useCallback } from 'react';
+import React, {useState, useMemo, useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -6,26 +6,32 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  StyleSheet, ActivityIndicator,
-  Alert
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  Modal,
 } from 'react-native';
 import IconF from 'react-native-vector-icons/AntDesign';
-import { Spacing, Search, Button } from '../../Components';
+import {Spacing, Search, Button} from '../../Components';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { SH, Colors, SW, SF } from '../../utils';
+import {SH, Colors, SW, SF} from '../../utils';
 import IconG from 'react-native-vector-icons/Ionicons';
 import Egypto from 'react-native-vector-icons/Entypo';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import images from '../../index';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
-import { EventId, SendInvites } from '../../Services/ApiList';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  EventId,
+  SendInvites,
+  deleteEventByEventContactId,
+} from '../../Services/ApiList';
+import {useFocusEffect} from '@react-navigation/native';
 
+const Invitationreport = ({route, ...props}) => {
+  const {id} = route.params;
 
-const Invitationreport = ({ route, ...props }) => {
-  const { id } = route.params;
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const navigation = useNavigation();
   const [singleData, setSingleData] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -34,31 +40,67 @@ const Invitationreport = ({ route, ...props }) => {
   const [loading, setLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [eventStats, setEventStats] = useState({})
+  const [eventStats, setEventStats] = useState({});
+  const [isDropdownOpenDots1, setIsDropdownOpenDots1] = useState(false);
+  const [isDropdownOpenDots2, setIsDropdownOpenDots2] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Effects
-  // useEffect(() => {
-    
-  // }, []);
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+  const handleEditEvent = () => {
+    // Implement your logic for editing the event here
+    toggleModal(); // Close the modal after handling the edit event
+  };
+  const DeleteEvent = async (eventId, contactId) => {
+    try {
+      // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+      const response = await deleteEventByEventContactId(eventId, contactId); // Pass user ID if requitransparent
+      console.log('Events:.....======+++++--------', response?.data);
+      if (response && response.status === 200) {
+        // Filter out the removed contact from the guest list
+        const updatedGuests = guest.filter(
+          item => item.invites.id !== contactId,
+        );
+        // setGuest(updatedGuests);
+        console.log('Guests after removal:', updatedGuests);
+      } else if (response && response.status === 404) {
+        const confirmDeletion = window.confirm(
+          'Are you sure you want to delete this contact?',
+        );
+        if (!confirmDeletion) {
+          console.log('User canceled deletion.');
+          return;
+        }
 
+        console.log('User confirmed deletion. Proceeding...');
+      } else {
+        console.error(
+          'Failed to remove contact:',
+          response?.data?.data?.message || 'Unknown error',
+        );
+      }
+    } catch (error) {
+      console.error('Error removing contact:', error);
+    }
+  };
+  const handleDeleteEvent = () => {
+    DeleteEvent();
+    // Implement your logic for deleting the event here
+    toggleModal(); // Close the modal after handling the delete event
+  };
   useFocusEffect(
     useCallback(() => {
       handleGetByUserId(id);
-    }, [])
+    }, []),
   );
-
-  // Functions
-  const handleGetByUserId = async (id) => {
+  const handleGetByUserId = async id => {
     try {
       setLoading(true);
       const response = await EventId(id);
       console.log('Events:.....======', response?.data);
-
-      // Check if response data is valid
       if (response?.data) {
         setSingleData(response.data);
-
-        // Check if stats data is available and has length > 0
         if (response.data.stats && response.data.stats.length > 0) {
           const {
             GuestConfirmed,
@@ -67,7 +109,7 @@ const Invitationreport = ({ route, ...props }) => {
             GuestMessages,
             GuestNotInvited,
             GuestRejected,
-            GuestScanned
+            GuestScanned,
           } = response.data.stats[0];
 
           setEventStats({
@@ -77,49 +119,46 @@ const Invitationreport = ({ route, ...props }) => {
             GuestMessages,
             GuestNotInvited,
             GuestRejected,
-            GuestScanned
+            GuestScanned,
           });
         } else {
-          // Set default values if stats data is not available
           setEventStats({
-            GuestConfirmed: "0",
-            GuestFailed: "0",
-            GuestInvited: "0",
-            GuestMessages: "0",
-            GuestNotInvited: "0",
-            GuestRejected: "0",
-            GuestScanned: "0"
+            GuestConfirmed: '0',
+            GuestFailed: '0',
+            GuestInvited: '0',
+            GuestMessages: '0',
+            GuestNotInvited: '0',
+            GuestRejected: '0',
+            GuestScanned: '0',
           });
         }
       } else {
-        // Handle case where response data is invalid
         console.log('Invalid response data:', response);
       }
     } catch (error) {
-      // Handle error
       console.log('Error fetching events:', error);
     } finally {
       setLoading(false);
     }
   };
 
-
   const handleSendInvites = async () => {
     try {
       const response = await SendInvites(id);
+      console.log('response', response);
       setTimeout(() => {
-        setInviteLoading(false)
+        setInviteLoading(false);
         Alert.alert('Success', 'Your invitations are sent.');
-        setValue(null)
+        setValue(null);
       }, 3000);
     } catch (error) {
       console.log('Error sending invites:', error);
       Alert.alert('Error', 'Invitations could not be sent.');
-      setInviteLoading(false)
-      setValue(null)
+      setInviteLoading(false);
+      setValue(null);
     } finally {
       setLoading(false);
-      setInviteLoading(false)
+      setInviteLoading(false);
     }
   };
 
@@ -128,9 +167,9 @@ const Invitationreport = ({ route, ...props }) => {
       const invitesCount = singleData?.invites?.length;
       console.log('🚀 ~ openContactslist ~ invitesCount:', invitesCount);
       if (invitesCount === 0) {
-        navigation.navigate('AddGuest', { id });
+        navigation.navigate('AddGuest', {id});
       } else if (invitesCount >= 1) {
-        navigation.navigate('AddNewGuest', { id });
+        navigation.navigate('AddNewGuest', {id});
       }
     } else {
       console.log('No invites data found');
@@ -151,7 +190,7 @@ const Invitationreport = ({ route, ...props }) => {
     setIsDropdownOpen(prevState => !prevState);
   };
 
-  const handleChangeValue = async (selectedValue) => {
+  const handleChangeValue = async selectedValue => {
     setValue(null);
     if (selectedValue === 'Invitation') {
       setInviteLoading(true);
@@ -160,49 +199,93 @@ const Invitationreport = ({ route, ...props }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={SplashStyl.ScrollViewTestHeight}>
         <View style={SplashStyl.Container}>
           <View style={styles.headerContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-              <IconF
-                size={SF(20)}
-                name="left"
+              <IconF size={SF(20)} name="left" style={styles.headerIcon} />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>Invitation Report</Text>
+
+            <TouchableOpacity onPress={toggleModal}>
+              <Egypto
+                size={20}
+                name="dots-two-vertical"
                 style={styles.headerIcon}
               />
             </TouchableOpacity>
-            <Text style={styles.headerText}>Invitation Report</Text>
-            <TouchableOpacity onPress={toggleDropdown}>
-              <Egypto
-                size={SF(20)}
-                name="dots-three-vertical"
-                style={styles.headerIconRight}
-              />
-            </TouchableOpacity>
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isModalVisible}
+              onRequestClose={toggleModal}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <TouchableOpacity
+                    style={styles.option}
+                    onPress={handleEditEvent}>
+                    <Text style={styles.boldstyle}>Edit Event</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.option}
+                    onPress={handleDeleteEvent}>
+                    <Text style={styles.boldstyle}>Delete Event</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
           </View>
+
           {loading ? (
-            <ActivityIndicator style={styles.loader} size="large" color="#000" />
+            <ActivityIndicator
+              style={styles.loader}
+              size="large"
+              color="#000"
+            />
           ) : (
             <>
               <View
                 style={{
                   flexDirection: 'column',
                   width: '95%',
-                  height: 80,
+                  height: 120,
                   backgroundColor: 'white',
-                  marginBottom: 10
+                  marginBottom: 10,
                 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ textAlign: 'start', fontSize: 17, fontWeight: '600', color: 'black', marginTop: 20 }}>Invitation Report</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 15,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      textAlign: 'start',
+                      fontSize: 17,
+                      fontWeight: '600',
+                      color: 'black',
+                      marginTop: 20,
+                    }}>
+                    Invitation Report
+                  </Text>
                   {/* Right side containing dropdown */}
-                  <View style={{ width: '35%', marginLeft: 110, height: 15, marginTop: 10 }}>
-
+                  <View
+                    style={{
+                      width: '35%',
+                      marginLeft: 110,
+                      height: 10,
+                      marginTop: 10,
+                      color: 'white',
+                    }}>
                     <DropDownPicker
                       items={[
-                        { label: 'Remainder', value: 'Remainder' },
-                        { label: 'Invitation', value: 'Invitation' },
+                        {label: 'Remainder', value: 'Remainder'},
+                        {label: 'Invitation', value: 'Invitation'},
                       ]}
                       style={{
                         backgroundColor: '#293170',
@@ -211,35 +294,46 @@ const Invitationreport = ({ route, ...props }) => {
                         borderWidth: 1,
                         borderColor: 'gray',
                       }}
-                      itemStyle={{ justifyContent: 'flex-start' }}
-                      labelStyle={{ color: 'white' }}
+                      itemStyle={{justifyContent: 'flex-start'}}
+                      labelStyle={{color: 'white'}}
                       dropDownStyle={{
                         backgroundColor: '#293170',
                         borderTopLeftRadius: 28,
                         borderBottomRightRadius: 28,
                       }}
-                      placeholderStyle={{ color: 'white', fontWeight: '800' }}
+                      placeholderStyle={{color: 'white', fontWeight: '800'}}
                       onChangeValue={handleChangeValue}
                       setOpen={setIsOpen}
                       open={isOpen}
                       value={value}
                       setValue={setValue}
                       placeholder="Share"
-                      iconStyle={{ color: 'white' }}
+                      iconStyle={{color: 'white'}}
                     />
                     {inviteLoading && (
                       <ActivityIndicator
-                        style={{ position: 'absolute', top: 15, right: 40, zIndex: 1000000 }}
+                        style={{
+                          position: 'absolute',
+                          top: 15,
+                          right: 40,
+                          zIndex: 1000000,
+                        }}
                         size="small"
                         color="white"
                       />
                     )}
                   </View>
-
                 </View>
 
                 {/* Subheading */}
-                <Text style={{ textAlign: 'start', fontSize: 14, fontWeight: '600', color: 'black', marginBottom: 10 }}>
+                <Text
+                  style={{
+                    textAlign: 'start',
+                    fontSize: 14,
+                    fontWeight: '600',
+                    color: 'black',
+                    marginBottom: 10,
+                  }}>
                   Your event invitation report is here
                 </Text>
 
@@ -268,7 +362,9 @@ const Invitationreport = ({ route, ...props }) => {
                       />
                       {/* Badge */}
                       <View style={styles.badgeContainer}>
-                        <Text style={styles.badgeText}>{eventStats?.GuestInvited}</Text>
+                        <Text style={styles.badgeText}>
+                          {eventStats?.GuestInvited}
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -283,7 +379,9 @@ const Invitationreport = ({ route, ...props }) => {
                     />
                     {/* Badge */}
                     <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>{eventStats?.GuestMessages}</Text>
+                      <Text style={styles.badgeText}>
+                        {eventStats?.GuestMessages}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -297,7 +395,9 @@ const Invitationreport = ({ route, ...props }) => {
                     />
                     {/* Badge */}
                     <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>{eventStats?.GuestConfirmed}</Text>
+                      <Text style={styles.badgeText}>
+                        {eventStats?.GuestConfirmed}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -305,10 +405,15 @@ const Invitationreport = ({ route, ...props }) => {
                 <View style={SplashStyl.insideboxview}>
                   <Text style={SplashStyl.boxtext}>Scanned</Text>
                   <View style={SplashStyl.imageView}>
-                    <Image source={images.scanned} style={SplashStyl.imagestyle} />
+                    <Image
+                      source={images.scanned}
+                      style={SplashStyl.imagestyle}
+                    />
                     {/* Badge */}
                     <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>{eventStats?.GuestScanned}</Text>
+                      <Text style={styles.badgeText}>
+                        {eventStats?.GuestScanned}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -318,14 +423,22 @@ const Invitationreport = ({ route, ...props }) => {
               {/* ////////////////boxrow1///////////////////// */}
               <View style={SplashStyl.RowView}>
                 <View
-                  style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                  }}>
                   <View style={SplashStyl.insideboxview}>
                     <Text style={SplashStyl.boxtext}>Waiting</Text>
                     <View style={SplashStyl.imageView}>
-                      <Image source={images.waitng} style={SplashStyl.imagestyle} />
+                      <Image
+                        source={images.waitng}
+                        style={SplashStyl.imagestyle}
+                      />
                       {/* Badge */}
                       <View style={styles.badgeContainer}>
-                        <Text style={styles.badgeText}>{eventStats?.GuestNotInvited}</Text>
+                        <Text style={styles.badgeText}>
+                          {eventStats?.GuestNotInvited}
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -334,10 +447,15 @@ const Invitationreport = ({ route, ...props }) => {
                 <View style={SplashStyl.insideboxview}>
                   <Text style={SplashStyl.boxtext}> Rejected</Text>
                   <View style={SplashStyl.imageView}>
-                    <Image source={images.rejected} style={SplashStyl.imagestyle} />
+                    <Image
+                      source={images.rejected}
+                      style={SplashStyl.imagestyle}
+                    />
                     {/* Badge */}
                     <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>{eventStats?.GuestRejected}</Text>
+                      <Text style={styles.badgeText}>
+                        {eventStats?.GuestRejected}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -352,7 +470,9 @@ const Invitationreport = ({ route, ...props }) => {
                     />
                     {/* Badge */}
                     <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>{eventStats?.GuestNotInvited}</Text>
+                      <Text style={styles.badgeText}>
+                        {eventStats?.GuestNotInvited}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -367,7 +487,9 @@ const Invitationreport = ({ route, ...props }) => {
                     />
                     {/* Badge */}
                     <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>{eventStats?.GuestFailed}</Text>
+                      <Text style={styles.badgeText}>
+                        {eventStats?.GuestFailed}
+                      </Text>
                     </View>
                   </View>
                 </View>
@@ -390,7 +512,7 @@ const Invitationreport = ({ route, ...props }) => {
                   }}>
                   <Image
                     source={images.gridicons_add}
-                    style={{ height: 40, width: 40, marginRight: 10 }}
+                    style={{height: 40, width: 40, marginRight: 10}}
                   />
                   <Text
                     style={{
@@ -403,30 +525,42 @@ const Invitationreport = ({ route, ...props }) => {
                   </Text>
                 </View>
               </TouchableOpacity>
+
               <View
                 style={{
-                  height: 10,
-                  backgroundColor: 'transparent',
+                  height: 30,
                   width: 340,
-                  // margin: 10,
-                  flexDirection: 'column',
+                  elevation: 10,
+                  shadowOpacity: 20,
                   borderTopRightRadius: 20,
                   borderBottomRightRadius: 20,
                 }}>
                 <View style={styles.slide}>
-                  <TouchableOpacity>
-                    <Image source={{ uri: singleData?.image }} style={styles.images} />
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Text style={{ color: 'black', fontWeight: '600', fontSize: 16 }}>{singleData?.name}</Text>
-                      <Text style={{ color: 'black' }}>{singleData?.eventDate}</Text>
-                    </View>
-                    {/* <Text>{singleData.name}</Text> */}
-                  </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: '600',
+                        fontSize: 16,
+                      }}>
+                      {singleData?.name}
+                    </Text>
+                    <Text style={{color: 'black'}}>
+                      {singleData?.eventDate}
+                    </Text>
+                  </View>
+                  <Image
+                    source={{uri: singleData?.image}}
+                    style={styles.images}
+                  />
                 </View>
               </View>
             </>
           )}
-
         </View>
       </ScrollView>
     </View>
@@ -437,9 +571,9 @@ const styles = StyleSheet.create({
   headerContainer: {
     width: '100%',
     flexDirection: 'row',
-    height: 50,
-    backgroundColor: '#F2F2F4',
-    padding: SW(10),
+    height: 60,
+    backgroundColor: '#ffff',
+    padding: SW(2),
     alignItems: 'center',
   },
   headerText: {
@@ -452,13 +586,13 @@ const styles = StyleSheet.create({
   headerIcon: {
     height: SH(50),
     marginLeft: 10,
-    marginRight: 20,
-    marginTop: 30,
-    color: '#000'
+    marginRight: 10,
+    marginTop: 20,
+    color: '#000',
   },
   headerIconRight: {
     marginRight: 10,
-    color: '#000'
+    color: '#000',
   },
   container: {
     flex: 1,
@@ -470,9 +604,11 @@ const styles = StyleSheet.create({
     //flex: 1,
     marginLeft: 15,
     height: '70%',
+    elevation: 30,
+    shadowOpacity: 10,
     //alignItems: 'center',
     justifyContent: 'center',
-    //backgroundColor: '#F2F2F4',
+
     // backgroundColor:'transparent',
     borderBottomRightRadius: 20,
   },
@@ -480,7 +616,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: 'black',
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
     //marginBottom: 20,
   },
   images: {
@@ -529,6 +665,31 @@ const styles = StyleSheet.create({
     color: 'white', // Badge text color
     fontSize: 12, // Adjust font size as needed
     fontWeight: 'bold', // Adjust font weight as needed
+  },
+  modalContainer: {
+    marginTop: 25,
+    height: 40,
+    width: 94,
+    marginLeft: 'auto',
+    right: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#DCC7F8',
+    borderRadius: 10,
+    padding: 2,
+  },
+  option: {
+    paddingVertical: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DCC7F8',
+  },
+  boldstyle: {
+    fontWeight: '600',
+    color: 'black',
+    fontSize: 13,
   },
 });
 export default Invitationreport;

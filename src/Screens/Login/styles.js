@@ -3,7 +3,6 @@ import {Fonts, SF, SH, SW, Colors} from '../../utils';
 
 const styles = StyleSheet.create({
   MinViewScreen: {
- 
     alignItems: 'center',
     height: '100%',
     width: '100%',
@@ -37,36 +36,36 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
     fontFamily: Fonts.Poppins_Medium,
   },
-  EmailPhoneView:{
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  borderWidth: 1,
-  width: '80%',
-  overflow: 'hidden',
-  // height: 57,
-  borderColor: 'black',
-  borderBottomRightRadius: 22,
-  borderTopLeftRadius: 22,
+  EmailPhoneView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    width: '85%',
+    overflow: 'hidden',
+    // height: 57,
+    borderColor: 'black',
+    borderBottomRightRadius: 22,
+    borderTopLeftRadius: 22,
   },
-  inputView:{
-  flexDirection: 'row',
-   width: '98%',
-    padding: SH(8)
+  inputView: {
+    flexDirection: 'row',
+    width: '98%',
+    padding: SH(8),
   },
-createaccount:{
-  fontSize:13,
-  fontWeight:'600',
-  color:'black',
-  paddingLeft:2
-},
-googleicon:{
-  height:16,
-  width:16,
-  marginTop:10,
-  marginLeft:10,
-  marginRight:3
-},
+  createaccount: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: 'black',
+    paddingLeft: 2,
+  },
+  googleicon: {
+    height: 16,
+    width: 16,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 3,
+  },
   container: {
     padding: 20,
   },
@@ -85,7 +84,7 @@ googleicon:{
     color: 'white',
     fontSize: 18,
   },
-  signInView:{
+  signInView: {
     flexDirection: 'row',
     paddingHorizontal: '5%',
     justifyContent: 'center',
@@ -97,21 +96,47 @@ googleicon:{
     marginLeft: 10,
     color: '#293170',
   },
- 
-  touchablestyleW: {
-    width: '78%',
+  iconStyleeye: {
+    paddingTop: 12,
+    marginLeft: 10,
+    color: '#293170',
+  },
+  touchablestyleP: {
+    width: '9%',
     alignSelf: 'center',
     marginVertical: 5,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderColor: '#293170',
+    borderWidth: 0.6,
+    backgroundColor: 'white',
+    borderTopLeftRadius: SF(20),
+    borderBottomRightRadius: SF(20),
+  },
 
+  touchablestyleW: {
+    width: '85%',
+    alignSelf: 'center',
+    marginVertical: 5,
     paddingHorizontal: 3,
     paddingVertical: 1,
-    //width: SW(280),
-    //justifyContent: 'center',
-    //alignContent: 'center',
     borderColor: '#293170',
     borderWidth: 0.6,
     backgroundColor: 'white',
     //borderBottomLeftRadius: SF(4),
+    borderTopLeftRadius: SF(20),
+    borderBottomRightRadius: SF(20),
+  },
+
+  touchablestyleE: {
+    width: '96%',
+    alignSelf: 'center',
+    marginVertical: 5,
+    paddingHorizontal: 3,
+    paddingVertical: 5,
+    borderColor: '#293170',
+    borderWidth: 0.6,
+    backgroundColor: 'white',
     borderTopLeftRadius: SF(20),
     borderBottomRightRadius: SF(20),
   },
@@ -154,7 +179,7 @@ googleicon:{
     color: Colors.darkBlue,
     fontSize: SF(15),
     fontWeight: '600',
-     paddingLeft: SH(25),
+    paddingLeft: SH(25),
   },
   btntext: {
     color: 'white',
@@ -162,12 +187,8 @@ googleicon:{
     fontWeight: '700',
   },
   touchablestyle: {
-    //height: SH(50),
-    //width: '100%',
     alignSelf: 'center',
-    width: SW(300),
-    //justifyContent: 'center',
-    //alignContent: 'center',
+    width: SW(320),
     backgroundColor: Colors.darkBlue,
     borderTopLeftRadius: SF(20),
     borderBottomRightRadius: SF(20),
@@ -180,6 +201,54 @@ googleicon:{
     margin: SH(3),
     color: 'black',
   },
-
+  inputPhonNu: {
+    width: '86%',
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    margin: SH(3),
+    color: 'black',
+    marginTop: SH(4),
+  },
+  modalCallingCodeContainer: {
+    backgroundColor: 'white',
+    width: 200,
+    height: 200,
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 260,
+    elevation: 5,
+    marginLeft: 30,
+  },
+  countryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
+  },
+  countryEmoji: {
+    marginRight: 10,
+    fontSize: 20,
+  },
+  countryText: {
+    fontSize: 16,
+  },
+  countryCode: {
+    marginLeft: 'auto',
+    fontSize: 16,
+    color: '#666666',
+  },
+  emailView: {
+    flexDirection: 'row',
+    width: '98%',
+    padding: SH(5),
+  },
+  googleStyle: {
+    height: 16,
+    width: 16,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 3,
+  },
 });
 export default styles;

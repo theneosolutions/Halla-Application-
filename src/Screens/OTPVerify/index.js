@@ -32,25 +32,15 @@ const OTPVerify = ({navigation, route}) => {
       otpTextInputRefs.current[index + 1].focus();
     }
   };
-return (
+  return (
     <View style={styles.Container}>
-      <View
-        style={styles.firstView}>
-        <Text
-          style={styles.boldstyle}>
-          {t('EnterYourCode')}
-        </Text>
-        <Text
-          style={styles.lighttext}>
-          {t('OTPtext')}
-        </Text>
-        <Image
-          source={images.halalogo}
-          style={styles.imgstyle}/>
+      <View style={styles.firstView}>
+        <Text style={styles.boldstyle}>{t('EnterYourCode')}</Text>
+        <Text style={styles.lighttext}>{t('OTPtext')}</Text>
+        <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
 
-      <View
-        style={styles.optView}>
+      <View style={styles.optView}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           {otp.map((digit, index) => (
             <TextInput
@@ -58,43 +48,29 @@ return (
               key={index}
               ref={ref => (otpTextInputRefs.current[index] = ref)}
               style={styles.textinputstyle}
-
-              
               value={digit}
+              color={'black'}
               onChangeText={text => handleOTPChange(index, text)}
               keyboardType="numeric"
               maxLength={1}
             />
           ))}
-        
         </View>
-     
-        <TouchableOpacity 
-      
-        >
-          <Text
-            style={styles.codeExpireStyle}>
-            {t('CodeExpires')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.dontreviewopt}>
-            <Text style={styles.lighttextgray}>
-              {t('dontrecevidOTP')}
-            </Text>
-            <Text
-              style={styles.underlinetext}>
-              {t('ResendOTP')}
-            </Text>
-          </View>
-        </TouchableOpacity>
+
+        <Text style={styles.codeExpireStyle}>{t('CodeExpires')}</Text>
+
+        <View style={styles.dontreviewopt}>
+          <Text style={styles.lighttextgray}>{t('dontrecevidOTP')}</Text>
+          <TouchableOpacity>
+            <Text style={styles.underlinetext}>{t('ResendOTP')}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-        <TouchableOpacity
-          style={styles.touchablestyle}
-          onPress={() => navigation.navigate('ResetPass', {email, otp})}>
-          <Text style={styles.btntext}>{t('Continue')}</Text>
-        </TouchableOpacity>
-   
+      <TouchableOpacity
+        style={styles.touchablestyle}
+        onPress={() => navigation.navigate('ResetPass', {email, otp})}>
+        <Text style={styles.btntext}>{t('Continue')}</Text>
+      </TouchableOpacity>
     </View>
   );
 };

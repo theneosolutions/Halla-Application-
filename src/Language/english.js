@@ -53,4 +53,5 @@ export default english = {
   dontrecevidOTP: 'Don`t receive code?',
   FirstName: 'FirstName',
   Re_Type_Password_Text: 'Re type Password',
+  Search_Inbox: 'Search',
 };

@@ -8,83 +8,50 @@ import {
   FlatList,
   Alert,
   Modal,
+  alert,
   ActivityIndicator,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import IconF from 'react-native-vector-icons/AntDesign';
 import Egypto from 'react-native-vector-icons/Entypo';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {SH, SW, SF} from '../../utils';
-import {guestListByID, removeContactByID} from '../../Services/ApiList';
-
-const AddNewGuest = props => {
+import {getpakage} from '../../Services/ApiList';
+import {getFromLocalStorage} from '../../Services/Api';
+const TopUp = ({route}) => {
   const navigation = useNavigation();
+
   const {t} = useTranslation();
-  const [guest, setGuest] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const {id} = props.route.params;
-  console.log('id', id);
+  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [selectedContactId, setSelectedContactId] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [contacts, setContacts] = useState([]);
+  const [numberOfGuest, setNumberOfGuest] = useState([]);
+  const [price, setPrice] = useState([]);
+  const [list, setList] = useState([]);
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
-    navigation.navigate('AddGuest', {id});
+    navigation.navigate('AddGuest', {event});
   };
+  //   console.log('iddddddd', event);
 
-  const handleGetByGuestId = async () => {
-    setLoading(true);
-    try {
-      // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await guestListByID(id); // Pass user ID if requitransparent
-      console.log('Events:.....======+++++', response?.data?.data);
+  const toggleContactSelection = (numberOfGuest, price) => {
+    const selectedIcon = {numberOfGuest, price};
+    const isSelected = selectedContacts.some(
+      contact =>
+        contact.numberOfGuest === numberOfGuest && contact.price === price,
+    );
 
-      const guestsData = response?.data?.data;
-      console.log('guestsData............', guestsData);
-      setGuest(guestsData);
-      console.log('..........', guest);
-      // console.log('data========',response.data)
-      setLoading(false);
-    } catch (error) {
-      // console.log('Error fetching events:', error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetByGuestId(); // Fetch events when component mounts
-  }, []);
-
-  const DeleteContactFromList = async (eventId, contactId) => {
-    try {
-      // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await removeContactByID(eventId, contactId); // Pass user ID if requitransparent
-      console.log('Events:.....======+++++--------', response);
-      if (response && response.status === 200) {
-        // Filter out the removed contact from the guest list
-        const updatedGuests = guest.filter(
-          item => item.invites.id !== contactId,
-        );
-        setGuest(updatedGuests);
-        console.log('Guests after removal:', updatedGuests);
-      } else if (response && response.status === 404) {
-        const confirmDeletion = window.confirm(
-          'Are you sure you want to delete this contact?',
-        );
-        if (!confirmDeletion) {
-          console.log('User canceled deletion.');
-          return;
-        }
-
-        console.log('User confirmed deletion. Proceeding...');
-      } else {
-        console.error(
-          'Failed to remove contact:',
-          response?.data?.data?.message || 'Unknown error',
-        );
-      }
-    } catch (error) {
-      console.error('Error removing contact:', error);
+    if (isSelected) {
+      setSelectedContacts(prevContacts =>
+        prevContacts.filter(contact => contact.numberOfGuest !== numberOfGuest),
+      );
+    } else {
+      setSelectedContacts(prevContacts => [...prevContacts, selectedIcon]);
     }
   };
 
@@ -99,61 +66,105 @@ const AddNewGuest = props => {
     setSelectedContactId(contactId);
     setShowModal(true);
   };
-  const renderGuestItem = ({item}) => (
-    <View style={styles.guestItem}>
-      <TouchableOpacity
-        style={styles.closeIconContainer}
-        onPress={() => openModal(item.eventId, item.invites.id)}>
-        {/* // onPress={() => DeleteContactFromList(item.eventId, item.invites.id)}> */}
-        <IconF name="close" size={SF(20)} style={styles.closeIcon} />
-      </TouchableOpacity>
-      <View style={styles.guestDetails}>
-        <Text style={styles.name}>{item.invites.name}</Text>
-        <Text style={styles.phoneNumber}>{item.invites.phoneNumber}</Text>
-      </View>
-      <View style={styles.counterContainer}>
-        <TouchableOpacity style={styles.counterButton}>
-          <Text style={styles.counterText}>-</Text>
-        </TouchableOpacity>
-        <Text style={styles.count}>1</Text>
-        <TouchableOpacity style={styles.counterButton}>
-          <Text style={styles.counterText}>+</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  const renderGuestItem = ({item, index}) => {
+    const isSelected = selectedContacts.some(
+      contact => contact.numberOfGuest === item.numberOfGuest,
+    );
 
+    return (
+      <View style={[styles.guestItem]}>
+        <TouchableOpacity
+          onPress={() => toggleContactSelection(item.numberOfGuest, item.price)}
+          style={styles.checkbox}>
+          {isSelected ? (
+            <IconF name="checksquare" size={30} color="#293170" />
+          ) : (
+            <Icon name="square-o" size={30} color="#293170" />
+          )}
+        </TouchableOpacity>
+
+        <View style={styles.guestDetails}>
+          <Text style={styles.price}>Price: {price}</Text>
+          <Text style={styles.numberOfGuest}>{numberOfGuest} Guests</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const handleGetPakage = async () => {
+    setLoading(true);
+    try {
+      const response = await getpakage();
+      console.log('response---------------+++Topupppp', response?.data?.data);
+      setList(response?.data?.data || []);
+
+      console.log('list---------', list);
+      const packages = response?.data?.data;
+      console.log('packages', packages);
+      if (packages && packages.length > 0) {
+        const firstPackage = packages[0];
+        const {numberOfGuest, price} = firstPackage;
+        setNumberOfGuest(numberOfGuest);
+        setPrice(price);
+      }
+      setLoading(false);
+      console.log('response---------------+++Topupppp', numberOfGuest);
+    } catch (error) {
+      console.error('Error fetching package:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetPakage();
+  }, []);
+
+  const handleContinue = async () => {
+    setLoading(true);
+    const response = await getpakage();
+    if (selectedContacts.length > 0) {
+      navigation.navigate('PaymentDetails', {
+        selectedContacts,
+        pakageid: response?.data?.data[0].id,
+      });
+    } else {
+      Alert.alert('Please select at least one item');
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Invitationreport', {id})}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <IconF size={SF(20)} name="left" style={styles.headerIcon} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Guests</Text>
-        <TouchableOpacity onPress={toggleDropdown}>
-          <Egypto size={SF(20)} name="plus" style={styles.headerIconRight} />
-        </TouchableOpacity>
+        <Text style={styles.headerText}>TOP UP</Text>
       </View>
-      {/* <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.scrollViewContent}> */}
+
       <View style={styles.header}>
-        <Text style={styles.heading}>Guests</Text>
-        <Text style={styles.subHeading}>
-          List of guests already added to the event:
-        </Text>
+        <Text style={styles.heading}>Payment Plan</Text>
+        <Text style={styles.subHeading}>Choose your payment plan:</Text>
       </View>
+      <ScrollView>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#293170" />
+          </View>
+        ) : (
+          <FlatList data={list} renderItem={renderGuestItem} />
+        )}
+      </ScrollView>
 
-      <FlatList
-        data={guest} // Pass the list of guests to FlatList
-        renderItem={renderGuestItem} // Render each guest item
-        // keyExtractor={item => item.id.toString()} // Extract unique keys for each item
-      />
-
-      {/* {guest.map(renderGuestItem)} */}
-      {/* </ScrollView> */}
-
+      <TouchableOpacity
+        style={styles.continueButton}
+        onPress={handleContinue}
+        // onPress={handleAddGuest}
+        // disabled={guestloading || selectedContacts.length === 0} // Disable the button when loading
+      >
+        {/* {guestloading ? (
+          <ActivityIndicator color="#fff" />
+        ) : ( */}
+        <Text style={styles.continueButtonText}>Continue</Text>
+        {/* )} */}
+      </TouchableOpacity>
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -184,7 +195,7 @@ const AddNewGuest = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ffff',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -196,6 +207,7 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 1,
     textAlign: 'center',
+    alignItems: 'center',
     fontWeight: '700',
     fontSize: SF(20),
     color: 'black',
@@ -232,9 +244,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginBottom: 10,
-    backgroundColor: '#E5E5E5',
-    borderRadius: 10,
-    paddingVertical: 10,
+    backgroundColor: '#F4F5FE',
+    borderTopLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    paddingVertical: 12,
     marginHorizontal: 25,
   },
   closeIconContainer: {
@@ -248,6 +261,9 @@ const styles = StyleSheet.create({
   guestDetails: {
     flex: 1,
     marginLeft: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 3,
   },
   name: {
     fontSize: 16,
@@ -356,6 +372,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  continueButton: {
+    height: '7%',
+    width: '70%',
+    backgroundColor: '#293170',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 55,
+    borderTopLeftRadius: 14,
+    borderBottomRightRadius: 14,
+  },
+  continueButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
 });
 
-export default AddNewGuest;
+export default TopUp;

@@ -15,6 +15,8 @@ const MapScreen = ({navigation,route}) => {
     longitude: 10,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
+    placeAddress: '',
+
   });
 
   const handleZoomIn = () => {
@@ -51,11 +53,11 @@ const MapScreen = ({navigation,route}) => {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
-    const placeAddress = 'Address'
-    // await getPlaceNameFromLatLong(
-    //   newCoordinate.latitude,
-    //   newCoordinate.longitude,
-    // );
+    const placeAddress = 
+    await getPlaceNameFromLatLong(
+      newCoordinate.latitude,
+      newCoordinate.longitude,
+    );
     console.log('🚀 ~ handleMarkerDragEnd ~ placeAddress:', placeAddress);
     // Optionally, you can also update the map region to the new location
     mapRef.current?.animateToRegion({
@@ -95,23 +97,16 @@ const animateToCurrentLocation = () => {
 };
   const handleNavigateToCreateEvent = async () => {
     try {
-      const placeAddress = 'Address'
-      // await getPlaceNameFromLatLong(
-      //   position.latitude,
-      //   position.longitude,
-
-      // );
+      const placeAddress = await getPlaceNameFromLatLong(
+        position.latitude,
+        position.longitude,
+       );
       
-      // console.log(
-      //   '🚀 ~ handleNavigateToCreateEvent ~ placeAddress:',
-      //   placeAddress,
-      // );
-
       navigation.navigate('CreateEvent', {
         latitude: position.latitude,
         longitude: position.longitude,
         address: placeAddress, // Assuming 'formatted_address' is the key for the address in the response
-        eventData:props.route.params?.eventData
+        eventData:route.params?.eventData
       });
     } catch (error) {
       console.error('Error getting place address:', error);
@@ -201,14 +196,15 @@ const animateToCurrentLocation = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        onPress={()=>{
-          navigation.navigate('CreateEvent', {
-            latitude: position.latitude,
-            longitude: position.longitude,
-            address: 'placeAddress', // Assuming 'formatted_address' is the key for the address in the response
-            eventData:route.params?.eventData
-          });
-        }}
+        onPress={handleNavigateToCreateEvent}
+        // onPress={()=>{
+        //   navigation.navigate('CreateEvent', {
+        //     latitude: position.latitude,
+        //     longitude: position.longitude,
+        //     address: position.placeAddress, // Assuming 'formatted_address' is the key for the address in the response
+        //     eventData:route.params?.eventData
+        //   });
+        // }}
         style={styles.navigateButton}>
         <Text style={styles.navigateButtonText}>Confirm Location</Text>
       </TouchableOpacity>

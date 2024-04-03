@@ -1,47 +1,34 @@
-import React, {useState, useMemo, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TextInput,
+  ActivityIndicator, Image, Keyboard, Modal, ScrollView, StyleSheet, Text, TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-  StyleSheet,
-  Modal,
-  ActivityIndicator,
+  TouchableWithoutFeedback, View
 } from 'react-native';
-import {Button, Container, Input, Spacing} from '../../Components';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Spacing } from '../../Components';
 
-import Login from '../../styles/CommonStyle/LoginScreenStyle';
-import Style from '../../styles/CommonStyle/Style';
-import {onGoogleButtonPress} from '../../SocailLogins/index';
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
+import { onGoogleButtonPress } from '../../SocailLogins/index';
+import Login from '../../styles/CommonStyle/LoginScreenStyle';
+import Style from '../../styles/CommonStyle/Style';
 
 import ConfirmationPopup from '../../utils/ConfirmationPopUp';
 // import {
 //   NotificationServices,
 //   requestUserPermission,
 // } from '../../utils/PushNotification_helper';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
-import {SH, SF, SW, Colors} from '../../utils';
-import IconG from 'react-native-vector-icons/Ionicons';
-import {useNavigation, useTheme} from '@react-navigation/native';
 import images from '../../index';
-import {useTranslation} from 'react-i18next';
+import { setItemInLocalStorage } from '../../Services/Api';
+import { signInEmail, signInPhone } from '../../Services/ApiList';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
-import {signInPhone, signInEmail} from '../../Services/ApiList';
+import { SF, SH, SW } from '../../utils';
 const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
-import {setItemInLocalStorage} from '../../Services/Api';
-import Languages from '../../Language/i18n';
 // import {setItemInLocalStorage} from '../../Services/Api';
-// import {useAppDispatch} from '../../Services/redux/ReduxHelper';
-import {heightPercent} from '../../utils/dimensions';
 const GoogleLogin = () => {
   const {Colors} = useTheme();
   const {t, i18n} = useTranslation();
@@ -53,7 +40,7 @@ const GoogleLogin = () => {
   const [TextInputPassword, setTextInputPassword] = useState('');
   const [callingCode, setCallingCode] = useState('');
   const [selectedOption, setSelectedOption] = useState('email');
-  const [email, setEmail] = useState('maryamubaid711+176@gmail.com');
+  const [email, setEmail] = useState('maryamubaid711@gmail.com');
   const [password, setPassword] = useState('Aaa111@#');
   const [showPassword, setShowPassword] = useState(true);
   const [submitted, setSubmitted] = useState(false);
@@ -187,6 +174,9 @@ const GoogleLogin = () => {
       if (response?.data) {
         // setMessage(response?.data?.message);
         const {accessToken, id, email} = response?.data;
+// new method to set data in async storage
+ 
+
         setItemInLocalStorage('@UserToken', accessToken);
         setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user));
         // setItemInLocalStorage('@UserId', response?.data?.user?.id);

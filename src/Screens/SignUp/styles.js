@@ -1,23 +1,33 @@
 import {StyleSheet} from 'react-native';
 import {Fonts, SF, SH, SW, Colors} from '../../utils';
-import styles from '../SplashScreen/styles';
+// import styles from '../SplashScreen/styles';
 const styles = StyleSheet.create({
+  MinViewScreen: {
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
 
-MinViewScreen: {
- 
-  alignItems: 'center',
-  height: '100%',
-  width: '100%',
+    backgroundColor: 'white',
+  },
 
-  backgroundColor: 'white',
-},
-
-AccountView: {
-  marginTop: SH(30),
-  justifyContent: 'center',
-  alignItem: 'center',
-},
-
+  AccountView: {
+    marginTop: SH(30),
+    justifyContent: 'center',
+    alignItem: 'center',
+  },
+  EmailPhoneView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    width: '82%',
+    marginLeft: 2,
+    overflow: 'hidden',
+    // height: 57,
+    borderColor: 'black',
+    borderBottomRightRadius: 22,
+    borderTopLeftRadius: 22,
+  },
 
   Loginheader: {
     fontSize: SF(25),
@@ -75,7 +85,7 @@ AccountView: {
   error: {
     color: 'red',
     marginBottom: 10,
-    fontSize:12
+    fontSize: 12,
   },
   iconStylemail: {
     paddingTop: 12,
@@ -97,11 +107,20 @@ AccountView: {
     margin: SH(3),
     color: 'black',
   },
+  inputPhonNu: {
+    width: '86%',
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    margin: SH(3),
+    color: 'black',
+    marginTop: SH(4),
+  },
   touchablestyle: {
     //height: SH(50),
     //width: '100%',
     alignSelf: 'center',
-    width: SW(300),
+    width: SW(310),
+    paddingVertical: SH(3),
     //justifyContent: 'center',
     //alignContent: 'center',
     backgroundColor: Colors.darkBlue,
@@ -116,18 +135,18 @@ AccountView: {
     // alignItems: 'center',
     //paddingLeft: SW(110),
   },
-  touchablestyle: {
-    //height: SH(50),
-    //width: '100%',
-    alignSelf: 'center',
-    width: SW(300),
-    //justifyContent: 'center',
-    //alignContent: 'center',
-    backgroundColor: Colors.darkBlue,
-    borderTopLeftRadius: SF(20),
-    borderBottomRightRadius: SF(20),
-    //marginTop: SH(250),
-  },
+  // touchablestyle: {
+  //   //height: SH(50),
+  //   //width: '100%',
+  //   alignSelf: 'center',
+  //   width: SW(300),
+  //   //justifyContent: 'center',
+  //   //alignContent: 'center',
+  //   backgroundColor: Colors.darkBlue,
+  //   borderTopLeftRadius: SF(20),
+  //   borderBottomRightRadius: SF(20),
+  //   //marginTop: SH(250),
+  // },
   btntext: {
     color: 'white',
     fontSize: SF(16),
@@ -135,7 +154,7 @@ AccountView: {
     // alignItems: 'center',
     //paddingLeft: SW(110),
   },
-////////////End SignUp//////
+  ////////////End SignUp//////
   appleloginview: {
     flexDirection: 'row',
     height: SH(54),
@@ -221,7 +240,14 @@ AccountView: {
     fontWeight: '400',
     color: 'black',
   },
-
+  NotRegisterTextBold: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: SF(14),
+    paddingLeft: SF(6),
+    fontWeight: '500',
+    color: 'black',
+  },
   googleimg: {
     height: SH(17),
     width: SW(16),
@@ -477,7 +503,7 @@ AccountView: {
     fontWeight: '400',
     // justifyContent: 'flex-end',
     // marginBottom: 20,
-     paddingLeft: SH(25),
+    paddingLeft: SH(25),
   },
   TabMinView: {
     width: '100%',
@@ -589,6 +615,35 @@ AccountView: {
   googlebtnstyleing: {
     height: SH(100),
     width: SW(100),
+  },
+  modalCallingCodeContainer: {
+    backgroundColor: 'white',
+    width: 200,
+    height: 200,
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 260,
+    elevation: 5,
+    marginLeft: 30,
+  },
+  countryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
+  },
+  countryEmoji: {
+    marginRight: 10,
+    fontSize: 20,
+  },
+  countryText: {
+    fontSize: 16,
+  },
+  countryCode: {
+    marginLeft: 'auto',
+    fontSize: 16,
+    color: '#666666',
   },
 });
 export default styles;

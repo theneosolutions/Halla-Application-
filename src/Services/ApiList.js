@@ -7,6 +7,14 @@ export const signUp = async data => {
   const res = await api(baseUrl, url, data, 'POST', false, false);
   return res;
 };
+export const signUpPhoneNu = async data => {
+  const url = `/api/auth/sign-up/phone`;
+
+  const res = await api(baseUrl, url, data, 'POST', false, false);
+
+  return res;
+};
+
 export const signInEmail = async data => {
   const url = `/api/auth/sign-in`;
   const res = await api(baseUrl, url, data, 'POST', false, false);
@@ -65,10 +73,16 @@ export const createCardInfo = async data => {
 export const GetCardInfo = async () => {
   const url = `/api/cards?order=ASC&page=1&take=10`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
+  console.log('res-------------', res);
   return res;
 };
 export const getEventWithUserId = async user => {
   const url = `/api/events/byUserId/${user}?order=DESC&page=1&take=100&filter=monthly`;
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  return res;
+};
+export const getEventCategorywithid = async id => {
+  const url = `/api/events/categorize/byUserId/${id}?order=DESC&page=1&take=100&filter=monthly`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
 };
@@ -79,23 +93,74 @@ export const getProfileWithUserId = async id => {
   return res;
 };
 
+export const setUserProfileData = async data => {
+  const url = `/api/users`;
+
+  const res = await api(baseUrl, url, data, 'PATCH', true, false);
+  return res;
+};
+export const setProfileDataUsername = async data => {
+  const url = `/api/users/username`;
+  const res = await api(baseUrl, url, data, 'PATCH', true, false);
+  return res;
+};
 export const EventId = async id => {
   const url = `/api/events/${id}`;
-  console.log("🚀 ~ EventId ~ url:", url)
+  console.log('🚀 ~ EventId ~ url:', url);
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
 };
 
-
-
-export const addEventGuests = async (event,data) => {
+export const addEventGuests = async (event, data) => {
   const url = `/api/events/addGuests/${event}`;
   const res = await api(baseUrl, url, data, 'POST', true, false);
   return res;
 };
 
-export const SendInvites = async (id) => {
+export const SendInvites = async id => {
   const url = `/api/events/send-invites/${id}`;
   const res = await api(baseUrl, url, {}, 'POST', true, false);
+  return res;
+};
+
+export const addGuestById = async (id, data) => {
+  const url = `/api/events/addGuests/${id}`;
+  const res = await api(baseUrl, url, data, 'POST', true, false);
+  // console.log('🚀 ~ addGuestById ~ res:', res);
+  return res;
+};
+
+export const guestListByID = async id => {
+  const url = `/api/events/guestlist/${id}?order=DESC&page=1&take=10&filter=monthly`;
+
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  return res;
+};
+export const removeContactByID = async (eventId, contactId) => {
+  const url = `/api/events/remove/guest/${eventId}/${contactId}`;
+  // console.log('🚀 ~ EventId ~ url::::::pppp', url);
+  const res = await api(baseUrl, url, {}, 'DELETE', true, false);
+  return res;
+};
+export const getpakage = async () => {
+  const url = `/api/packages?order=ASC&page=1&take=10`;
+  // console.log('url------------------', url);
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  // console.log('res-------------++++++++', res);
+  return res;
+};
+
+export const getPakageById = async id => {
+  const url = `/api/packages/${id}`;
+  console.log('url---ssss---------------', url);
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  // console.log('res-------------++++++++', res);
+  return res;
+};
+export const deleteEventByEventContactId = async (eventId, contactId) => {
+  const url = `/api/events/remove/guest/${eventId}/${contactId}`;
+  // console.log('url---ssss---------------', url);
+  const res = await api(baseUrl, url, {}, 'DELETE', true, false);
+  // console.log('res-------------++++++++', res);
   return res;
 };

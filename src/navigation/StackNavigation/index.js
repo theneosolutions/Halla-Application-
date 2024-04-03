@@ -21,7 +21,15 @@ import AddGuest from '../../Screens/AddGuest/index';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../../Screens/Card/index';
 import EditProfile from '../../Screens/EditProfile/index';
-import {StatusBar,View,StyleSheet, TouchableOpacity,Text, Dimensions, Image} from 'react-native';
+import {
+  StatusBar,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+  Image,
+} from 'react-native';
 import Invitationreport from '../../Screens/Invitationreport/index';
 import React, {useState} from 'react';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -38,12 +46,16 @@ import NewEvents from '../../Screens/NewEvents/index';
 import SignUp from '../../Screens/SignUp/index';
 import AddNewGuest from '../../Screens/AddNewGuest/index';
 import AllDone from '../../Screens/AllDone/index';
-import { getPathDown } from "./curve";
-import { Svg, Path } from "react-native-svg";
-import { scale } from "react-native-size-scaling";
- import Login from '../../Screens/Login/index';
+import {getPathDown} from './curve';
+import {Svg, Path} from 'react-native-svg';
+import {scale} from 'react-native-size-scaling';
+import Login from '../../Screens/Login/index';
 import ConfirmPassword from '../../Screens/ConfirmPassword/index';
-
+import ScanList from '../../Screens/ScanList/index';
+import AddMembers from '../../Screens/AddMembers/index';
+import TopUp from '../../Screens/TopUp/index';
+import PaymentDetails from '../../Screens/PaymentDetails/index';
+import WebViewScreen from '../../Screens/PaymentDetails/WebViewScreen';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -58,12 +70,12 @@ const AuthStack = () => {
         component={SplashScreen}
         options={{headerShown: false}}
       />
-         <Stack.Screen
+      <Stack.Screen
         name="RegistrationScreen"
         component={RegistrationScreen}
         options={{headerShown: false}}
       />
-  <Stack.Screen
+      <Stack.Screen
         name="Login"
         component={Login}
         options={{headerShown: false}}
@@ -79,10 +91,18 @@ const AuthStack = () => {
         component={MapScreen}
         options={{headerShown: false}}
       />
-  
-      <Stack.Screen name="AddGuest" 
-      component={AddGuest}   
-      options={{headerShown: false}}/>
+
+      <Stack.Screen
+        name="AddGuest"
+        component={AddGuest}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddMembers"
+        component={AddMembers}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name="ForgotPass"
         component={ForgotPass}
@@ -137,6 +157,22 @@ const AuthStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
+        name="TopUp"
+        component={TopUp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PaymentDetails"
+        component={PaymentDetails}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="WebViewScreen"
+        component={WebViewScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
         name="Upcommingevents"
         component={Upcommingevents}
         options={{headerShown: false}}
@@ -168,28 +204,38 @@ const AuthStack = () => {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="MessagesV1" component={MessagesV1} />
       <Stack.Screen name="MessageV2" component={MessageV2} />
-      <Stack.Screen  name="Card"  component={Card}  options={{headerShown: false}}
+      <Stack.Screen
+        name="Card"
+        component={Card}
+        options={{headerShown: false}}
       />
-      <Stack.Screen name="AllDone" component={AllDone} options={{headerShown: true}}
+      <Stack.Screen
+        name="AllDone"
+        component={AllDone}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name="Scan"
+        component={Scan}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
 };
-const TabNavigator = ({ navigation, route }) => {
-  const [maxWidth, setMaxWidth] = useState(Dimensions.get("window").width);
+const TabNavigator = ({navigation, route}) => {
+  const [maxWidth, setMaxWidth] = useState(Dimensions.get('window').width);
   const returnpathDown = getPathDown(maxWidth, 60, 50);
 
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
           borderTopWidth: 0,
-          position: "absolute",
+          position: 'absolute',
           elevation: 0,
         },
-      }}
-    >
+      }}>
       <Tab.Screen
         name="Home"
         component={Home}
@@ -197,38 +243,38 @@ const TabNavigator = ({ navigation, route }) => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#DEE1F5",
+            backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <Icon
-                  name={'home'}
-                  size={24}
-                  color={focused ? '#293170' : 'gray'}
-                />
+              name={'home'}
+              size={24}
+              color={focused ? '#293170' : 'gray'}
+            />
           ),
-          tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{color:focused ? '#293170' : 'gray'}}>Home</Text>
+          tabBarLabel: ({focused, color, size}) => (
+            <Text style={{color: focused ? '#293170' : 'gray'}}>Home</Text>
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="messages"
         component={MessageV2}
         options={{
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#DEE1F5",
+            backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <Icon
-                  name={'message-square'}
-                  size={24}
-                  color={focused ? '#293170' : 'gray'}
-                />
+              name={'message-square'}
+              size={24}
+              color={focused ? '#293170' : 'gray'}
+            />
           ),
-          tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{color:focused ? '#293170' : 'gray'}}>Messages</Text>
+          tabBarLabel: ({focused, color, size}) => (
+            <Text style={{color: focused ? '#293170' : 'gray'}}>Messages</Text>
           ),
         }}
       />
@@ -242,52 +288,47 @@ const TabNavigator = ({ navigation, route }) => {
             margin: 0,
             zIndex: -50,
           },
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <View
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 height: 56,
                 width: 56,
-                backgroundColor: "#293170",
+                backgroundColor: '#293170',
                 borderRadius: 35,
-              }}
-            >
-              <Icon
-                  name={'plus'}
-                  size={24}
-                  color={'white'}
-                />
+              }}>
+              <Icon name={'plus'} size={24} color={'white'} />
             </View>
           ),
-          tabBarLabel: ({ focused, color, size }) => (
+          tabBarLabel: ({focused, color, size}) => (
             <View>
               <Svg width={maxWidth} height={scale(60)}>
-                <Path fill={"#DEE1F5"} {...{ d: returnpathDown }} />
+                <Path fill={'#DEE1F5'} {...{d: returnpathDown}} />
               </Svg>
             </View>
           ),
         }}
       />
-       <Tab.Screen
-        name="Scan"
-        component={Scan}
+      <Tab.Screen
+        name="ScanList"
+        component={ScanList}
         options={{
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#DEE1F5",
+            backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <MaterialCommunityIcons
-                  name={'line-scan'}
-                  size={24}
-                  color={focused ? '#293170' : 'gray'}
-                />
+              name={'line-scan'}
+              size={24}
+              color={focused ? '#293170' : 'gray'}
+            />
           ),
-          tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{color:focused ? '#293170' : 'gray'}}>Scan</Text>
+          tabBarLabel: ({focused, color, size}) => (
+            <Text style={{color: focused ? '#293170' : 'gray'}}>ScanList</Text>
           ),
         }}
       />
@@ -295,20 +336,21 @@ const TabNavigator = ({ navigation, route }) => {
         name="Profile"
         component={Profile}
         options={{
+          unmountOnBlur: true,
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: "#DEE1F5",
+            backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({ focused, color, size }) => (
+          tabBarIcon: ({focused, color, size}) => (
             <FontAwesome
-            name={'user-circle-o'}
-            size={24}
-            color={focused ? '#293170' : 'gray'}
-          />
+              name={'user-circle-o'}
+              size={24}
+              color={focused ? '#293170' : 'gray'}
+            />
           ),
-          tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{color:focused ? '#293170' : 'gray'}}>Profile</Text>
+          tabBarLabel: ({focused, color, size}) => (
+            <Text style={{color: focused ? '#293170' : 'gray'}}>Profile</Text>
           ),
         }}
       />

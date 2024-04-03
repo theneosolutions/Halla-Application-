@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useRef} from 'react';
+import React, {useState, useMemo, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Modal,
   Linking,
+  FlatList,
 } from 'react-native';
 import Egypto from 'react-native-vector-icons/Entypo';
 import {Picker} from '@react-native-picker/picker';
@@ -26,7 +27,10 @@ import {SF, SW, SH, Colors} from '../../utils';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import IconF from 'react-native-vector-icons/AntDesign';
+import {EventId} from '../../Services/ApiList';
+
 const Scan = () => {
+  const [events, setEvents] = useState([]);
   const onSuccess = e => {
     Linking.openURL(e.data).catch(err =>
       console.error('An error occurred', err),
@@ -40,21 +44,46 @@ const Scan = () => {
   // const HomeTabStyle = useMemo(() => HomeTabStyles(Colors), [Colors]);
   const [color, setcolor] = useState('Clean_Text');
 
+  useEffect(() => {
+    // Fetch data from the EventId API
+    const fetchData = async () => {
+      try {
+        const response = await EventId();
+        if (response?.data) {
+          setEvents(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchData();
+
+    // Cleanup function
+    return () => {
+      // Cleanup logic if needed
+    };
+  }, []);
+
+  const handleEventPress = event => {
+    // Handle event press here, you can navigate to event details screen or perform any action
+    console.log('Event pressed:', event);
+  };
   return (
     <View style={{flex: 1}}>
       <View
         style={{
           width: '99%',
           flexDirection: 'row',
-          height: 50,
+          // height: '100%',
           backgroundColor: '#f2f2f4',
-          padding: SW(10),
+          padding: SW(5),
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <IconF
             size={SF(20)}
             name="left"
-            style={{height: SH(30), marginLeft: 10, marginRight: 20}}
+            style={{height: SH(20), marginLeft: 10, marginRight: 20}}
           />
         </TouchableOpacity>
         <Text
@@ -76,7 +105,7 @@ const Scan = () => {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={Scanstyle.ScrollViewTestHeight}>
-        <View style={{height: '10%'}}>
+        <View style={{height: '100%'}}>
           <QRCodeScanner
             onRead={onSuccess}
             bottomContent={
@@ -101,6 +130,24 @@ const Scan = () => {
           <Text style={HomeTabStyle.juststylesec}>just now</Text>
         </View> */}
       </ScrollView>
+
+      {/* <View style={{flex: 1, backgroundColor: 'lightgray'}}>
+        <TouchableOpacity onPress={() => navigation.navigate('ScanList')}>
+          <Text>Scanxxx</Text>
+        </TouchableOpacity> */}
+
+      {/* <View style={{flex: 1, backgroundColor: 'lightgray'}}>
+          <FlatList
+            data={events}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => (
+              <TouchableOpacity onPress={() => handleEventPress(item)}>
+                <Text>{item.title}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View> */}
+      {/* </View> */}
     </View>
   );
 };

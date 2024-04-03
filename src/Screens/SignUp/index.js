@@ -1,6 +1,26 @@
 import React, {useState, useEffect} from 'react';
-import {View,Text, ScrollView,Image,TextInput,TouchableOpacity,Alert,StyleSheet, TouchableWithoutFeedback,Keyboard,Modal,ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Modal,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
+import styles from './styles';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import {Button, Container, Input, Spacing} from '../../Components';
 import Feather from 'react-native-vector-icons/Feather';
 import Login from '../../styles/CommonStyle/LoginScreenStyle';
@@ -12,9 +32,10 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import ConfirmationPopup from '../../utils/ConfirmationPopUp';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
-import {signUp} from '../../Services/ApiList';
+import {signUp, signUpPhoneNu} from '../../Services/ApiList';
 import {setItemInLocalStorage} from '../../Services/Api';
 import {useAppDispatch} from '../../Services/redux/ReduxHelper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const SignUp = () => {
   const {dispatchUserData} = useAppDispatch();
   const {t} = useTranslation();
@@ -33,23 +54,33 @@ const SignUp = () => {
   const [buttonEnable, setButtonEnable] = useState(false);
   const [selectedOption, setSelectedOption] = useState('email');
   const [passwordPateren, setPasswordPateren] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const [btnLoading, setBtnLoading] = useState(false);
   useEffect(() => {
     if (selectedOption === 'firstName') {
       // Enable button if email and password are valid
-      setButtonEnable(email !== '' && firstName =='' &&lastName !== '' && password1 !== '' && password2 !== ''  );
-    // } else if (selectedOption === 'phoneNumber') {
-      // Enable button if phone number is valid
-      // setButtonEnable(phoneNumber.length === 10);
-      // navigation.navigate('OTPVerify');
+      setButtonEnable(
+        email !== '' &&
+          firstName == '' &&
+          lastName !== '' &&
+          password1 !== '' &&
+          password2 !== '' &&
+          phoneNumber.length === 10 &&
+          phoneNumber.startsWith(selectedCountry?.phone),
+      );
     }
-  }, [firstName,lastName, email,password1, password2]);
-  // const backtoscreen = () => {
-  //   setCurrentComponent('');
-  //   navigation.navigate('Home');
-  // };
+  }, [
+    firstName,
+    lastName,
+    email,
+    password1,
+    password2,
+    phoneNumber,
+    selectedCountry,
+  ]);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -59,9 +90,7 @@ const SignUp = () => {
   useEffect(() => {
     if (
       firstName != '' &&
-      // !specialCharacters.test(firstName) &&
       lastName != '' &&
-      // !specialCharacters.test(lastName) &&
       email != '' &&
       password1.length >= 8 &&
       /[a-z]/.test(password1) &&
@@ -74,7 +103,7 @@ const SignUp = () => {
     } else {
       setButtonEnable(false);
     }
-  }, [firstName, lastName, email, password1, password2]);
+  }, [firstName, lastName, email, password1, password2, phoneNumber]);
   const setUserData = async data => {
     const userObject = {
       accessToken: data.accessToken,
@@ -84,10 +113,14 @@ const SignUp = () => {
       firstName: data.user.firstName,
       username: data.user.username,
       profilePhoto: data.user.profilePhoto,
+      phoneNumber: data.user.phoneNumber, // Assuming phoneNumber and callingCode are available in the response
+      callingCode: data.user.callingCode,
+      // phoneNumber: data.user.phoneNumber,
+      // callingCode: data.user.callingCode,
     };
     console.log('==================', userObject);
     dispatchUserData(userObject);
-    await setItemInLocalStorage('@UserToken', userObject.accessToken);
+    await setItemInLocalStorage('@UserToken....', userObject.accessToken);
     await setItemInLocalStorage('@UserInfo', JSON.stringify(userObject));
     console.log('userObjectuserObject============', userObject);
   };
@@ -97,20 +130,21 @@ const SignUp = () => {
       const data = {
         firstName: firstName,
         lastName: lastName,
-        email: email,
+        email: email.trim(),
         password1: password1,
         password2: password2,
         referredBy: 'abcde', // Assuming referredBy always "string"
       };
-      setButtonEnable(false);
+
       const response = await signUp(data);
       setUserData(response?.data);
+      setButtonEnable(true);
       console.log('signUpResponse======================', response);
       console.log('SignUp Response:', response?.data?.message);
       console.log('SignUp ============:', response?.response?.data?.message);
       if (response?.data) {
         setMessage('User Register Successfully');
-    // setBtnLoading(false);
+        // setBtnLoading(false);
         setCurrentComponent('signUpSuccess');
       } else if (response?.response?.data?.message) {
         setMessage(response?.response?.data?.message);
@@ -119,289 +153,543 @@ const SignUp = () => {
       setBtnLoading(false);
       // setButtonEnable(false);
     } catch (error) {
-    setBtnLoading(false);
+      setBtnLoading(false);
       console.error('SignUp Error:', error);
     }
     setButtonEnable(false);
   };
   const handleProceed = () => {
     // Navigate to the GoogleLogin screen
-    navigation.navigate('GoogleLogin');
+    navigation.navigate('Login');
   };
   const backtoscreen = () => {
     setCurrentComponent('');
     // navigation.navigate('SignUp');
   };
 
+  /////////callingcode//////
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const countries = require('../EditProfile//countryCodes.json')['countries'];
+  const [modalVisible, setModalVisible] = useState(false);
+  const openCountryCodePicker = () => {
+    setModalVisible(true);
+  };
+
+  const onSelectCountry = country => {
+    setSelectedCountry(country);
+    setModalVisible(false);
+  };
+  const renderItem = ({item}) => (
+    <TouchableOpacity onPress={() => onSelectCountry(item)}>
+      <View
+        style={{
+          flexDirection: 'row',
+
+          margin: 2,
+        }}>
+        <Text>{item.emoji}</Text>
+        <Text>{item.phone}</Text>
+      </View>
+
+      {item.code && <Text>{item.code}</Text>}
+    </TouchableOpacity>
+  );
+
+  const handleSignUpPhoneNu = async () => {
+    setBtnLoading(true);
+    try {
+      const data = {
+        callingCode: selectedCountry ? selectedCountry.phone : '',
+        phoneNumber: phoneNumber,
+      };
+
+      // Call the API
+      const response = await signUpPhoneNu(data);
+      console.log('response................phonumberrr', response);
+      setButtonEnable(true);
+      if (data.callingCode && data.phoneNumber) {
+        setUserData(response?.data);
+        if (response?.data) {
+          setMessage('User Registered Successfully');
+          setCurrentComponent('signUpSuccess');
+          navigation.navigate('Login');
+        } else if (response?.response?.data?.message) {
+          setMessage(response?.response?.data?.message);
+          setBtnLoading(false);
+          setLoading(false);
+          setCurrentComponent('signUpError');
+          setButtonEnable(false);
+        }
+      } else {
+        setButtonEnable(false);
+        // Handle incomplete fields
+        Alert.alert(
+          'Please complete both calling code and phone number fields',
+        );
+      }
+    } catch (error) {
+      console.error('SignUp Error:', error);
+      setMessage('An error occurred during sign up');
+      setCurrentComponent('signUpError');
+      setButtonEnable(false);
+      // setLoading(false);
+      // setBtnLoading(true);
+    }
+    // setLoading(false);
+    setBtnLoading(false);
+  };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={Login.MinViewScreen}>
+      <View style={styles.MinViewScreen}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={Style.ScrollViewStyles}>
-          <View style={Login.AccountView}>
-            <Text style={Login.Loginheader}>{t('SignUp')}</Text>
+          <View style={styles.AccountView}>
+            <Text style={styles.Loginheader}>{t('SignUp')}</Text>
             <Text style={Login.LoginText}>{t('signuptext')}</Text>
           </View>
           <Spacing space={SH(60)} />
-          <TouchableOpacity style={SplashStyl.touchablestyleW}>
-            <View style={{flexDirection: 'row'}}>
-              <Entypo
-                name="user"
-                size={SF(20)}
-                style={SplashStyl.iconStylemail}
-                color={'#293170'}
-              />
-              <TextInput
-                style={SplashStyl.withouticoninput}
-                placeholder="FirstName"
-                value={firstName}
-                placeholderTextColor={'black'}
-                onChangeText={val => {
-                  setFirstName(val), setSubmitted(true);
-                }}
-              />
-            </View>
-          </TouchableOpacity>
-          {submitted && firstName == '' ? (
-            <Text style={styles.error}>Enter your name</Text>
-          ) : null}
-          <TouchableOpacity style={SplashStyl.touchablestyleW}>
-            <View style={{flexDirection: 'row'}}>
-              <Entypo
-                name="user"
-                size={SF(20)}
-                style={SplashStyl.iconStylemail}
-                color={'black'}
-              />
-              <TextInput
-                style={SplashStyl.withouticoninput}
-                placeholder={t('lastName')}
-                value={lastName}
-                placeholderTextColor={'black'}
-                onChangeText={val => {
-                  setLastName(val), setSubmitted(true);
-                }}
-                // secureTextEntry={!showPassword}
-              />
-            </View>
-          </TouchableOpacity>
-          {submitted && lastName == '' ? (
-            <Text style={styles.error}>Enter your last name</Text>
-          ) : null}
-          <TouchableOpacity style={SplashStyl.touchablestyleW}>
-            <View style={{flexDirection: 'row'}}>
-              <MatIcon
-                name="mail"
-                size={SF(20)}
-                style={SplashStyl.iconStylemail}
-                // color={'black'}
-              />
-              <TextInput
-                style={SplashStyl.withouticoninput}
-                placeholder={t('Enteremail')}
-                value={email}
-                placeholderTextColor={'black'}
-                onChangeText={text => {
-                  setEmail(text), setSubmitted(true);
-                }}
-                // secureTextEntry={!showPassword}
-              />
-            </View>
-          </TouchableOpacity>
-          {submitted && email == '' ? (
-            <Text style={styles.error}>Enter your email.</Text>
-          ) : null}
-          <TouchableOpacity style={SplashStyl.touchablestyleW}>
-            <View style={{flexDirection: 'row'}}>
-              <FontAwesome
-                name="lock"
-                size={SF(20)}
-                style={{
-                  paddingVertical: SH(15),
-                  paddingHorizontal: SW(3),
-                  marginLeft: 8,
-                  color: '#293170',
-                }}
-              />
-              <TextInput
-                style={SplashStyl.input}
-                placeholder={t('Password_Text')}
-                value={password1}
-                placeholderTextColor={'black'}
-                onChangeText={text => {
-                  setPassword1(text), setPasswordPateren(true);
-                }}
-                secureTextEntry={showPassword1}
-              />
-              <TouchableOpacity onPress={togglePasswordVisibilityone}>
-                <FontAwesome
-                  name={showPassword1 ? 'eye-slash' : 'eye'}
-                  size={SF(18)}
-                  style={{
-                    paddingHorizontal: 2,
-                    marginRight: 12,
-                    paddingVertical: 12,
-                  }}
-                  color={'black'}
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {passwordPateren &&
-          (password1 == '' ||
-            !/[a-z]/.test(password1) ||
-            !/[A-Z]/.test(password1) ||
-            !/[0-9]/.test(password1) ||
-            !specialCharacters.test(password1) ||
-            !(password1.length >= 8)) ? (
-            <View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {password1.length >= 8 && (
-                  <Feather name="check-circle" color="green" size={14} />
-                )}
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: password1.length >= 8 ? 'green' : 'red',
-                    marginLeft: password1.length >= 8 ? 10 : 0,
-                  }}>
-                  {t('MINIMUM_CHARACTER')}
-                </Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {/[0-9]/.test(password1) && (
-                  <Feather name="check-circle" color="green" size={14} />
-                )}
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: /[0-9]/.test(password1) ? 'green' : 'red',
-                    marginLeft: /[0-9]/.test(password1) ? 10 : 0,
-                  }}>
-                  {t('PASSWORD_ERROR')}
-                  {t('NUMBER')}
-                </Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {/[a-z]/.test(password1) && (
-                  <Feather name="check-circle" color="green" size={14} />
-                )}
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: /[a-z]/.test(password1) ? 'green' : 'red',
-                    marginLeft: /[a-z]/.test(password1) ? 10 : 0,
-                  }}>
-                  {t('PASSWORD_ERROR')}
-                  {t('LOWER_CASE')}
-                </Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {/[A-Z]/.test(password1) && (
-                  <Feather name="check-circle" color="green" size={14} />
-                )}
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: /[A-Z]/.test(password1) ? 'green' : 'red',
-                    marginLeft: /[A-Z]/.test(password1) ? 10 : 0,
-                  }}>
-                  {t('PASSWORD_ERROR')}
-                  {t('UPPER_CASE')}
-                </Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {specialCharacters.test(password1) && (
-                  <Feather name="check-circle" color="green" size={14} />
-                )}
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: specialCharacters.test(password1) ? 'green' : 'red',
-                    marginLeft: specialCharacters.test(password1) ? 10 : 0,
-                  }}>
-                  {t('PASSWORD_ERROR')}
-                  {t('SPECIAL_CHARACTER')}
-                </Text>
-              </View>
-            </View>
-          ) : null}
-          <TouchableOpacity
-            style={SplashStyl.touchablestyleW}
-            //onPress={() => navigation.navigate('Forgotemail')}
-          >
-            <View style={{flexDirection: 'row'}}>
-              <FontAwesome
-                name="lock"
-                size={SF(20)}
-                style={{
-                  paddingVertical: SH(15),
-                  paddingHorizontal: SW(3),
-                  marginLeft: 8,
-                  color: '#293170',
-                }}
-                color={'black'}
-              />
-              <TextInput
-                style={SplashStyl.input}
-                placeholder={t('Re_Type_Password_Text')}
-                value={password2}
-                placeholderTextColor={'black'}
-                onChangeText={setPassword2}
-                secureTextEntry={showPassword}
-              />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
-                <FontAwesome
-                  name={showPassword ? 'eye-slash' : 'eye'}
-                  size={SF(18)}
-                  style={{
-                    paddingHorizontal: 2,
-                    marginRight: 12,
-                    paddingVertical: 8,
-                    marginTop: SH(3),
-                  }}
-                  color={'#293170'}
-                />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-          {submitted && password2 == '' ? (
-            <Text style={styles.error}>Confirm your password</Text>
-          ) : password1 != password2 ? (
-            <Text style={styles.error}>
-              Password not matched
-            </Text>
-          ) : null}
-          <Spacing space={SH(20)} />
-          <TouchableOpacity
-  style={{
-    ...SplashStyl.touchablestyle,
-    backgroundColor: buttonEnable ? '#293170' : '#ccc',
-  }}
-  onPress={handleSignUp}
-  disabled={!buttonEnable}>
-  <View
-    style={{
-      flexDirection: 'row',
-      paddingHorizontal: '5%',
-      justifyContent: 'center',
-      height:50
-    }}>
-    {btnLoading ? (
-      <ActivityIndicator color="white" />
-    ) : (
-      <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
-    )}
-  </View>
-</TouchableOpacity>
-<Spacing space={SH(20)} />
-          <View style={Login.NotRegisterView}>
-            <Text style={Login.NotRegisterText}>{t('Haveanaccount')}</Text>
+
+          <View style={styles.EmailPhoneView}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('GoogleLogin')}
+              onPress={() => setSelectedOption('email')}
+              style={{
+                width: '50%',
+                height: 57,
+                borderTopLeftRadius: 20,
+                overflow: 'hidden',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor:
+                  selectedOption === 'email' ? '#293170' : 'white',
+              }}>
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={20}
+                color={selectedOption === 'email' ? 'white' : 'black'}
+              />
+              <Text
+                style={{
+                  color: selectedOption === 'email' ? 'white' : 'black',
+                  marginLeft: 10,
+                  overflow: 'hidden',
+                }}>
+                {t('Email')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setSelectedOption('phonenumber')}
+              style={{
+                width: '50%',
+                height: 57,
+                borderBottomRightRadius: 20,
+                backgroundColor:
+                  selectedOption === 'phonenumber' ? '#293170' : 'white',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Feather
+                name="phone"
+                size={20}
+                color={selectedOption === 'phonenumber' ? 'white' : 'black'}
+              />
+              <Text
+                style={{
+                  color: selectedOption === 'phonenumber' ? 'white' : 'black',
+                  marginLeft: 10,
+                }}>
+                {t('PhoneNumber')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Spacing space={30} />
+          {selectedOption === 'email' && (
+            <>
+              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+                <View style={{flexDirection: 'row'}}>
+                  <Entypo
+                    name="user"
+                    size={SF(20)}
+                    style={SplashStyl.iconStylemail}
+                    color={'#293170'}
+                  />
+                  <TextInput
+                    style={SplashStyl.withouticoninput}
+                    placeholder="FirstName"
+                    value={firstName}
+                    placeholderTextColor={'black'}
+                    onChangeText={val => {
+                      setFirstName(val), setSubmitted(true);
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              {submitted && firstName == '' ? (
+                <Text style={styles.error}>Enter your name</Text>
+              ) : null}
+              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+                <View style={{flexDirection: 'row'}}>
+                  <Entypo
+                    name="user"
+                    size={SF(20)}
+                    style={SplashStyl.iconStylemail}
+                    color={'black'}
+                  />
+                  <TextInput
+                    style={SplashStyl.withouticoninput}
+                    placeholder={t('lastName')}
+                    value={lastName}
+                    placeholderTextColor={'black'}
+                    onChangeText={val => {
+                      setLastName(val), setSubmitted(true);
+                    }}
+                    // secureTextEntry={!showPassword}
+                  />
+                </View>
+              </TouchableOpacity>
+              {submitted && lastName == '' ? (
+                <Text style={styles.error}>Enter your last name</Text>
+              ) : null}
+              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+                <View style={{flexDirection: 'row'}}>
+                  <MatIcon
+                    name="mail"
+                    size={SF(20)}
+                    style={SplashStyl.iconStylemail}
+                    // color={'black'}
+                  />
+                  <TextInput
+                    style={SplashStyl.withouticoninput}
+                    placeholder={t('Enteremail')}
+                    value={email}
+                    placeholderTextColor={'black'}
+                    onChangeText={text => {
+                      setEmail(text), setSubmitted(true);
+                    }}
+                    // secureTextEntry={!showPassword}
+                  />
+                </View>
+              </TouchableOpacity>
+              {submitted && email == '' ? (
+                <Text style={styles.error}>Enter your email.</Text>
+              ) : null}
+              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+                <View style={{flexDirection: 'row'}}>
+                  <FontAwesome
+                    name="lock"
+                    size={SF(20)}
+                    style={{
+                      paddingVertical: SH(15),
+                      paddingHorizontal: SW(3),
+                      marginLeft: 8,
+                      color: '#293170',
+                    }}
+                  />
+                  <TextInput
+                    style={SplashStyl.input}
+                    placeholder={t('Password_Text')}
+                    value={password1}
+                    placeholderTextColor={'black'}
+                    onChangeText={text => {
+                      setPassword1(text), setPasswordPateren(true);
+                    }}
+                    secureTextEntry={showPassword1}
+                  />
+                  <TouchableOpacity onPress={togglePasswordVisibilityone}>
+                    <FontAwesome
+                      name={showPassword1 ? 'eye-slash' : 'eye'}
+                      size={SF(18)}
+                      style={{
+                        paddingHorizontal: 2,
+                        color: '#293170',
+                        marginRight: 12,
+                        paddingVertical: 12,
+                      }}
+                      color={'black'}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+              {passwordPateren &&
+              (password1 == '' ||
+                !/[a-z]/.test(password1) ||
+                !/[A-Z]/.test(password1) ||
+                !/[0-9]/.test(password1) ||
+                !specialCharacters.test(password1) ||
+                !(password1.length >= 8)) ? (
+                <View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    {password1.length >= 8 && (
+                      <Feather name="check-circle" color="green" size={14} />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: password1.length >= 8 ? 'green' : 'red',
+                        marginLeft: password1.length >= 8 ? 10 : 0,
+                      }}>
+                      {t('MINIMUM_CHARACTER')}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    {/[0-9]/.test(password1) && (
+                      <Feather name="check-circle" color="green" size={14} />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: /[0-9]/.test(password1) ? 'green' : 'red',
+                        marginLeft: /[0-9]/.test(password1) ? 10 : 0,
+                      }}>
+                      {t('PASSWORD_ERROR')}
+                      {t('NUMBER')}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    {/[a-z]/.test(password1) && (
+                      <Feather name="check-circle" color="green" size={14} />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: /[a-z]/.test(password1) ? 'green' : 'red',
+                        marginLeft: /[a-z]/.test(password1) ? 10 : 0,
+                      }}>
+                      {t('PASSWORD_ERROR')}
+                      {t('LOWER_CASE')}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    {/[A-Z]/.test(password1) && (
+                      <Feather name="check-circle" color="green" size={14} />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: /[A-Z]/.test(password1) ? 'green' : 'red',
+                        marginLeft: /[A-Z]/.test(password1) ? 10 : 0,
+                      }}>
+                      {t('PASSWORD_ERROR')}
+                      {t('UPPER_CASE')}
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    {specialCharacters.test(password1) && (
+                      <Feather name="check-circle" color="green" size={14} />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: specialCharacters.test(password1)
+                          ? 'green'
+                          : 'red',
+                        marginLeft: specialCharacters.test(password1) ? 10 : 0,
+                      }}>
+                      {t('PASSWORD_ERROR')}
+                      {t('SPECIAL_CHARACTER')}
+                    </Text>
+                  </View>
+                </View>
+              ) : null}
+              <TouchableOpacity
+                style={SplashStyl.touchablestyleW}
+                //onPress={() => navigation.navigate('Forgotemail')}
+              >
+                <View style={{flexDirection: 'row'}}>
+                  <FontAwesome
+                    name="lock"
+                    size={SF(20)}
+                    style={{
+                      paddingVertical: SH(15),
+                      paddingHorizontal: SW(3),
+                      marginLeft: 8,
+                      color: '#293170',
+                    }}
+                    color={'#293170'}
+                  />
+                  <TextInput
+                    style={SplashStyl.input}
+                    placeholder={t('Re_Type_Password_Text')}
+                    value={password2}
+                    placeholderTextColor={'black'}
+                    onChangeText={setPassword2}
+                    secureTextEntry={showPassword}
+                  />
+                  <TouchableOpacity onPress={togglePasswordVisibility}>
+                    <FontAwesome
+                      name={showPassword ? 'eye-slash' : 'eye'}
+                      size={SF(18)}
+                      style={{
+                        paddingHorizontal: 2,
+                        marginRight: 12,
+                        paddingVertical: 8,
+                        marginTop: SH(3),
+                        color: '#293170',
+                      }}
+                      color={'#293170'}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+              {submitted && password2 == '' ? (
+                <Text style={styles.error}>Confirm your password</Text>
+              ) : password1 != password2 ? (
+                <Text style={styles.error}>Password not matched</Text>
+              ) : null}
+              <Spacing space={30} />
+              <TouchableOpacity
+                style={{
+                  ...SplashStyl.touchablestyle,
+                  backgroundColor: '#293170',
+                }}
+                onPress={handleSignUp}
+                disabled={!buttonEnable}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: '5%',
+                    justifyContent: 'center',
+                    height: 50,
+                  }}>
+                  {btnLoading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
+
+          {selectedOption === 'phonenumber' && (
+            <>
+              <TouchableOpacity style={styles.touchablestyleW}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: wp(80),
+                    paddingVertical: SH(8),
+                  }}>
+                  {/* //////////// */}
+                  <TouchableOpacity
+                    onPress={openCountryCodePicker}
+                    style={{
+                      borderRadius: 10,
+                      backgroundColor: 'white',
+                      elevation: 5,
+                      marginHorizontal: wp(2),
+                      paddingVertical: wp(2),
+                      alignSelf: 'center',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+
+                        marginLeft: wp(3),
+                        paddingRight: wp(2),
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                      }}>
+                      <Icon
+                        name="chevron-down"
+                        size={30}
+                        color={'black'}
+                        style={{marginTop: hp(-1.2)}}
+                      />
+                      <Text
+                        style={{
+                          color: 'black',
+                          // alignSelf: 'center',
+                          // textAlign: 'center',
+                          // paddingTop: 8,
+                        }}>
+                        {selectedCountry ? selectedCountry.emoji : '🇺🇸'}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    style={{height: 40}}
+                    onRequestClose={() => setModalVisible(false)}>
+                    <View style={styles.modalCallingCodeContainer}>
+                      <FlatList
+                        data={countries}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={renderItem}
+                      />
+                    </View>
+                  </Modal>
+
+                  <TextInput
+                    style={styles.inputPhonNu}
+                    placeholder={t('PhoneNumber')}
+                    value={phoneNumber}
+                    color={'black'}
+                    keyboardType="phone-pad"
+                    placeholderTextColor={'black'}
+                    onChangeText={val => {
+                      setPhoneNumber(val), setSubmitted(true);
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              {submitted && phoneNumber == '' ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: SF(12),
+                  }}>
+                  {t('NUMBER_ERROR')}
+                </Text>
+              ) : submitted && phoneNumber.length <= 10 ? (
+                <Text
+                  style={{
+                    color: 'red',
+                    fontSize: SF(12),
+                  }}>
+                  must contain 10 numbers
+                </Text>
+              ) : null}
+
+              <Spacing space={10} />
+
+              <TouchableOpacity
+                style={{
+                  ...styles.touchablestyle,
+                  backgroundColor: '#293170',
+                }}
+                onPress={handleSignUpPhoneNu}
+                disabled={btnLoading}>
+                {/* disabled={!buttonEnable}> */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: '5%',
+                    justifyContent: 'center',
+                    height: 50,
+                  }}>
+                  {btnLoading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
+
+          <Spacing space={SH(20)} />
+          <View style={styles.NotRegisterView}>
+            <Text style={styles.NotRegisterText}>{t('Haveanaccount')}</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
               disabled={loading}>
-              <Text style={Login.NotRegisterText}>{t('SignIn')}</Text>
+              <Text style={styles.NotRegisterTextBold}>{t('SignIn')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -446,32 +734,32 @@ const SignUp = () => {
     </TouchableWithoutFeedback>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  input: {
-    height: 90,
-    borderColor: 'gray',
-    width: '90%',
-    borderWidth: 1,
-    marginBottom: 10,
-    // paddingHorizontal: 15,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-    fontSize:12
-  },
-  button: {
-    backgroundColor: 'blue',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 20,
+//   },
+//   input: {
+//     height: 90,
+//     borderColor: 'gray',
+//     width: '90%',
+//     borderWidth: 1,
+//     marginBottom: 10,
+//     // paddingHorizontal: 15,
+//   },
+//   error: {
+//     color: 'red',
+//     marginBottom: 10,
+//     fontSize: 12,
+//   },
+//   button: {
+//     backgroundColor: 'blue',
+//     padding: 10,
+//     borderRadius: 5,
+//     alignItems: 'center',
+//   },
+//   buttonText: {
+//     color: 'white',
+//     fontSize: 18,
+//   },
+// });
 export default SignUp;

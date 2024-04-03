@@ -23,12 +23,18 @@ const ResetPass = ({navigation, route}) => {
   console.log('email=========', email);
   console.log('otp=========', otp);
   const [password1, setPassword1] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+
   const [password2, setpassword2] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const togglePasswordVisibility1 = () => {
+    setShowPassword1(!showPassword1); // Toggle visibility for password 1
+  };
+
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2); // Toggle visibility for password 2
   };
   const {t, i18n} = useTranslation();
 
@@ -51,23 +57,15 @@ const ResetPass = ({navigation, route}) => {
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-         <View style={styles.Container}>
-           <View style={styles.firstHalfView}>
-              <Text style={styles.boldText}>{t('ResetPassword')}
-             </Text>
-             <Text
-             style={styles.lightText}>
-            {t('resetpasstext')}
-            </Text>
-            <Image
-            source={images.halalogo}
-            style={styles.imgstyle} />
-          </View>
+      <View style={styles.Container}>
+        <View style={styles.firstHalfView}>
+          <Text style={styles.boldText}>{t('ResetPassword')}</Text>
+          <Text style={styles.lightText}>{t('resetpasstext')}</Text>
+          <Image source={images.halalogo} style={styles.imgstyle} />
+        </View>
 
-        <View
-          style={styles.touchableView}>
-          <TouchableOpacity
-            style={styles.touchablestyleW}>
+        <View style={styles.touchableView}>
+          <TouchableOpacity style={styles.touchablestyleW}>
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
                 name="lock"
@@ -81,22 +79,20 @@ const ResetPass = ({navigation, route}) => {
                 value={password1}
                 onChangeText={setPassword1}
                 placeholderTextColor={'black'}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showPassword1}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
+              <TouchableOpacity onPress={togglePasswordVisibility1}>
                 <FontAwesome
-                  name={showPassword ? 'eye-slash' : 'eye'}
+                  name={showPassword1 ? 'eye-slash' : 'eye'}
                   size={SF(20)}
                   style={styles.iconStyle}
-                  color={Colors.black}
+                  color={'#293170'}
                 />
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.touchablestyleW}
-          >
+          <TouchableOpacity style={styles.touchablestyleW}>
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
                 name="lock"
@@ -110,14 +106,14 @@ const ResetPass = ({navigation, route}) => {
                 value={password2}
                 onChangeText={setpassword2}
                 placeholderTextColor={'black'}
-                secureTextEntry={!showPassword}
+                secureTextEntry={!showPassword2}
               />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
+              <TouchableOpacity onPress={togglePasswordVisibility2}>
                 <FontAwesome
-                  name={showPassword ? 'eye-slash' : 'eye'}
+                  name={showPassword2 ? 'eye-slash' : 'eye'}
                   size={SF(20)}
                   style={styles.iconStyle}
-                  color={Colors.black}
+                  color={'#293170'}
                 />
               </TouchableOpacity>
             </View>
@@ -130,8 +126,7 @@ const ResetPass = ({navigation, route}) => {
             </Text>
           ) : null}
         </View>
-        <View
-          style={styles.ButtonView}>
+        <View style={styles.ButtonView}>
           <TouchableOpacity
             style={[
               styles.button,
@@ -146,7 +141,6 @@ const ResetPass = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       </View>
-
     </TouchableWithoutFeedback>
   );
 };

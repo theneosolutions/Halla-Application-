@@ -89,6 +89,10 @@ const images = {
   success: require('./success.png'),
   backimg: require('./halla.png'),
   Doone: require('./Doone.png'),
+  cardOneImg: require('./CardOneImg.png'),
+  CardTwoimg: require('./CardTwoimg.png'),
+  CardThreeImg: require('./CardThreeImg.png'),
+  cardFourimg: require('./cardFourimg.png'),
   // MaskGroupPlus: require('./MaskGroupPlus.png'),
 
   // SearchImg: require('./Search.png'),

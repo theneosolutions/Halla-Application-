@@ -11,6 +11,7 @@ import IconF from 'react-native-vector-icons/AntDesign';
 
 import {useNavigation, useTheme} from '@react-navigation/native';
 import React from 'react';
+import Egypto from 'react-native-vector-icons/Entypo';
 const DATA = [
   {
     id: '1',
@@ -40,21 +41,18 @@ const DATA = [
   // Add more data objects as needed
 ];
 
-const Upcommingevents = props => {
-  const {navigation} = props;
+const Upcommingevents = ({navigation, route}) => {
+  const {upcoming} = route.params;
+  console.log('upcoming---', upcoming);
   const renderItem = ({item}) => (
     <View style={styles.slide}>
       {/* Wrap the image inside TouchableOpacity */}
       <TouchableOpacity onPress={() => navigation.navigate('Invitationreport')}>
-        <Image source={item.image} style={styles.images} />
+        <Image source={{uri: item.image}} style={styles.images} />
       </TouchableOpacity>
-      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.title}>{item.name}</Text>
       <View style={{flexDirection: 'row'}}>
-        <Text style={styles.text}>{item.text}</Text>
-        <View style={{flexDirection: 'row'}}>
-          <Image source={item.image2} style={styles.image2} />
-          <Image source={item.image3} style={styles.image3} />
-        </View>
+        <Text style={styles.text}>{item.eventDate}</Text>
       </View>
       <TouchableOpacity
         style={styles.button}
@@ -66,49 +64,24 @@ const Upcommingevents = props => {
     </View>
   );
 
-  // const {selectedBirthday, imageUrl} = route.params;
-
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          width: '99%',
-          flexDirection: 'row',
-          height: 50,
-          backgroundColor: '#f8f9fc',
-          padding: SW(10),
-        }}>
+      <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <IconF
+          <IconF size={SF(20)} name="left" style={styles.headerIcon} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Upcomming Events</Text>
+        <TouchableOpacity>
+          <Egypto
             size={SF(20)}
-            name="left"
-            style={{
-              height: SH(30),
-              marginLeft: 10,
-              marginRight: 20,
-              color: 'black',
-            }}
+            name="dots-three-vertical"
+            style={styles.headerIconRight}
           />
         </TouchableOpacity>
-        <Text
-          style={{
-            alignItems: 'center',
-            alignContent: 'center',
-            fontWeight: '700',
-            fontSize: SF(20),
-            color: 'black',
-          }}>
-          Upcomming Events
-        </Text>
-        {/* <Egypto
-          size={SF(20)}
-          name="dots-three-vertical"
-          style={{marginLeft: 'auto'}}
-        /> */}
       </View>
       <View style={{flex: 1, marginTop: 20}}>
         <FlatList
-          data={DATA}
+          data={upcoming}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.list}
@@ -122,6 +95,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  headerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    height: 50,
+    backgroundColor: '#ffff',
+    padding: SW(10),
+    alignItems: 'center',
+  },
+  headerText: {
+    flex: 1,
+    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: SF(20),
+    color: 'black',
+  },
+  headerIcon: {
+    height: SH(50),
+    marginLeft: 10,
+    marginRight: 20,
+    marginTop: 30,
+    color: '#000',
+  },
+  headerIconRight: {
+    marginRight: 10,
+    color: '#000',
+  },
+  headerView: {
+    width: '99%',
+    flexDirection: 'row',
+    height: 50,
+    backgroundColor: '#f8f9fc',
+    padding: SW(10),
+  },
+  HeaderText: {
+    alignItems: 'center',
+    alignContent: 'center',
+    fontWeight: '700',
+    fontSize: SF(20),
+    color: 'black',
+  },
+  IconStyle: {
+    height: SH(30),
+    marginLeft: 10,
+    marginRight: 20,
+    color: 'black',
+    fontWeight: '900',
   },
   list: {
     paddingHorizontal: 20,

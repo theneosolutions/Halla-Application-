@@ -1,13 +1,12 @@
 import React, {useState, useMemo} from 'react';
-import {View,StyleSheet, Image} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {Spacing, Input} from '../commonComponents';
-import {SH, Colors,SF,SW} from '../../utils';
+import {SH, Colors, SF, SW} from '../../utils';
 import images from '../../index';
 import {useTheme} from '@react-navigation/native';
-
 
 const Search = () => {
   const {t} = useTranslation();
@@ -23,12 +22,13 @@ const Search = () => {
             placeholder={t('Search_Inbox')}
             onChangeText={value => Setsearch(value)}
             value={search}
+            color={'black'}
             inputStyle={HomeTabStyle.BgColorTransparent}
             placeholderStyle={HomeTabStyle.PlaceHolderStyles}
           />
         </View>
-        <View style={HomeTabStyle.IconViewStyles}>
-          <Icon name="search1" size={23} />
+        <View style={styles.IconViewStyles}>
+          <Icon name="search1" size={23} color={'black'} />
         </View>
       </View>
       <Spacing space={SH(10)} />
@@ -61,14 +61,12 @@ const Search = () => {
     // </View>
   );
 };
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   BgColorView: {
     padding: SH(10),
-    // margin: SH(5),
     justifyContent: 'center',
     borderBottomRightRadius: SF(40),
     borderBottomLeftRadius: SF(40),
-
     backgroundColor: Colors.darkBlue,
   },
   FlexrowSearchView: {
@@ -80,5 +78,5 @@ const styles=StyleSheet.create({
     borderBottomRightRadius: SH(20),
     width: '90%',
   },
-})
+});
 export default Search;

@@ -26,9 +26,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //   try {
 //     if (Platform.OS === 'android') {
 //       const permissionStatus = await notifee.requestPermission();
-     
+
 //     }
-  
+
 //     const channelId = await notifee.createChannel({
 //       id: 'default',
 //       name: 'Default Channel',
@@ -73,83 +73,77 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //   },
 // });
 i18n.use(initReactI18next).init({
-    resources: {
-      en: {translation: en},
-      ar: {translation: ar},
-    },
-    lng: 'en', // default language
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
-  
- const SplashScreen = ({navigation}) => {
+  resources: {
+    en: {translation: en},
+    ar: {translation: ar},
+  },
+  lng: 'en', // default language
+  fallbackLng: 'en',
+  interpolation: {
+    escapeValue: false,
+  },
+});
+
+const SplashScreen = ({navigation}) => {
   const [language, setLanguage] = useState('en');
   const {t} = useTranslation();
   const toggleLanguage = () => {
-    const newLanguage = language === 'en' ? 'ar' : 'en'; 
-    i18n.changeLanguage(newLanguage); 
+    const newLanguage = language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLanguage);
     setLanguage(newLanguage);
   };
- 
 
-//   // const checkToken = async () => {
-//     // try {
-//     //   const token = await AsyncStorage.getItem('@UserToken');
-//     //   if (token !== null) {
-//     //     // Token exists, navigate to HomeScreen
-//     //     navigation.navigate('Home');
-//     //   } else {
-//     //     // Token doesn't exist, navigate to GoogleLoginScreen
-//     //     navigation.navigate('GoogleLogin');
-//     //   }
-//     // } catch (error) {
-//     //   console.error('Error retrieving token:', error);
-//     // }
-//   // };
-//   // useEffect(() => {
-//   //   checkToken();
-//   // }, []);
+  // const checkToken = async () => {
+  //   try {
+  //     const token = await AsyncStorage.getItem('@UserToken');
+  //     if (token !== null) {
+  //       // Token exists, navigate to HomeScreen
+  //       navigation.navigate('Home');
+  //     } else {
+  //       // Token doesn't exist, navigate to GoogleLoginScreen
+  //       navigation.navigate('Login');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error retrieving token:', error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
   return (
-    
-      <View style={styles.Container}>
-        <TouchableOpacity
-          onPress={toggleLanguage}
-          style={styles.SwitchStyle}>
-          {language === 'en' ? (
-            <>
-              <Image
-                source={require('../../images/engLang.png')}
-                style={styles.SwitchImage}
-              />
-              <Text>Eng</Text>
-            </>
-          ) : (
-            <>
-              <Image
-                source={require('../../images/arabLang.png')}
-                style={styles.SwitchImage}
-              />
-              <Text>عربى</Text>
-            </>
-          )}
-        </TouchableOpacity>
+    <View style={styles.Container}>
+      <TouchableOpacity onPress={toggleLanguage} style={styles.SwitchStyle}>
+        {language === 'en' ? (
+          <>
+            <Image
+              source={require('../../images/engLang.png')}
+              style={styles.SwitchImage}
+            />
+            <Text>Eng</Text>
+          </>
+        ) : (
+          <>
+            <Image
+              source={require('../../images/arabLang.png')}
+              style={styles.SwitchImage}
+            />
+            <Text>عربى</Text>
+          </>
+        )}
+      </TouchableOpacity>
 
-        <View style={styles.logoContainer}>
-          <Image source={images.halalogo} style={styles.imgstyle} />
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.touchablestyle}
-           
-            onPress={() => navigation.navigate('RegistrationScreen')}> 
-            <Text style={styles.btntext}>{t('started')}</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.logoContainer}>
+        <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
-   
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.touchablestyle}
+          onPress={() => navigation.navigate('RegistrationScreen')}>
+          <Text style={styles.btntext}>{t('started')}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 export default SplashScreen;

@@ -37,9 +37,10 @@ async function makeRequest(
     headers['Content-Type'] = 'multipart/form-data';
   }
   if (token) {
-    console.log('>>>>>token', token,userToken)
+    console.log('>>>>>token', token, userToken);
     const userToken = await getFromLocalStorage('@UserToken');
     headers['Authorization'] = `Bearer ${userToken}`;
+    console.log('cool', userToken);
   }
   const fullUrl = `${baseUrl}${url}`;
   const config = {
@@ -49,6 +50,7 @@ async function makeRequest(
     params: method === 'GET' ? body : undefined,
     data: method !== 'GET' ? body : undefined,
   };
+  console.log('🚀 ~ config:', config);
   return axios(config).then(
     res => {
       return {

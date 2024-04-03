@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  Keyboard,ScrollView
+  Keyboard,
+  ScrollView,
 } from 'react-native';
 import images from '../../index';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -42,22 +43,25 @@ const Forgotemail = ({navigation}) => {
     const response = await confirmemail(data);
 
     console.log('confirmemail==========', response);
-     navigation.navigate('OTPVerify', {email});
+    navigation.navigate('OTPVerify', {email});
   };
 
   return (
-    <ScrollView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.Container}>
-              <View   style={styles.firstHalfView}>
-                 <Text  style={styles.forgotstyle}>  Forgot Password</Text>
-                 <Text style={styles.textStyle}>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sintvelit officia consequat duis enim velit mollit.</Text>
-             <View style={styles.imageview}>
-                <Image source={images.halalogo} style={styles.imgstyle} />
-           </View>
-        </View>
-         <Text   style={styles.LabelEmail}>  {t('Email')}  </Text>
-      
+    <ScrollView style={{backgroundColor: 'white'}}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.Container}>
+          <View style={styles.firstHalfView}>
+            <Text style={styles.forgotstyle}> Forgot Password</Text>
+            <Text style={styles.textStyle}>
+              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
+              amet sintvelit officia consequat duis enim velit mollit.
+            </Text>
+            <View style={styles.imageview}>
+              <Image source={images.halalogo} style={styles.imgstyle} />
+            </View>
+          </View>
+          <Text style={styles.LabelEmail}> {t('Email')} </Text>
+
           <TouchableOpacity
             style={styles.touchablestyleW}
             onPress={() => navigation.navigate('Forgotemail')}>
@@ -66,7 +70,7 @@ const Forgotemail = ({navigation}) => {
                 size={SF(25)}
                 name="email-outline"
                 style={styles.Iconstyle}
-                color={'black'}
+                color={'#293170'}
               />
               <TextInput
                 style={styles.input}
@@ -77,18 +81,16 @@ const Forgotemail = ({navigation}) => {
               />
             </View>
           </TouchableOpacity>
-        
-        <View
-          style={styles.ContinuTouchView}>
-          <TouchableOpacity
-            style={styles.touchablestyle}
-            onPress={() => forgotpass()}>
-            <Text style={styles.btntext}>{t('Continue')}</Text>
-          </TouchableOpacity>
+
+          <View style={styles.ContinuTouchView}>
+            <TouchableOpacity
+              style={styles.touchablestyle}
+              onPress={() => forgotpass()}>
+              <Text style={styles.btntext}>{t('Continue')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-   </View>
-  
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
     </ScrollView>
   );
 };

@@ -9,18 +9,22 @@ import {
   Dimensions,
   FlatList,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
+// import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {Spacing, Search, Button} from '../../Components';
-//import {RouteName} from '../../../routes';
-import Login from '../../styles/CommonStyle/LoginScreenStyle';
 import Style from '../../styles/CommonStyle/Style';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import {getEventWithUserId} from '../../Services/ApiList';
+import {getEventCategorywithid} from '../../Services/ApiList';
 import MessagingStyles from '../../styles/CommonStyle/MessagingStyles';
 import IconG from 'react-native-vector-icons/Ionicons';
-import {useNavigation, useTheme,useFocusEffect} from '@react-navigation/native';
+import {
+  useNavigation,
+  useTheme,
+  useFocusEffect,
+} from '@react-navigation/native';
 import images from '../../index';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useTranslation} from 'react-i18next';
@@ -33,29 +37,34 @@ const Home = () => {
   const screenWidth = Dimensions.get('window').width;
   const {t} = useTranslation();
   const [loading, setLoading] = useState(true);
-  const[card,setCard]=useState('')
-const [events, setEvents] = useState([]);
+  const [card, setCard] = useState([]);
+  const [upcomming, setUpcomming] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  ////////////get api by userid//////////////
 
-////////////get api by userid//////////////
+  const handleRefresh = () => {
+    setRefreshing(true);
+    // Fetch data again
+    handleGetByUserId();
+    setRefreshing(false);
+  };
+  const handleGetByUserId = async () => {
+    try {
+      const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+      const response = await getEventCategorywithid(Gettingtoken.id);
+      console.log('response---------------+++', response?.data);
+      console.log('response?.data?.upcoming======', response?.data?.upcoming); // Pass user ID if requitransparent
+      console.log('Events:.....======______====', response?.data?.drafts);
+      setCard(response?.data?.allEvents);
+      setUpcomming(response?.data?.upcoming);
+      console.log('data========', response?.data);
+      setLoading(false);
+    } catch (error) {}
+  };
 
-const handleGetByUserId  = async () => {
-  try {
-    const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'))
-    const response = await getEventWithUserId(Gettingtoken.id); // Pass user ID if requitransparent
-    console.log('Events:.....======', response);
-    setCard(response.data.data);
-    // console.log('data========',response.data)
-    setLoading(false);
-  } catch (error) {
-    // console.log('Error fetching events:', error);
-  }
-
-}
-
-useEffect(() => {
-
-  handleGetByUserId(); // Fetch events when component mounts
-}, []);
+  useEffect(() => {
+    handleGetByUserId();
+  }, []);
   const {Colors} = useTheme();
   const [showRealApp, setShowRealApp] = useState(false);
   const data = {
@@ -63,40 +72,38 @@ useEffect(() => {
     datasets: [
       {
         data: [20, 45, 28, 80, 99, 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2, // optional
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+        strokeWidth: 2,
       },
     ],
-    legend: ['Rainy Days'], // optional
+    legend: ['Rainy Days'],
   };
 
   const handleUpcomingEventsPress = () => {
-    // Navigate to UpcomingEvents screen and pass the data
-    navigation.navigate('Upcommingevents');
+    navigation.navigate('Upcommingevents', {upcoming: upcomming});
   };
-
-
+  console.log('upcomming', upcomming);
 
   const _renderItem = ({item}) => {
     if (loading) {
-      return <ActivityIndicator size="large" color="#0000ff" />;
+      return <ActivityIndicator size="large" color="#293170" />;
     }
-    console.log("🚀 ~ Home ~ item:", item)
     return (
-       <View style={styles.slide}>
-          <TouchableOpacity
-                 onPress={() => {
-                  console.log("🚀 ~ Home ~ test:", item.id)
-                  navigation.navigate('Invitationreport', {id: item.id })
-                 }}>
-          <Image source={{uri:item.image}} style={styles.images} />
-          </TouchableOpacity>
-        {/* <View style={{flexDirection:'row',backgroundColor:'transparent',justifyContent:'spcae-between'}}>
-               <Text style={styles.title}>{item.name}</Text>
-               <Text style={styles.datastyle}>{item.eventDate}</Text>
-        </View> */}
-      
-   
+      <View style={styles.slide}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('🚀 ~ Home ~ test:', item.id);
+            navigation.navigate('Invitationreport', {id: item.id});
+          }}>
+          <View style={styles.textrow}>
+            <Text style={styles.textStyle}>{item.name}</Text>
+            <Text style={styles.textStyleLight}>{item.createdAt}</Text>
+          </View>
+
+          <Image source={{uri: item.image}} style={styles.images} />
+
+          <Text style={styles.drafttext}>All Events</Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -129,41 +136,41 @@ useEffect(() => {
   const _onDone = () => {
     setShowRealApp(true);
   };
-  const slides = [
-    {
-      key: 1,
-      title: 'Title 1',
-      text: 'Birthday Party.',
-      image: require('../../images/wallpaper1.png'),
-      backgroundColor: '#59b2ab',
-      image2: require('../../images/icon4.png'),
-      image3: require('../../images/icon4.png'),
-      image4: require('../../images/iconthree.png'),
-      image5: require('../../images/Invitaciones.png'),
-    },
-    {
-      key: 2,
-      title: 'Title 2',
-      text: 'Other cool stuff',
-      image: require('../../images/wallpaper1.png'),
-      backgroundColor: '#febe29',
-      image2: require('../../images/icon4.png'),
-      image3: require('../../images/icon4.png'),
-      image4: require('../../images/iconthree.png'),
-      image5: require('../../images/Invitaciones.png'),
-    },
-    {
-      key: 3,
-      title: 'Rocket guy',
-      text: "I'm already out of descriptions",
-      image: require('../../images/wallpaper1.png'),
-      backgroundColor: '#22bcb5',
-      image2: require('../../images/icon4.png'),
-      image3: require('../../images/icon4.png'),
-      image4: require('../../images/iconthree.png'),
-      image5: require('../../images/Invitaciones.png'),
-    },
-  ];
+  // const slides = [
+  //   {
+  //     key: 1,
+  //     title: 'Title 1',
+  //     text: 'Birthday Party.',
+  //     image: require('../../images/wallpaper1.png'),
+  //     backgroundColor: '#59b2ab',
+  //     image2: require('../../images/icon4.png'),
+  //     image3: require('../../images/icon4.png'),
+  //     image4: require('../../images/iconthree.png'),
+  //     image5: require('../../images/Invitaciones.png'),
+  //   },
+  //   {
+  //     key: 2,
+  //     title: 'Title 2',
+  //     text: 'Other cool stuff',
+  //     image: require('../../images/wallpaper1.png'),
+  //     backgroundColor: '#febe29',
+  //     image2: require('../../images/icon4.png'),
+  //     image3: require('../../images/icon4.png'),
+  //     image4: require('../../images/iconthree.png'),
+  //     image5: require('../../images/Invitaciones.png'),
+  //   },
+  //   {
+  //     key: 3,
+  //     title: 'Rocket guy',
+  //     text: "I'm already out of descriptions",
+  //     image: require('../../images/wallpaper1.png'),
+  //     backgroundColor: '#22bcb5',
+  //     image2: require('../../images/icon4.png'),
+  //     image3: require('../../images/icon4.png'),
+  //     image4: require('../../images/iconthree.png'),
+  //     image5: require('../../images/Invitaciones.png'),
+  //   },
+  // ];
 
   const [color, setcolor] = useState('Clean_Text');
   const [selectedDay, setSelectedDay] = useState(null);
@@ -176,42 +183,42 @@ useEffect(() => {
       </View>
     ));
   };
-  const onDisplayNotification = async () => {
-    try {
-      if (Platform.OS === 'android') {
-        const permissionStatus = await notifee.requestPermission();
-        // console.log('first', permissionStatus);
-        // if (permissionStatus !== 'granted') {
-        //   Alert.alert('Permission Requitransparent', 'Please allow notifications');
-        //   return;
-        // }
-      }
-      // console.log('first', permissionStatus);
-      const channelId = await notifee.createChannel({
-        id: 'default',
-        name: 'Default Channel',
-      });
+  // const onDisplayNotification = async () => {
+  //   try {
+  //     if (Platform.OS === 'android') {
+  //       const permissionStatus = await notifee.requestPermission();
+  //       // console.log('first', permissionStatus);
+  //       // if (permissionStatus !== 'granted') {
+  //       //   Alert.alert('Permission Requitransparent', 'Please allow notifications');
+  //       //   return;
+  //       // }
+  //     }
+  //     // console.log('first', permissionStatus);
+  //     const channelId = await notifee.createChannel({
+  //       id: 'default',
+  //       name: 'Default Channel',
+  //     });
 
-      await notifee.displayNotification({
-        title: 'welcome to Home screen ',
-        body: 'you have successfully login to halla app ',
-        android: {
-          channelId,
-          // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-          // pressAction is needed if you want the notification to open the app when pressed
-          pressAction: {
-            id: 'default',
-          },
-        },
-      });
-    } catch (error) {
-      console.error('Error displaying notification:', error);
-    }
-  };
+  //     await notifee.displayNotification({
+  //       title: 'welcome to Home screen ',
+  //       body: 'you have successfully login to halla app ',
+  //       android: {
+  //         channelId,
+  //         // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+  //         // pressAction is needed if you want the notification to open the app when pressed
+  //         pressAction: {
+  //           id: 'default',
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error('Error displaying notification:', error);
+  //   }
+  // };
 
   ///////////////////////////////////////
   const DisplayingHome = () => {
-    onDisplayNotification();
+    // onDisplayNotification();
     navigation.navigate('CreateEvent', {
       latitude: null,
       longitude: null,
@@ -219,219 +226,147 @@ useEffect(() => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        width: '100%',
-        // marginBottom:80,
-        // height: 'auto',
-        backgroundColor: '#f8f9fc',
-      }}>
+    <View style={styles.mainview}>
       <Search />
       <View style={HomeTabStyle.Container}>
-        <View style={{marginBottom: 60}}>
+        <View style={{marginBottom: 120}}>
           <ScrollView
             nestedScrollEnabled={true}
             contentContainerStyle={{
               paddingVertical: 5,
-              // marginBottom: 200,
               overflow: 'hidden',
-            }}>
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }>
             <View style={{flex: 1}}>
               <Spacing space={SH(10)} />
 
-              <View style={HomeTabStyle.maincontainer}>
+              <View style={styles.maincontainer}>
                 <View>
-                  <Text style={HomeTabStyle.availablestyle}>
-                    Available Balance
-                  </Text>
-                  <Text style={HomeTabStyle.invitationstyle}>5 Invitation</Text>
+                  <Text style={styles.availablestyle}>Available Balance</Text>
+                  <Text style={styles.invitationstyle}>5 Invitation</Text>
                 </View>
 
-                <TouchableOpacity
-                  style={HomeTabStyle.topbtnview}
-                  onPress={DisplayingHome}>
-                  {/* // onPress={() => navigation.navigate('CreateEvent')}> */}
-                  <Text style={HomeTabStyle.topstyle}>Top</Text>
-                </TouchableOpacity>
+                <View style={styles.topbtnview} onPress={DisplayingHome}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('TopUp')}>
+                    <Text style={HomeTabStyle.topstyle}>Top Up</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              
-              <View>
-              
-                 <View
-                  style={{
-                    height: '30%',
-                    backgroundColor: 'red',
-                    width: SW(350),
-                    // marginBottom: 14,
-                    // marginTop: 14,
-                    marginLeft:16,
-                    borderTopLeftRadius: 30,
-                    borderBottomRightRadius: 30,
-                  }}> 
-                     {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />
-      ) : (
-        <View style={{ height: 220, backgroundColor: 'white', width: SW(350), borderTopLeftRadius: 30, borderBottomRightRadius: 30 }}>
-          <AppIntroSlider
-            renderItem={_renderItem}
-            data={card}
-          />
-        </View>
-      )}
 
-                 </View>
-              
-               
+              <View>
+                <View style={styles.firstView}>
+                  {/* {card.length == 0 ? (
+                    <SkeletonPlaceholder>
+                      <SkeletonPlaceholder.Item>
+                        <SkeletonPlaceholder.Item
+                          width={'100%'}
+                          height={20}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          marginTop={14}
+                          width={'100%'}
+                          height={47}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          width={'100%'}
+                          height={20}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          marginTop={14}
+                          width={'100%'}
+                          height={47}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          width={'100%'}
+                          height={20}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          marginTop={14}
+                          width={'100%'}
+                          height={47}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          width={'100%'}
+                          height={20}
+                          borderRadius={4}
+                        />
+                        <SkeletonPlaceholder.Item
+                          marginTop={14}
+                          width={'100%'}
+                          height={47}
+                          borderRadius={4}
+                        />
+                      </SkeletonPlaceholder.Item>
+                    </SkeletonPlaceholder>
+                  ) : ( */}
+                  <View style={styles.appintroView}>
+                    <AppIntroSlider
+                      renderItem={_renderItem}
+                      data={card}
+                      showNextButton={false} // Set showNextButton to false
+                      showDoneButton={false}
+                    />
+                  </View>
+                  {/* )} */}
+                </View>
+
                 <ScrollView
                   keyboardShouldPersistTaps="handled"
-                  contentContainerStyle={Style.ScrollViewTestHeight}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      margin: SF(5),
-                    }}>
+                  contentContainerStyle={styles.ScrollViewTestHeight}>
+                  <View style={styles.cardView}>
                     <BirthdayCard
                       title="Upcoming Events"
-                      // text="Custom Text"
-                      imageUrl={images.wallpaper} // Provide the imageUrl as an
-                      // iconName="activity"
-                      onPress={handleUpcomingEventsPress}
+                      imageUrl={images.cardOneImg}
+                      onPress={() => handleUpcomingEventsPress()}
+                      data={upcomming}
                     />
 
                     <BirthdayCard
                       title="Attended Events"
-                      // text="Custom Text"
-                      imageUrl={images.wallpaper2} // Provide the imageUrl as an
-                      // iconName="activity"
+                      imageUrl={images.CardTwoimg}
                       onPress={() => {
                         navigation.navigate('Attendedevents');
-                        // Handle press event
                       }}
                     />
                   </View>
 
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}>
+                  <View style={styles.cardView}>
                     <BirthdayCard
                       title="Missed Events"
-                      // text="Custom Text"
-                      imageUrl={images.wallpaper3} // Provide the imageUrl as an
-                      // iconName="activity"
+                      imageUrl={images.CardThreeImg}
                       onPress={() => {
                         navigation.navigate('MissedEvent');
-                        // Handle press event
                       }}
                     />
                     <BirthdayCard
                       title="New Events"
-                      // text="Custom Text"
-                      imageUrl={images.cardone} // Provide the imageUrl as an
-                      // iconName="activity"
+                      imageUrl={images.cardFourimg}
                       onPress={() => {
                         navigation.navigate('NewEvents');
-                        // Handle press event
                       }}
                     />
                   </View>
+                  <Spacing space={SH(150)} />
                 </ScrollView>
-                {/* <TouchableOpacity
-                  style={{
-                    height: '5%',
-                    width: '50%',
-                    backgroundColor: '#293170',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginLeft: 95,
-                    borderTopLeftRadius: 14,
-                    borderBottomRightRadius: 14,
-                  }}>
-                  <Text style={{color: 'white', fontWeight: '600'}}>
-                    Top Picks
-                  </Text>
-                </TouchableOpacity> */}
               </View>
             </View>
-
-            {/* <View
-              style={{
-                height: '22%',
-                // backgroundColor: '#f2f2f4',
-                width: SW(340),
-                margin: 15,
-                borderTopLeftRadius: 20,
-                borderBottomRightRadius: 20,
-                overflow: 'hidden',
-              }}>
-              <AppIntroSlider
-                renderItem={_renderItemM}
-                data={slides}
-                onDone={_onDone}
-              />
-            </View> */}
           </ScrollView>
         </View>
       </View>
     </View>
   );
- 
 };
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   slide: {
-//     //flex: 1,
-// marginLeft:15,
-//     height: '70%',
-//     //alignItems: 'center',
-//     justifyContent: 'center',
-//     //backgroundColor: '#F2F2F4',
-// // backgroundColor:'transparent',
-//     borderBottomRightRadius: 20,
-//   },
-//   title: {
-//     fontSize: 15,
-//     fontWeight: '600',
-//     color:'black',
-//     paddingHorizontal:16
-//     //marginBottom: 20,
-//   },
-//   images: {
-//     height: SH(200),
-//     width: SW(320),
-//     //borderRadius: 23,
-//     borderTopLeftRadius: 40,
-//                     borderBottomRightRadius: 40,
-//     //borderBottomLeftradius: 20,
-//     marginTop:55,
-//     marginBottom: 1,
-//   },
-//   text: {
-//     marginRight: 'auto',
-//     fontWeight: '700',
-//     color: 'black',
-//     marginTop:5,
-//     //textAlign: 'center',
-//     fontSize: 10,
-//     marginLeft: 15,
-//     // marginHorizontal: 30,
-//   },
-//   text2: {
-//     marginLeft: 'auto',
-//     fontWeight: '700',
-//     color: 'black',
-//     //textAlign: 'center',
-//     fontSize: 12,
-//     marginLeft: 14,
-//     // marginHorizontal: 30,
-//   },
-// });
+
 export default Home;

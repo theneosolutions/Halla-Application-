@@ -8,6 +8,25 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+pod 'Firebase', :modular_headers => true
+pod 'FirebaseCoreInternal', :modular_headers => true
+pod 'GoogleUtilities', :modular_headers => true
+pod 'FirebaseCore', :modular_headers => true
+
+pod 'FirebaseStorage', :modular_headers => true
+pod 'FirebaseAppCheckInterop', :modular_headers => true
+pod 'GTMSessionFetcher', :modular_headers => true
+pod 'FirebaseCoreExtension', :modular_headers => true
+pod 'FirebaseAuthInterop', :modular_headers => true
+pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
+# pod 'lottie-ios', :path => '../node_modules/lottie-ios'
+pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+# pod 'lottie-ios', '~> 4.4.1'
+$RNFirebaseAsStaticFramework = true
+
+
+
+
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
 #
