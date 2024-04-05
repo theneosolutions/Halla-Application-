@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: 'black',
-    width: 300,
+    width: 298,
     paddingVertical: 10,
 
     paddingHorizontal: 8,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   privacypolicy: {
     textAlign: 'center',
     color: 'red',
-    fontSize: 14,
+    fontSize: 13,
   },
   guestItem: {
     flexDirection: 'row',

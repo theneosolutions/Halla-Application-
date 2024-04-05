@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   images: {
     height: 160,
-    width: 350,
+    width: SW(320),
     justifyContent: 'center',
     alignSelf: 'center',
 
@@ -121,9 +121,9 @@ const styles = StyleSheet.create({
     marginLeft: 1,
   },
   maincontainer: {
-    height: SH(60),
+    height: SH(70),
     width: '90%',
-    backgroundColor: Colors.light_gray_text_color,
+    backgroundColor: '#BD9956',
     margintop: SH(0),
     justifyContent: 'center',
     alignContent: 'center',
@@ -137,22 +137,22 @@ const styles = StyleSheet.create({
     // borderWidth: 0.5,
   },
   availablestyle: {
-    color: 'black',
+    color: 'white',
     fontWeight: '400',
     textAlign: 'center',
     paddingTop: SH(1),
     paddingLeft: SF(30),
   },
   invitationstyle: {
-    color: 'black',
-    fontWeight: '400',
+    color: 'white',
+    fontWeight: '600',
     //textAlign: 'center',
     paddingLeft: 30,
   },
   topbtnview: {
     height: SH(38),
     width: '24%',
-    backgroundColor: Colors.darkBlue,
+    backgroundColor: 'white',
     marginLeft: 'auto',
     marginVertical: SH(30),
     marginHorizontal: SW(10),
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
   },
   topstyle: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'black',
+    fontWeight: '500',
     textAlign: 'center',
     padding: SH(6),
   },

@@ -22,7 +22,7 @@ const AddMembers = ({route}) => {
   console.log('🚀 ~ AddMembers ~ route.params:', route.params);
   console.log('selectedContacts', selectedContacts);
   const navigation = useNavigation();
-
+  console.log('eventeeeeeee', event);
   const {t} = useTranslation();
   const [guest, setGuest] = useState([...selectedContacts]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

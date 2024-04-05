@@ -64,6 +64,14 @@ export const createEventInfo = async data => {
   const res = await api(baseUrl, url, data, 'POST', true, false);
   return res;
 };
+
+export const EditEventInfo = async (id, data) => {
+  const url = `/api/events/${id}`;
+  const res = await api(baseUrl, url, data, 'PATCH', true, false);
+  console.log('res---------APILISt', res);
+  return res;
+};
+
 export const createCardInfo = async data => {
   const url = `/api/cards/create-card`;
   const res = await api(baseUrl, url, data, 'POST', true, false);
@@ -83,7 +91,9 @@ export const getEventWithUserId = async user => {
 };
 export const getEventCategorywithid = async id => {
   const url = `/api/events/categorize/byUserId/${id}?order=DESC&page=1&take=100&filter=monthly`;
+  // console.log('url------------', url);
   const res = await api(baseUrl, url, {}, 'GET', true, false);
+  // console.log('res+++++++++++', res);
   return res;
 };
 
@@ -106,8 +116,9 @@ export const setProfileDataUsername = async data => {
 };
 export const EventId = async id => {
   const url = `/api/events/${id}`;
-  console.log('🚀 ~ EventId ~ url:', url);
+  // console.log('🚀 ~ EventId ~ url:', url);
   const res = await api(baseUrl, url, {}, 'GET', true, false);
+  // console.log('res======', res?.data?.id);
   return res;
 };
 
@@ -138,7 +149,7 @@ export const guestListByID = async id => {
 };
 export const removeContactByID = async (eventId, contactId) => {
   const url = `/api/events/remove/guest/${eventId}/${contactId}`;
-  // console.log('🚀 ~ EventId ~ url::::::pppp', url);
+  console.log('🚀 ~ EventId ~ url::::::pppppppp', url);
   const res = await api(baseUrl, url, {}, 'DELETE', true, false);
   return res;
 };
@@ -157,10 +168,10 @@ export const getPakageById = async id => {
   // console.log('res-------------++++++++', res);
   return res;
 };
-export const deleteEventByEventContactId = async (eventId, contactId) => {
-  const url = `/api/events/remove/guest/${eventId}/${contactId}`;
-  // console.log('url---ssss---------------', url);
+export const deleteEventbyId = async id => {
+  const url = `/api/events/${id}`;
+  // console.log('🚀 ~ deleteeventby iidd', url);
   const res = await api(baseUrl, url, {}, 'DELETE', true, false);
-  // console.log('res-------------++++++++', res);
+  // console.log('res.....', res);
   return res;
 };

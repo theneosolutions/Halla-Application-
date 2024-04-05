@@ -24,6 +24,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: Fonts.Poppins_Medium,
   },
+  focusedInput: {
+    borderWidth: 1, // Add border
+    borderRadius: 5, // Add border radius
+    borderColor: '#293170', // Set border color when focused
+    elevation: 5, // Add elevation for depth
+  },
   LoginText: {
     fontSize: SF(13),
     paddingVertical: 10,

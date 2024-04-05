@@ -21,6 +21,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import {CountryPickerInput} from '../../Components/commonComponents/CountryPickerInput';
 import {Button, Container, Input, Spacing} from '../../Components';
 import Feather from 'react-native-vector-icons/Feather';
 import Login from '../../styles/CommonStyle/LoginScreenStyle';
@@ -58,6 +59,21 @@ const SignUp = () => {
   const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const [btnLoading, setBtnLoading] = useState(false);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [countryNameCode, setCountryNameCode] = useState('GB');
+  const [callingCode, setCallingCode] = useState('+44'); // State to track focused input
+  const onCountrySelect = value => {
+    setCountryNameCode(value.cca2);
+    setCallingCode('+' + value.callingCode);
+  };
+  const handleFocus = input => {
+    setFocusedInput(input);
+  };
+
+  const handleBlur = () => {
+    setFocusedInput(null);
+  };
+
   useEffect(() => {
     if (selectedOption === 'firstName') {
       // Enable button if email and password are valid
@@ -307,7 +323,40 @@ const SignUp = () => {
           <Spacing space={30} />
           {selectedOption === 'email' && (
             <>
-              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+              {/* <TouchableOpacity
+                style={[
+                  styles.touchablestyleE,
+                  focusedInput === 'email' && styles.focusedInput,
+                ]}
+                onPress={() => handleFocus('email')}
+                onBlur={handleBlur}>
+                <View style={styles.emailView}>
+                  <MatIcon
+                    name="mail"
+                    size={SF(20)}
+                    style={styles.iconStylemail}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder={t('Email_Error')}
+                    value={email}
+                    color={'black'}
+                    placeholderTextColor={'black'}
+                    onFocus={() => handleFocus('email')} // Add onFocus event
+                    onBlur={handleBlur}
+                    onChangeText={text => {
+                      setEmail(text), setSubmitted(true);
+                    }}
+                  />
+                </View>
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                style={[
+                  SplashStyl.touchablestyleW,
+                  focusedInput === 'FirstName' && styles.focusedInput,
+                ]}
+                onPress={() => handleFocus('email')}
+                onBlur={handleBlur}>
                 <View style={{flexDirection: 'row'}}>
                   <Entypo
                     name="user"
@@ -320,6 +369,8 @@ const SignUp = () => {
                     placeholder="FirstName"
                     value={firstName}
                     placeholderTextColor={'black'}
+                    onFocus={() => handleFocus('FirstName')} // Add onFocus event
+                    onBlur={handleBlur}
                     onChangeText={val => {
                       setFirstName(val), setSubmitted(true);
                     }}
@@ -329,7 +380,11 @@ const SignUp = () => {
               {submitted && firstName == '' ? (
                 <Text style={styles.error}>Enter your name</Text>
               ) : null}
-              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+              <TouchableOpacity
+                style={[
+                  SplashStyl.touchablestyleW,
+                  focusedInput === 'lastName' && styles.focusedInput,
+                ]}>
                 <View style={{flexDirection: 'row'}}>
                   <Entypo
                     name="user"
@@ -342,6 +397,8 @@ const SignUp = () => {
                     placeholder={t('lastName')}
                     value={lastName}
                     placeholderTextColor={'black'}
+                    onFocus={() => handleFocus('lastName')} // Add onFocus event
+                    onBlur={handleBlur}
                     onChangeText={val => {
                       setLastName(val), setSubmitted(true);
                     }}
@@ -352,7 +409,11 @@ const SignUp = () => {
               {submitted && lastName == '' ? (
                 <Text style={styles.error}>Enter your last name</Text>
               ) : null}
-              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+              <TouchableOpacity
+                style={[
+                  SplashStyl.touchablestyleW,
+                  focusedInput === 'Enteremail' && styles.focusedInput,
+                ]}>
                 <View style={{flexDirection: 'row'}}>
                   <MatIcon
                     name="mail"
@@ -364,6 +425,8 @@ const SignUp = () => {
                     style={SplashStyl.withouticoninput}
                     placeholder={t('Enteremail')}
                     value={email}
+                    onFocus={() => handleFocus('Enteremail')} // Add onFocus event
+                    onBlur={handleBlur}
                     placeholderTextColor={'black'}
                     onChangeText={text => {
                       setEmail(text), setSubmitted(true);
@@ -375,7 +438,11 @@ const SignUp = () => {
               {submitted && email == '' ? (
                 <Text style={styles.error}>Enter your email.</Text>
               ) : null}
-              <TouchableOpacity style={SplashStyl.touchablestyleW}>
+              <TouchableOpacity
+                style={[
+                  SplashStyl.touchablestyleW,
+                  focusedInput === 'Password_Text' && styles.focusedInput,
+                ]}>
                 <View style={{flexDirection: 'row'}}>
                   <FontAwesome
                     name="lock"
@@ -392,6 +459,8 @@ const SignUp = () => {
                     placeholder={t('Password_Text')}
                     value={password1}
                     placeholderTextColor={'black'}
+                    onFocus={() => handleFocus('Password_Text')} // Add onFocus event
+                    onBlur={handleBlur}
                     onChangeText={text => {
                       setPassword1(text), setPasswordPateren(true);
                     }}
@@ -494,7 +563,11 @@ const SignUp = () => {
                 </View>
               ) : null}
               <TouchableOpacity
-                style={SplashStyl.touchablestyleW}
+                style={[
+                  SplashStyl.touchablestyleW,
+                  focusedInput === 'Re_Type_Password_Text' &&
+                    styles.focusedInput,
+                ]}
                 //onPress={() => navigation.navigate('Forgotemail')}
               >
                 <View style={{flexDirection: 'row'}}>
@@ -516,6 +589,8 @@ const SignUp = () => {
                     placeholderTextColor={'black'}
                     onChangeText={setPassword2}
                     secureTextEntry={showPassword}
+                    onFocus={() => handleFocus('Re_Type_Password_Text')} // Add onFocus event
+                    onBlur={handleBlur}
                   />
                   <TouchableOpacity onPress={togglePasswordVisibility}>
                     <FontAwesome
@@ -565,79 +640,13 @@ const SignUp = () => {
 
           {selectedOption === 'phonenumber' && (
             <>
-              <TouchableOpacity style={styles.touchablestyleW}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: wp(80),
-                    paddingVertical: SH(8),
-                  }}>
-                  {/* //////////// */}
-                  <TouchableOpacity
-                    onPress={openCountryCodePicker}
-                    style={{
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      elevation: 5,
-                      marginHorizontal: wp(2),
-                      paddingVertical: wp(2),
-                      alignSelf: 'center',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
+              <CountryPickerInput
+                countryNameCode={countryNameCode}
+                callingCode={callingCode}
+                onSelect={onCountrySelect}
+                onChangeText={setPhoneNumber}
+              />
 
-                        marginLeft: wp(3),
-                        paddingRight: wp(2),
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                      }}>
-                      <Icon
-                        name="chevron-down"
-                        size={30}
-                        color={'black'}
-                        style={{marginTop: hp(-1.2)}}
-                      />
-                      <Text
-                        style={{
-                          color: 'black',
-                          // alignSelf: 'center',
-                          // textAlign: 'center',
-                          // paddingTop: 8,
-                        }}>
-                        {selectedCountry ? selectedCountry.emoji : '🇺🇸'}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    style={{height: 40}}
-                    onRequestClose={() => setModalVisible(false)}>
-                    <View style={styles.modalCallingCodeContainer}>
-                      <FlatList
-                        data={countries}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={renderItem}
-                      />
-                    </View>
-                  </Modal>
-
-                  <TextInput
-                    style={styles.inputPhonNu}
-                    placeholder={t('PhoneNumber')}
-                    value={phoneNumber}
-                    color={'black'}
-                    keyboardType="phone-pad"
-                    placeholderTextColor={'black'}
-                    onChangeText={val => {
-                      setPhoneNumber(val), setSubmitted(true);
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
               {submitted && phoneNumber == '' ? (
                 <Text
                   style={{

@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Alert,
   Modal,
+  RefreshControl,
 } from 'react-native';
 import IconF from 'react-native-vector-icons/AntDesign';
 import {Spacing, Search, Button} from '../../Components';
@@ -21,11 +22,7 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import images from '../../index';
 import {useTranslation} from 'react-i18next';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
-import {
-  EventId,
-  SendInvites,
-  deleteEventByEventContactId,
-} from '../../Services/ApiList';
+import {EventId, SendInvites, deleteEventbyId} from '../../Services/ApiList';
 import {useFocusEffect} from '@react-navigation/native';
 
 const Invitationreport = ({route, ...props}) => {
@@ -33,7 +30,7 @@ const Invitationreport = ({route, ...props}) => {
 
   const {t} = useTranslation();
   const navigation = useNavigation();
-  const [singleData, setSingleData] = useState(null);
+  const [singleData, setSingleData] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -44,26 +41,18 @@ const Invitationreport = ({route, ...props}) => {
   const [isDropdownOpenDots1, setIsDropdownOpenDots1] = useState(false);
   const [isDropdownOpenDots2, setIsDropdownOpenDots2] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
-  };
-  const handleEditEvent = () => {
-    // Implement your logic for editing the event here
-    toggleModal(); // Close the modal after handling the edit event
-  };
-  const DeleteEvent = async (eventId, contactId) => {
+  const [isViewVisible, setIsViewVisible] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+  const [selectedContactId, setSelectedContactId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const DeleteEventFromList = async eventId => {
     try {
-      // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await deleteEventByEventContactId(eventId, contactId); // Pass user ID if requitransparent
-      console.log('Events:.....======+++++--------', response?.data);
+      const response = await deleteEventbyId(eventId);
+      // console.log('Events:.....======+++++--------', response);
       if (response && response.status === 200) {
-        // Filter out the removed contact from the guest list
-        const updatedGuests = guest.filter(
-          item => item.invites.id !== contactId,
-        );
-        // setGuest(updatedGuests);
-        console.log('Guests after removal:', updatedGuests);
+        setSingleData({});
+        // console.log('Event deleted successfully');
       } else if (response && response.status === 404) {
         const confirmDeletion = window.confirm(
           'Are you sure you want to delete this contact?',
@@ -72,33 +61,62 @@ const Invitationreport = ({route, ...props}) => {
           console.log('User canceled deletion.');
           return;
         }
-
         console.log('User confirmed deletion. Proceeding...');
       } else {
-        console.error(
-          'Failed to remove contact:',
-          response?.data?.data?.message || 'Unknown error',
-        );
+        console.error('Failed to delete event');
       }
     } catch (error) {
-      console.error('Error removing contact:', error);
+      console.error('Error deleting event:', error);
     }
   };
-  const handleDeleteEvent = () => {
-    DeleteEvent();
-    // Implement your logic for deleting the event here
-    toggleModal(); // Close the modal after handling the delete event
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    // Fetch data again
+    handleGetByUserId();
+
+    setRefreshing(false);
+  };
+  // console.log('singleData', singleData);
+  useEffect(() => {
+    // Fetch data from the EventId API
+    const fetchData = async () => {
+      try {
+        const response = await EventId(id);
+        // console.log('response?.data?.id===++++', response?.data?.id);
+        // const Events = response?.data?.id;
+        // console.log('EventId', Events);
+        if (response?.data?.id) {
+          setSingleData(response.data);
+        }
+        // console.log('setSingleData----------', singleData?.id);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchData();
+
+    // Cleanup function
+    return () => {
+      // Cleanup logic if needed
+    };
+  }, [id]);
+
+  const handleEditEvent = async () => {
+    // console.log('first');
   };
   useFocusEffect(
     useCallback(() => {
       handleGetByUserId(id);
     }, []),
   );
+
   const handleGetByUserId = async id => {
     try {
       setLoading(true);
       const response = await EventId(id);
-      console.log('Events:.....======', response?.data);
+      // console.log('Events:.....===eventid===', response?.data);
       if (response?.data) {
         setSingleData(response.data);
         if (response.data.stats && response.data.stats.length > 0) {
@@ -145,7 +163,7 @@ const Invitationreport = ({route, ...props}) => {
   const handleSendInvites = async () => {
     try {
       const response = await SendInvites(id);
-      console.log('response', response);
+      // console.log('response', response);
       setTimeout(() => {
         setInviteLoading(false);
         Alert.alert('Success', 'Your invitations are sent.');
@@ -165,6 +183,7 @@ const Invitationreport = ({route, ...props}) => {
   const openContactslist = () => {
     if (singleData && singleData?.invites) {
       const invitesCount = singleData?.invites?.length;
+      // console.log('singleData=======', singleData);
       console.log('🚀 ~ openContactslist ~ invitesCount:', invitesCount);
       if (invitesCount === 0) {
         navigation.navigate('AddGuest', {id});
@@ -185,7 +204,7 @@ const Invitationreport = ({route, ...props}) => {
       handleSendInvites();
     }
   };
-
+  // console.log('singleData--------------------=======', singleData);
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
   };
@@ -197,12 +216,31 @@ const Invitationreport = ({route, ...props}) => {
       await handleSendInvites();
     }
   };
+  // State variable to control the visibility of the view
 
+  // Function to toggle the visibility of the view
+  const toggleView = () => {
+    setIsViewVisible(!isViewVisible);
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const handleDeleteEvent = eventId => {
+    setSelectedEventId(eventId); // Set the selected event ID
+    openModal(); // Open the modal
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
     <View style={{flex: 1}}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={SplashStyl.ScrollViewTestHeight}>
+        contentContainerStyle={SplashStyl.ScrollViewTestHeight}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }>
         <View style={SplashStyl.Container}>
           <View style={styles.headerContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -210,34 +248,26 @@ const Invitationreport = ({route, ...props}) => {
             </TouchableOpacity>
             <Text style={styles.headerText}>Invitation Report</Text>
 
-            <TouchableOpacity onPress={toggleModal}>
+            {isViewVisible && (
+              <View style={styles.modalContentView}>
+                <TouchableOpacity
+                  style={styles.option}
+                  onPress={() => navigation.navigate('EditEvent', {id})}>
+                  <Text style={styles.boldstyle}>Edit Event</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleDeleteEvent(singleData?.id)}>
+                  <Text style={styles.boldstyle}>Delete Event</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            <TouchableOpacity onPress={toggleView} style={styles.iconContainer}>
               <Egypto
                 size={20}
-                name="dots-two-vertical"
+                name="dots-three-vertical"
                 style={styles.headerIcon}
               />
             </TouchableOpacity>
-
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={isModalVisible}
-              onRequestClose={toggleModal}>
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <TouchableOpacity
-                    style={styles.option}
-                    onPress={handleEditEvent}>
-                    <Text style={styles.boldstyle}>Edit Event</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.option}
-                    onPress={handleDeleteEvent}>
-                    <Text style={styles.boldstyle}>Delete Event</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
           </View>
 
           {loading ? (
@@ -530,8 +560,8 @@ const Invitationreport = ({route, ...props}) => {
                 style={{
                   height: 30,
                   width: 340,
-                  elevation: 10,
-                  shadowOpacity: 20,
+                  // elevation: 10,
+                  // shadowOpacity: 20,
                   borderTopRightRadius: 20,
                   borderBottomRightRadius: 20,
                 }}>
@@ -562,6 +592,33 @@ const Invitationreport = ({route, ...props}) => {
             </>
           )}
         </View>
+
+        <Modal visible={showModal} animationType="slide" transparent>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalHeading}>
+                Do You Want To
+                <Text style={styles.boldheading}>Delete</Text> An Event
+              </Text>
+
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => {
+                    DeleteEventFromList(id);
+                    closeModal();
+                  }}>
+                  <Text style={styles.buttonText}>Delete Event</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={closeModal}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </View>
   );
@@ -585,9 +642,9 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     height: SH(50),
-    marginLeft: 10,
+    marginLeft: 2,
     marginRight: 10,
-    marginTop: 20,
+    marginTop: 25,
     color: '#000',
   },
   headerIconRight: {
@@ -667,19 +724,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // Adjust font weight as needed
   },
   modalContainer: {
-    marginTop: 25,
-    height: 40,
-    width: 94,
-    marginLeft: 'auto',
-    right: 16,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: '#DCC7F8',
+    backgroundColor: '#ffff',
     borderRadius: 10,
     padding: 2,
+    paddingVertical: 8,
+  },
+
+  modalContentView: {
+    backgroundColor: '#ffff',
+    borderRadius: 10,
+    // marginLeft: 20,
+    marginTop: 2,
+    borderWidth: 1,
+    marginLeft: 30,
+  },
+  modalContentM: {
+    backgroundColor: '#ffff',
+    borderRadius: 10,
+    padding: 2,
+    paddingVertical: 4,
   },
   option: {
     paddingVertical: 1,
@@ -689,7 +758,47 @@ const styles = StyleSheet.create({
   boldstyle: {
     fontWeight: '600',
     color: 'black',
+    fontSize: 12,
+    padding: 5,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 280,
+    margin: 5,
+  },
+  modalButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    borderRadius: 5,
+    width: '45%',
+    alignItems: 'center',
+    backgroundColor: '#293170',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 14,
+    borderBottomRightRadius: 14,
+  },
+  buttonText: {
+    color: '#fff',
     fontSize: 13,
+    fontWeight: 'bold',
+  },
+  modalHeading: {
+    color: '#000',
+    fontSize: 15,
+    fontWeight: '400',
+    marginBottom: 20,
+    textAlign: 'center',
+    paddingVertical: 20,
+  },
+  boldheading: {
+    color: '#000',
+    fontSize: 15,
+    fontWeight: 'bold',
+    // marginBottom: 20,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });
 export default Invitationreport;

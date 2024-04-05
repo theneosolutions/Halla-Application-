@@ -61,5 +61,9 @@ const styles = StyleSheet.create({
     fontSize: SF(16),
     fontWeight: '700',
   },
+  textStyle: {
+    color: 'black',
+    fontWeight: '600',
+  },
 });
 export default styles;

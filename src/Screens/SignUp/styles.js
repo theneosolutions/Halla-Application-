@@ -9,7 +9,12 @@ const styles = StyleSheet.create({
 
     backgroundColor: 'white',
   },
-
+  focusedInput: {
+    borderWidth: 1, // Add border
+    borderRadius: 5, // Add border radius
+    borderColor: '#293170', // Set border color when focused
+    elevation: 5, // Add elevation for depth
+  },
   AccountView: {
     marginTop: SH(30),
     justifyContent: 'center',

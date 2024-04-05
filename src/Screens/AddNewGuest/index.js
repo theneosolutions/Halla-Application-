@@ -23,7 +23,7 @@ const AddNewGuest = props => {
   const [guest, setGuest] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const {id} = props.route.params;
-  console.log('id', id);
+
   const [showModal, setShowModal] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [selectedContactId, setSelectedContactId] = useState(null);

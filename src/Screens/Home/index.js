@@ -17,7 +17,11 @@ import {Spacing, Search, Button} from '../../Components';
 import Style from '../../styles/CommonStyle/Style';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import {getEventCategorywithid} from '../../Services/ApiList';
+import {
+  getEventCategorywithid,
+  getProfileWithUserId,
+} from '../../Services/ApiList';
+import moment from 'moment';
 import MessagingStyles from '../../styles/CommonStyle/MessagingStyles';
 import IconG from 'react-native-vector-icons/Ionicons';
 import {
@@ -40,6 +44,7 @@ const Home = () => {
   const [card, setCard] = useState([]);
   const [upcomming, setUpcomming] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [wallet, setWallet] = useState(false);
   ////////////get api by userid//////////////
 
   const handleRefresh = () => {
@@ -79,6 +84,26 @@ const Home = () => {
     legend: ['Rainy Days'],
   };
 
+  useEffect(() => {
+    const fetchData = async id => {
+      try {
+        const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+        const response = await getProfileWithUserId(Gettingtoken.id);
+        console.log(
+          'profilee:.....======---wallet===========',
+          setWallet(response?.data?.wallet),
+        );
+        // setProfileData(response.data);
+        // console.log('setProfileData=====', profileData?.firstName);
+        // setLoading(false);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleUpcomingEventsPress = () => {
     navigation.navigate('Upcommingevents', {upcoming: upcomming});
   };
@@ -97,7 +122,9 @@ const Home = () => {
           }}>
           <View style={styles.textrow}>
             <Text style={styles.textStyle}>{item.name}</Text>
-            <Text style={styles.textStyleLight}>{item.createdAt}</Text>
+            <Text style={styles.textStyleLight}>
+              {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+            </Text>
           </View>
 
           <Image source={{uri: item.image}} style={styles.images} />
@@ -136,41 +163,6 @@ const Home = () => {
   const _onDone = () => {
     setShowRealApp(true);
   };
-  // const slides = [
-  //   {
-  //     key: 1,
-  //     title: 'Title 1',
-  //     text: 'Birthday Party.',
-  //     image: require('../../images/wallpaper1.png'),
-  //     backgroundColor: '#59b2ab',
-  //     image2: require('../../images/icon4.png'),
-  //     image3: require('../../images/icon4.png'),
-  //     image4: require('../../images/iconthree.png'),
-  //     image5: require('../../images/Invitaciones.png'),
-  //   },
-  //   {
-  //     key: 2,
-  //     title: 'Title 2',
-  //     text: 'Other cool stuff',
-  //     image: require('../../images/wallpaper1.png'),
-  //     backgroundColor: '#febe29',
-  //     image2: require('../../images/icon4.png'),
-  //     image3: require('../../images/icon4.png'),
-  //     image4: require('../../images/iconthree.png'),
-  //     image5: require('../../images/Invitaciones.png'),
-  //   },
-  //   {
-  //     key: 3,
-  //     title: 'Rocket guy',
-  //     text: "I'm already out of descriptions",
-  //     image: require('../../images/wallpaper1.png'),
-  //     backgroundColor: '#22bcb5',
-  //     image2: require('../../images/icon4.png'),
-  //     image3: require('../../images/icon4.png'),
-  //     image4: require('../../images/iconthree.png'),
-  //     image5: require('../../images/Invitaciones.png'),
-  //   },
-  // ];
 
   const [color, setcolor] = useState('Clean_Text');
   const [selectedDay, setSelectedDay] = useState(null);
@@ -248,13 +240,13 @@ const Home = () => {
               <View style={styles.maincontainer}>
                 <View>
                   <Text style={styles.availablestyle}>Available Balance</Text>
-                  <Text style={styles.invitationstyle}>5 Invitation</Text>
+                  <Text style={styles.invitationstyle}>{wallet}</Text>
                 </View>
 
                 <View style={styles.topbtnview} onPress={DisplayingHome}>
                   <TouchableOpacity
                     onPress={() => navigation.navigate('TopUp')}>
-                    <Text style={HomeTabStyle.topstyle}>Top Up</Text>
+                    <Text style={styles.topstyle}>Top Up</Text>
                   </TouchableOpacity>
                 </View>
               </View>

@@ -85,7 +85,7 @@ const TopUp = ({route}) => {
 
         <View style={styles.guestDetails}>
           <Text style={styles.price}>Price: {price}</Text>
-          <Text style={styles.numberOfGuest}>{numberOfGuest} Guests</Text>
+          <Text style={styles.price}>{numberOfGuest} Guests</Text>
         </View>
       </View>
     );
@@ -378,13 +378,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#293170',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 55,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 10,
     borderTopLeftRadius: 14,
     borderBottomRightRadius: 14,
   },
   continueButtonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  price: {
+    color: 'black',
   },
 });
 

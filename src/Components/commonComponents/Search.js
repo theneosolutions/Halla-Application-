@@ -17,18 +17,24 @@ const Search = () => {
   return (
     <View style={styles.BgColorView}>
       <View style={styles.FlexrowSearchView}>
+        <View style={styles.IconViewStyles}>
+          <Icon
+            name="search1"
+            size={16}
+            color={'black'}
+            style={styles.iconstyle}
+          />
+        </View>
         <View style={HomeTabStyle.InputSpaceView}>
           <Input
-            placeholder={t('Search_Inbox')}
+            placeholder={'Find Events'}
             onChangeText={value => Setsearch(value)}
             value={search}
             color={'black'}
-            inputStyle={HomeTabStyle.BgColorTransparent}
-            placeholderStyle={HomeTabStyle.PlaceHolderStyles}
+            placeholderTextColor={'black'}
+            inputStyle={styles.BgColorTransparent}
+            placeholderStyle={styles.PlaceHolderStyles}
           />
-        </View>
-        <View style={styles.IconViewStyles}>
-          <Icon name="search1" size={23} color={'black'} />
         </View>
       </View>
       <Spacing space={SH(10)} />
@@ -63,10 +69,11 @@ const Search = () => {
 };
 const styles = StyleSheet.create({
   BgColorView: {
-    padding: SH(10),
+    padding: SH(12),
+
     justifyContent: 'center',
-    borderBottomRightRadius: SF(40),
-    borderBottomLeftRadius: SF(40),
+    // borderBottomRightRadius: SF(40),
+    // borderBottomLeftRadius: SF(40),
     backgroundColor: Colors.darkBlue,
   },
   FlexrowSearchView: {
@@ -74,9 +81,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: SW(20),
-    borderTopLeftRadius: SH(20),
-    borderBottomRightRadius: SH(20),
+    marginTop: SH(5),
+    borderRadius: 10,
+    // borderTopLeftRadius: SH(20),
+    // borderBottomRightRadius: SH(20),
     width: '90%',
+  },
+  IconViewStyles: {
+    marginLeft: 15,
+    marginVertical: 15,
+  },
+  BgColorTransparent: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    fontSize: SF(15),
+    marginBottom: 5,
+    // color: 'black',
+    // paddingTop: SH(7),
+    // borderTopLeftRadius: 20,
+    // height: SH(50),
+    shadowOffset: {
+      width: 0,
+      height: Platform.OS === 'ios' ? 0 : 0,
+    },
+    PlaceHolderStyles: {
+      color: Colors.black_text_color,
+      fontSize: SF(10),
+    },
+    iconstyle: {
+      fontWeight: '800',
+    },
   },
 });
 export default Search;

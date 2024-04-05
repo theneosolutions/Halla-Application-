@@ -54,13 +54,12 @@ const ProfileTabStyles = StyleSheet.create({
     borderRadius: SH(300),
     backgroundColor: 'gray',
     marginLeft: SW(5),
-   
   },
   LeftIconStyles: {
     width: SW(30),
     height: SH(70),
     paddingTop: SH(26),
-    color:"black",
+    color: 'black',
     marginLeft: SW(10),
   },
   UserName: {
@@ -277,10 +276,9 @@ const ProfileTabStyles = StyleSheet.create({
   },
   btnview: {
     flexDirection: 'row',
-  
+
     justifyContent: 'center',
     margin: SH(20),
-
   },
   ActiveButton: {
     height: SH(40),
@@ -310,7 +308,7 @@ const ProfileTabStyles = StyleSheet.create({
     justifyContent: 'space-evenly',
     borderTopWidth: 0.2,
     borderTopColor: Colors.gray_text_color,
-     borderColor:'black' // Choose your desired color
+    borderColor: 'black', // Choose your desired color
 
     // marginTop: SH(5), // Adjust as needed
   },
@@ -333,7 +331,7 @@ const ProfileTabStyles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     borderBottomWidth: 0.2,
-    borderColor:'black',
+    borderColor: 'black',
     margin: SH(8),
   },
   mainboxViewJohn: {
@@ -356,7 +354,7 @@ const ProfileTabStyles = StyleSheet.create({
     marginTop: SH(2),
     color: 'black',
     borderBottomWidth: 0.5,
-    borderColor:'black'
+    borderColor: 'gray',
   },
   profiledetailboxview: {
     height: SH(40),
@@ -388,7 +386,7 @@ const ProfileTabStyles = StyleSheet.create({
     // backgroundColor: 'yellow',
     marginLeft: 'auto',
     paddingTop: SH(8),
-    color:'black'
+    color: 'black',
     // padding: SW(5),
   },
   savebtn: {
@@ -421,8 +419,7 @@ const ProfileTabStyles = StyleSheet.create({
     width: SW(40),
     marginLeft: 'auto',
     paddingTop: SH(15),
-    color:'black'
-
+    color: 'black',
   },
   johnboxtwo: {
     height: SH(30),
@@ -441,7 +438,6 @@ const ProfileTabStyles = StyleSheet.create({
     borderTopLeftRadius: 18,
     borderBottomRightRadius: 18,
     marginTop: SH(2),
-   
   },
   accountstyle: {
     fontSize: SF(17),

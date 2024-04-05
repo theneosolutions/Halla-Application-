@@ -119,7 +119,7 @@ const SplashScreen = ({navigation}) => {
               source={require('../../images/engLang.png')}
               style={styles.SwitchImage}
             />
-            <Text>Eng</Text>
+            <Text style={styles.textStyle}>Eng</Text>
           </>
         ) : (
           <>
@@ -127,7 +127,7 @@ const SplashScreen = ({navigation}) => {
               source={require('../../images/arabLang.png')}
               style={styles.SwitchImage}
             />
-            <Text>عربى</Text>
+            <Text style={styles.textStyle}>عربى</Text>
           </>
         )}
       </TouchableOpacity>

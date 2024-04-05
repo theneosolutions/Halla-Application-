@@ -21,6 +21,7 @@ import AddGuest from '../../Screens/AddGuest/index';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Card from '../../Screens/Card/index';
 import EditProfile from '../../Screens/EditProfile/index';
+import EditEvent from '../../Screens/EditEvent/index';
 import {
   StatusBar,
   View,
@@ -198,6 +199,13 @@ const AuthStack = () => {
         component={CreateEvent}
         options={{headerShown: false}}
       />
+
+      <Stack.Screen
+        name="EditEvent"
+        component={EditEvent}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen name="SettingScreen" component={SettingScreen} />
       <Stack.Screen name="ProfileDetail" component={ProfileDetail} />
       <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />

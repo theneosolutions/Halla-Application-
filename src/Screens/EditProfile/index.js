@@ -44,6 +44,8 @@ const EditDetail = props => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const countries = require('./countryCodes.json')['countries'];
   const [modalVisible, setModalVisible] = useState(false);
+  const [walletAmount, setWalletAmount] = useState(0);
+
   const openCountryCodePicker = () => {
     setModalVisible(true);
   };
@@ -74,7 +76,8 @@ const EditDetail = props => {
       try {
         const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
         const response = await getProfileWithUserId(userInfo?.id);
-        console.log('Gettingtoken-----dataaaa--', response.data);
+        console.log('Gettingtoken-----dataaaa--userid', response.data?.wallet);
+
         if (response?.data) {
           setProfileData(response.data);
           setPhoneNumber(response?.data?.phoneNumber);
@@ -82,7 +85,9 @@ const EditDetail = props => {
           setEmail(response?.data?.email);
           setAddress(response?.data?.address);
           setProfilePhoto(response?.data?.profilePhoto);
+          setWalletAmount(response.data.wallet);
         }
+
         setLoading(false);
       } catch (error) {
         console.error('Error fetching profile:', error);

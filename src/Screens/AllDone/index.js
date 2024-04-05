@@ -10,7 +10,8 @@ import {
   HiNewsViewdata,
   Colors,
 } from '../../utils';
-const AllDone = ({navigation}) => {
+const AllDone = ({navigation, route}) => {
+  const {eventData} = route;
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
       <View
@@ -19,18 +20,16 @@ const AllDone = ({navigation}) => {
           backgroundColor: 'white',
           alignItem: 'center',
           justifyContents: 'center',
-          margin:40,
-          backgroundColor:'white'
-
-          
+          margin: 40,
+          backgroundColor: 'white',
         }}>
         <Image
           source={image.success}
           style={{
             height: 200,
             width: 200,
-            
-             marginTop: 60,
+
+            marginTop: 60,
             margin: 50,
           }}
         />
@@ -45,7 +44,7 @@ const AllDone = ({navigation}) => {
           All Done
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Invitationreport', {eventData})}
           // onPress={shareEvent}
           style={{
             height: '8%',
@@ -65,7 +64,7 @@ const AllDone = ({navigation}) => {
               paddingVertical: 10,
               fontWeight: '700',
             }}>
-            Share
+            Done
           </Text>
         </TouchableOpacity>
         <Image

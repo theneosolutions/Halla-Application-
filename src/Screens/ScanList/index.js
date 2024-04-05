@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 // import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {SH, Colors, SW, SF} from '../../utils';
@@ -14,6 +15,7 @@ import {getEventWithUserId} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useNavigation} from '@react-navigation/native';
 import Egypto from 'react-native-vector-icons/Entypo';
+import moment from 'moment';
 const ScanList = () => {
   const navigation = useNavigation();
   const [scanData, setScanData] = useState([]);
@@ -39,7 +41,7 @@ const ScanList = () => {
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <IconF size={SF(20)} name="left" style={styles.headerIcon} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Upcomming Events</Text>
+        <Text style={styles.headerText}>Scan</Text>
         <TouchableOpacity>
           <Egypto
             size={SF(20)}
@@ -48,103 +50,62 @@ const ScanList = () => {
           />
         </TouchableOpacity>
       </View>
-      {/* {loading || scanData.length == 0 ? (
-        <SkeletonPlaceholder>
-          <SkeletonPlaceholder.Item>
-            <SkeletonPlaceholder.Item
-              width={'100%'}
-              height={20}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              marginTop={14}
-              width={'100%'}
-              height={47}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              width={'100%'}
-              height={20}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              marginTop={14}
-              width={'100%'}
-              height={47}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              width={'100%'}
-              height={20}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              marginTop={14}
-              width={'100%'}
-              height={47}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              width={'100%'}
-              height={20}
-              borderRadius={4}
-            />
-            <SkeletonPlaceholder.Item
-              marginTop={14}
-              width={'100%'}
-              height={47}
-              borderRadius={4}
-            />
-          </SkeletonPlaceholder.Item>
-        </SkeletonPlaceholder>
-      ) : ( */}
-      <View style={{backgroundColor: 'white', flex: 1, width: '100%'}}>
-        <FlatList
-          data={scanData}
-          renderItem={({item}) => (
-            <View style={styles.flatListView}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
+
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            flex: 1,
+            width: '100%',
+            paddingBottom: 100,
+          }}>
+          <FlatList
+            data={scanData}
+            renderItem={({item}) => (
+              <View style={styles.flatListView}>
                 <Text style={styles.lightTextStyle}>
-                  <Text style={styles.boldText}>Name:</Text>
-                  {item.user.firstName}
+                  {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                 </Text>
-                <Text style={styles.lightTextStyle}>{item.user.lastName}</Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  height: 30,
-                  backgroundColor: 'white',
-                }}>
-                <Text style={styles.lightTextStyle}>
-                  <Text style={styles.boldText}>Invitation Name:</Text>
-                  {item.name}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  height: 50,
-                  backgroundColor: 'white',
-                }}>
-                <Text>
-                  <Text style={styles.boldText}>Date:</Text>
-                  {item.updatedAt}
-                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: SW(300),
+                  }}>
+                  <Text style={styles.lightTextStyle}>
+                    {item.user.firstName}
+                  </Text>
+                  <Text style={styles.lightTextStyle}>
+                    {item.user.lastName}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    height: 30,
+                  }}>
+                  <Text style={styles.boldText}>{item.name}</Text>
+
+                  <Text style={styles.lightTextStyle}>{item.address}</Text>
+                </View>
+                <View
+                  style={{
+                    height: SH(0.5),
+                    width: SW(300),
+                    borderBottomWidth: 0.5,
+                    borderColor: 'black',
+                    marginTop: 30,
+                  }}
+                />
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Scan')}
                   style={styles.scanstyle}>
                   <Text style={styles.scanText}>Scan</Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          )}
-        />
-      </View>
-      {/* )} */}
+            )}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -255,17 +216,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   lightTextStyle: {
-    color: 'black',
-    fontWeight: '400',
-    padding: 4,
+    color: 'gray',
+    fontWeight: '500',
+
+    fontSize: 12,
   },
   boldText: {
     color: 'black',
     fontWeight: '600',
+    fontSize: 12,
   },
   scanstyle: {
     height: 40,
-    width: 100,
+    width: SW(300),
     backgroundColor: '#293170',
     marginLeft: 'auto',
     marginRight: 5,
@@ -281,15 +244,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   flatListView: {
-    padding: 3,
-    height: 120,
-    backgroundColor: 'white',
-    width: '90%',
+    padding: 10,
+
+    height: SH(180),
+    backgroundColor: '#f8f9fc',
+    width: '98%',
     borderRadius: 10,
     justifyContent: 'center',
     alignSelf: 'center',
-    elevation: 20,
-    marginTop: 20,
+    // elevation: 5,
+
+    marginTop: 10,
+    elevation: 5,
   },
 });
 

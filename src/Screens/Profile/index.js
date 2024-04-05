@@ -99,7 +99,7 @@ const Profile = props => {
               style={styles.LeftIconStyles}
             />
 
-            <Text style={ProfileTabStyle.johnboxtwo}>OrderManagement</Text>
+            <Text style={styles.johnboxtwo}>OrderManagement</Text>
 
             <IconF
               size={SF(20)}
@@ -116,7 +116,7 @@ const Profile = props => {
               style={styles.LeftIconStyles}
             />
 
-            <Text style={ProfileTabStyle.johnboxtwo}>Document Management</Text>
+            <Text style={styles.johnboxtwo}>Document Management</Text>
 
             <IconF
               size={SF(20)}
@@ -133,7 +133,72 @@ const Profile = props => {
               style={styles.LeftIconStyles}
             />
 
-            <Text style={ProfileTabStyle.johnboxtwo}>Payment</Text>
+            <Text style={styles.johnboxtwo}>Payment</Text>
+
+            <IconF
+              size={SF(20)}
+              name="right"
+              style={ProfileTabStyle.Jognboxthree}
+            />
+          </View>
+
+          {/* //////////////////////////// */}
+          <View style={styles.mainsecboxViewJohn}>
+            <IconMI
+              size={SF(20)}
+              name="align-horizontal-left"
+              style={styles.LeftIconStyles}
+            />
+
+            <Text style={styles.johnboxtwo}>Sign Out</Text>
+
+            <IconF
+              size={SF(20)}
+              name="right"
+              style={ProfileTabStyle.Jognboxthree}
+            />
+          </View>
+          <View style={styles.accountview}>
+            <Text style={styles.accountstyle}>Contact</Text>
+          </View>
+
+          {/* /////////////johnsmith///////////// */}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ConfirmPassword')}>
+            <View style={styles.mainsecboxViewJohn}>
+              <IconE size={SF(20)} name="lock" style={styles.LeftIconStyles} />
+              <Text style={styles.johnboxtwo}>+9765443222222</Text>
+              <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
+            </View>
+          </TouchableOpacity>
+
+          {/* ///////////////////////// */}
+
+          <View style={styles.mainsecboxViewJohn}>
+            <IconM
+              size={SF(20)}
+              name="bell-ring"
+              style={styles.LeftIconStyles}
+            />
+
+            <Text style={styles.johnboxtwo}>admin@halla.sa</Text>
+
+            <IconF
+              size={SF(20)}
+              name="right"
+              style={ProfileTabStyle.Jognboxthree}
+            />
+          </View>
+
+          {/* //////////////////////////// */}
+          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+            <FeIcon
+              size={SF(20)}
+              name="settings"
+              style={styles.LeftIconStyles}
+            />
+
+            <Text style={styles.johnboxtwo}>www.Halla.sa</Text>
 
             <IconF
               size={SF(20)}
@@ -146,11 +211,11 @@ const Profile = props => {
           <View style={ProfileTabStyle.mainsecboxViewJohn}>
             <IconMI
               size={SF(20)}
-              name="align-horizontal-left"
+              name="payment"
               style={styles.LeftIconStyles}
             />
 
-            <Text style={ProfileTabStyle.johnboxtwo}>Sign Out</Text>
+            <Text style={styles.johnboxtwo}>Payment</Text>
 
             <IconF
               size={SF(20)}
@@ -158,102 +223,6 @@ const Profile = props => {
               style={ProfileTabStyle.Jognboxthree}
             />
           </View>
-
-          {/* //////////////////////////// */}
-          <View style={ProfileTabStyle.accountview}>
-            <Text style={ProfileTabStyle.accountstyle}>More Options</Text>
-          </View>
-
-          {/* /////////////////////////////// */}
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
-            <IconMI
-              size={SF(20)}
-              name="align-horizontal-left"
-              style={styles.LeftIconStyles}
-            />
-
-            <Text style={ProfileTabStyle.johnboxtwo}>Newsletter</Text>
-
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
-          </View>
-          {/* //////////////////////////////////// */}
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
-            <IconMI
-              size={SF(20)}
-              name="align-horizontal-left"
-              style={styles.LeftIconStyles}
-            />
-
-            <Text style={ProfileTabStyle.johnboxtwo}>Text Message</Text>
-
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
-          </View>
-          {/* //////////////////////////////////// */}
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <View style={ProfileTabStyle.mainsecboxViewJohn}>
-              <IconMI
-                size={SF(20)}
-                name="align-horizontal-left"
-                style={styles.LeftIconStyles}
-              />
-
-              <Text style={ProfileTabStyle.johnboxtwo}>Phone Call</Text>
-              <Text style={{paddingLeft: SF(70), fontSize: SF(12)}}>$USD</Text>
-              <IconF
-                size={SF(20)}
-                name="right"
-                style={ProfileTabStyle.Jognboxthree}
-              />
-            </View>
-          </TouchableOpacity>
-          {/* //////////////////////////////////// */}
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <View style={ProfileTabStyle.mainsecboxViewJohn}>
-              <IconMI
-                size={SF(20)}
-                name="align-horizontal-left"
-                style={styles.LeftIconStyles}
-              />
-
-              <Text style={ProfileTabStyle.johnboxtwo}>Phone Call</Text>
-              <Text style={{paddingLeft: SF(60), fontSize: SF(12)}}>$USD</Text>
-              <IconF
-                size={SF(20)}
-                name="right"
-                style={ProfileTabStyle.Jognboxthree}
-              />
-            </View>
-          </TouchableOpacity>
-          {/* /////////////////////////////////// */}
-
-          <TouchableOpacity onPress={handleLogout}>
-            <View style={ProfileTabStyle.mainsecboxViewJohn}>
-              <IconMI
-                size={SF(20)}
-                name="align-horizontal-left"
-                style={styles.LeftIconStyles}
-              />
-
-              <Text style={ProfileTabStyle.johnboxtwo}>LogOut</Text>
-
-              <Text style={{paddingLeft: SF(25), fontSize: SF(12)}}>
-                facebood go.
-              </Text>
-              <IconF
-                size={SF(20)}
-                name="right"
-                style={ProfileTabStyle.Jognboxthree}
-              />
-            </View>
-          </TouchableOpacity>
         </View>
       </View>
     </View>

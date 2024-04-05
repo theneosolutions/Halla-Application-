@@ -1,29 +1,44 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, ActivityIndicator } from 'react-native';
-import { GiftedChat, Bubble, InputToolbar, Composer, Send, Avatar } from 'react-native-gifted-chat';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState, useEffect, useContext} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
+import {
+  GiftedChat,
+  Bubble,
+  InputToolbar,
+  Composer,
+  Send,
+  Avatar,
+} from 'react-native-gifted-chat';
+import {useNavigation} from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { getFromLocalStorage } from '../../Services/Api';
+import {getFromLocalStorage} from '../../Services/Api';
 import axios from 'axios';
-import { SocketContext } from '../../socket';
+import {SocketContext} from '../../socket';
 
-
-const ChatDetailScreen = ({ route }) => {
-  const { chatItem } = route.params;
-  console.log("🚀 ~ ChatDetailScreen ~ chatItem:", chatItem)
+const ChatDetailScreen = ({route}) => {
+  const {chatItem} = route.params;
+  console.log('🚀 ~ ChatDetailScreen ~ chatItem:', chatItem);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false); // State for loading indicator
   const navigation = useNavigation();
-  const { socket } = useContext(SocketContext);
+  const {socket} = useContext(SocketContext);
 
   const onNewMessage = newMessage => {
-    console.log("🚀 ~ onNewMessage ~ newMessage:", newMessage)
-    setMessages(previousMessages => GiftedChat.append(previousMessages, {
-      _id: newMessage?.id?.toString(),
-      text: newMessage.actionData,
-      createdAt: new Date(),
-      user: { _id: newMessage?.sentBy },
-    }));
+    console.log('🚀 ~ onNewMessage ~ newMessage:', newMessage);
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, {
+        _id: newMessage?.id?.toString(),
+        text: newMessage.actionData,
+        createdAt: new Date(),
+        user: {_id: newMessage?.sentBy},
+      }),
+    );
   };
 
   useEffect(() => {
@@ -42,20 +57,30 @@ const ChatDetailScreen = ({ route }) => {
     setLoading(true); // Set loading to true when fetching data
     const token = await getFromLocalStorage('@UserToken');
     try {
-      const response = await axios.get(`https://36e9-203-189-228-4.ngrok-free.app/api/events/chats/messages/user/${chatItem.usersId}/event/${chatItem.eventId}/contact/${chatItem.invites.id}?order=ASC&page=1&take=10&filter=monthly`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `https://backend.halla.sa/api/events/chats/messages/user/${chatItem.usersId}/event/${chatItem.eventId}/contact/${chatItem.invites.id}?order=ASC&page=1&take=10&filter=monthly`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
+      console.log('🚀 ~ fetchChatMessages ~ response:', response);
       const reversedMessages = response.data?.data?.reverse();
-      console.log("🚀 ~ fetchChatMessages ~ reversedMessages:", reversedMessages)
+      console.log(
+        '🚀 ~ fetchChatMessages ~ reversedMessages:',
+        reversedMessages,
+      );
       const formattedMessages = reversedMessages.map(message => ({
         _id: message?.id.toString(),
         text: message?.actionData,
         createdAt: new Date(message?.createdAt),
-        user: { _id: message?.sentBy },
+        user: {_id: message?.sentBy},
       }));
-      console.log("🚀 ~ formattedMessages ~ formattedMessages:", formattedMessages)
+      console.log(
+        '🚀 ~ formattedMessages ~ formattedMessages:',
+        formattedMessages,
+      );
       setMessages(formattedMessages);
     } catch (error) {
       console.error('Error fetching chat messages:', error);
@@ -67,15 +92,15 @@ const ChatDetailScreen = ({ route }) => {
   const onSend = newMessages => {
     // setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages));
     const sms = {
-      "isRead": false,
-      "action": "message",
-      "actionData": newMessages[0]?.text,
-      "actionType": "text",
-      "actionUser": chatItem.usersId,
-      "contact": chatItem.invites.id,
-      "event": chatItem.events.id,
-      "sentBy": chatItem.usersId,
-    }
+      isRead: false,
+      action: 'message',
+      actionData: newMessages[0]?.text,
+      actionType: 'text',
+      actionUser: chatItem.usersId,
+      contact: chatItem.invites.id,
+      event: chatItem.events.id,
+      sentBy: chatItem.usersId,
+    };
     socket.emit('chat', sms);
   };
 
@@ -84,13 +109,13 @@ const ChatDetailScreen = ({ route }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
           <FontAwesome name="arrow-left" size={23} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>{chatItem?.invites?.name}</Text>
-        <View style={{ width: 24 }} />
+        <View style={{width: 24}} />
       </View>
       {loading ? ( // Show loading indicator while data is being fetched
         <View style={styles.loadingIndicator}>
@@ -100,7 +125,7 @@ const ChatDetailScreen = ({ route }) => {
         <GiftedChat
           messages={messages}
           onSend={newMessages => onSend(newMessages)}
-          user={{ _id: chatItem?.usersId }}
+          user={{_id: chatItem?.usersId}}
           renderAvatar={null}
           renderBubble={renderBubble}
           renderInputToolbar={renderInputToolbar}
@@ -190,7 +215,12 @@ const renderComposer = props => (
       }}
     />
     <Send {...props}>
-      <FontAwesome name="send" size={23} color="black" style={{ marginBottom: 10, marginRight: 4 }} />
+      <FontAwesome
+        name="send"
+        size={23}
+        color="black"
+        style={{marginBottom: 10, marginRight: 4}}
+      />
     </Send>
   </View>
 );
