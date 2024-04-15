@@ -39,6 +39,8 @@ const CreateEvent = ({navigation, route}) => {
   const [buttonEnable, setButtonEnable] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadText, setUploadText] = useState('Upload Image');
+  const [loadingDraft, setLoadingDraft] = useState(false);
+  const [loadingCreateEvent, setLoadingCreateEvent] = useState(false);
 
   const openImagePicker = () => {
     ImageCropPicker.openPicker({
@@ -215,6 +217,7 @@ const CreateEvent = ({navigation, route}) => {
       <View style={MessagingStyles.BackgroundWhite}>
         <View style={MessagingStyles.whilistminbody}>
           <ScrollView
+            showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={MessagingStyles.ScrollViewTestHe}>
             <View style={{marginBottom: 60}}>
@@ -253,7 +256,7 @@ const CreateEvent = ({navigation, route}) => {
                 </Text>
               </View>
               <TouchableOpacity onPress={openImagePicker} activeOpacity={0.6}>
-                <View style={MessagingStyles.imagepickerview}>
+                <View style={styles.imagepickerview}>
                   {imagePath ? (
                     <Image
                       source={{uri: imagePath.path}}
@@ -309,7 +312,7 @@ const CreateEvent = ({navigation, route}) => {
                   Event Name:
                 </Text>
                 <Input
-                  inputStyle={Scanstyle.InputStyles}
+                  inputStyle={styles.InputStyles}
                   placeholder="Event name"
                   onChangeText={text => setEventName(text)}
                   value={eventName}
@@ -338,8 +341,8 @@ const CreateEvent = ({navigation, route}) => {
               </Text>
               <View style={{width: '97%', marginLeft: 5}}>
                 <Input
-                  inputStyle={Scanstyle.InputStyles}
-                  placeholder="Event name"
+                  inputStyle={styles.InputStyles}
+                  placeholder="Event Description"
                   onChangeText={text => setEventDescription(text)}
                   value={eventDescription}
                 />
@@ -359,13 +362,16 @@ const CreateEvent = ({navigation, route}) => {
               <TouchableOpacity
                 onPress={() => setDatePickerVisible(true)}
                 style={{
-                  width: '95%',
-                  height: SH(55),
-                  backgroundColor: 'white',
+                  width: '90%',
+                  height: SH(58),
+                  borderWidth: 1,
+                  borderColor: '#BD9956',
+
                   marginLeft: SW(10),
                   // paddingVertical: SH(18),
-                  paddingHorizontal: SW(14),
-                  borderTopLeftRadius: SF(12),
+                  // paddingHorizontal: SW(14),
+                  borderTopLeftRadius: SF(23),
+                  borderBottomRightRadius: SF(20),
                 }}>
                 <Text
                   style={{
@@ -418,11 +424,13 @@ const CreateEvent = ({navigation, route}) => {
                     margin: SW(15),
                     borderTopLeftRadius: SF(30),
                     borderBottomRightRadius: SF(30),
+                    borderColor: '#BD9956',
+                    borderWidth: 1,
                   }}>
                   <Image
                     source={images.mapimg}
                     style={{
-                      height: SH(210),
+                      height: SH(197),
                       width: '100%',
                       justifyContent: 'center',
                       borderTopLeftRadius: SF(30),
@@ -460,8 +468,8 @@ const CreateEvent = ({navigation, route}) => {
                   margin: 10,
                 }}>
                 <TouchableOpacity
-                  onPress={handleConfirm}
-                  disabled={loading}
+                  // onPress={handleConfirm}
+                  // disabled={loading}
                   // onPress={() => navigation.navigate('Card')}
                   style={{
                     height: '100%',
@@ -471,21 +479,21 @@ const CreateEvent = ({navigation, route}) => {
                     borderBottomRightRadius: 20,
                     paddingVertical: 8,
                   }}>
-                  {loading ? (
+                  {/* {loading ? (
                     <ActivityIndicator size="small" color="#ffffff" />
-                  ) : (
-                    <Text
-                      style={{
-                        alignItems: 'center',
-                        color: 'white',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                        paddingVertical: 10,
-                        fontWeight: '700',
-                      }}>
-                      Save as Draft
-                    </Text>
-                  )}
+                  ) : ( */}
+                  <Text
+                    style={{
+                      alignItems: 'center',
+                      color: 'white',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                      paddingVertical: 10,
+                      fontWeight: '700',
+                    }}>
+                    Save as Draft
+                  </Text>
+                  {/* )} */}
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -549,6 +557,31 @@ const styles = StyleSheet.create({
   },
   Iconstyle: {
     fontSize: 15,
+  },
+  imagepickerview: {
+    height: SH(200),
+    width: '90%',
+    borderColor: '#BD9956',
+    justifyContent: 'center',
+    alignContent: 'center',
+    margin: SW(20),
+    borderTopLeftRadius: SF(30),
+    borderBottomRightRadius: SF(30),
+    borderWidth: 1,
+  },
+  InputStyles: {
+    width: '97%',
+    color: 'black',
+    fontSize: SF(17),
+    paddingTop: SH(10),
+    // fontFamily: Fonts.Poppins_Medium,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    marginLeft: SH(18),
+    borderColor: '#BD9956',
+    // borderTopLeftRadius: SF(20),
+    // borderBottomRightRadius: SF(20),
+    borderWidth: 1,
   },
 });
 export default CreateEvent;

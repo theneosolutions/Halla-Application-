@@ -59,8 +59,8 @@ const Login = () => {
   const [TextInputPassword, setTextInputPassword] = useState('');
   // const [callingCode, setCallingCode] = useState('');
   const [selectedOption, setSelectedOption] = useState('email');
-  const [email, setEmail] = useState('maryamubaid711@gmail.com');
-  const [password, setPassword] = useState('Qqq111@#');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
@@ -253,6 +253,7 @@ const Login = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.MinViewScreen}>
         <ScrollView
+          showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={styles.ScrollViewStyles}>
           <View style={styles.AccountView}>

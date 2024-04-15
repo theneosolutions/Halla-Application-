@@ -15,7 +15,11 @@ const BirthdayCard = ({
   data,
 }) => {
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
       <TouchableOpacity onPress={onPress} style={styles.container}>
         <View style={styles.imageContainer}>
           {imageUrl && <Image source={imageUrl} style={styles.image} />}
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // padding: 20,
     backgroundColor: 'white',
-    // backgroundColor: 'red',
+    backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 20,
     elevation: 2,
@@ -55,6 +59,8 @@ const styles = StyleSheet.create({
     height: 160,
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 20,
+    borderWidth: 1,
+    borderColor: '#BD9956',
   },
   image: {
     width: SW(130),

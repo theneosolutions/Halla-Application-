@@ -101,11 +101,7 @@ const Profile = props => {
 
             <Text style={styles.johnboxtwo}>OrderManagement</Text>
 
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
+            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
           </View>
 
           {/* //////////////////////////// */}
@@ -118,11 +114,7 @@ const Profile = props => {
 
             <Text style={styles.johnboxtwo}>Document Management</Text>
 
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
+            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
           </View>
 
           {/* //////////////////////////// */}
@@ -135,11 +127,7 @@ const Profile = props => {
 
             <Text style={styles.johnboxtwo}>Payment</Text>
 
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
+            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
           </View>
 
           {/* //////////////////////////// */}
@@ -183,11 +171,7 @@ const Profile = props => {
 
             <Text style={styles.johnboxtwo}>admin@halla.sa</Text>
 
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
+            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
           </View>
 
           {/* //////////////////////////// */}
@@ -200,11 +184,7 @@ const Profile = props => {
 
             <Text style={styles.johnboxtwo}>www.Halla.sa</Text>
 
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
+            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
           </View>
 
           {/* //////////////////////////// */}
@@ -217,11 +197,7 @@ const Profile = props => {
 
             <Text style={styles.johnboxtwo}>Payment</Text>
 
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
+            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
           </View>
         </View>
       </View>

@@ -51,7 +51,9 @@ const ScanList = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollViewContent}>
         <View
           style={{
             backgroundColor: 'white',

@@ -1,105 +1,105 @@
 import {StyleSheet} from 'react-native';
 import {Fonts, SF, SH, SW, Colors} from '../../utils';
 const SplashStyl = StyleSheet.create({
-////////splashscreen//////////
-Container: {
-  flex: 1,
-  backgroundColor: 'white',
-  alignItems: 'center',
-},
-SwitchStyle:{
-  flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: 'auto',
-            borderRadius: 10,
-            height: '4%',
-            paddingHorizontal: 2,
-            backgroundColor: '#f2f2f4',
-            shadowOpacity: 20,
-            capacity: 20,
-            margin: '2%',
-            marginTop: '8%',
-},
+  ////////splashscreen//////////
+  Container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  SwitchStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 'auto',
+    borderRadius: 10,
+    height: '4%',
+    paddingHorizontal: 2,
+    backgroundColor: '#f2f2f4',
+    shadowOpacity: 20,
+    capacity: 20,
+    margin: '2%',
+    marginTop: '8%',
+  },
 
-SwitchImage:{
-  width: 28,
-  height: 26,
-  marginRight: 5,
-  borderRadius: 12,
-},
-logoContainer: {
-  flex: 0.7,
-  width: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-imgstyle: {
-  height: SH(200),
-  width: SW(100),
-  justifyContent: 'center',
-  alignSelf: 'center',
-  marginTop: SH(40),
-  //marginBottom: SH(10),
-},
-buttonContainer: {
-  flex: 0.3,
-  width: '100%',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
+  SwitchImage: {
+    width: 28,
+    height: 26,
+    marginRight: 5,
+    borderRadius: 12,
+  },
+  logoContainer: {
+    flex: 0.7,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imgstyle: {
+    height: SH(200),
+    width: SW(100),
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: SH(40),
+    //marginBottom: SH(10),
+  },
+  buttonContainer: {
+    flex: 0.3,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
-touchablestyle: {
-  //height: SH(50),
-  //width: '100%',
-  alignSelf: 'center',
-  width: SW(300),
-  //justifyContent: 'center',
-  //alignContent: 'center',
-  backgroundColor: Colors.darkBlue,
-  borderTopLeftRadius: SF(20),
-  borderBottomRightRadius: SF(20),
-  //marginTop: SH(250),
-},
-btntext: {
-  color: 'white',
-  fontSize: SF(16),
-  fontWeight: '700',
-},
-//////////splashscreenend/////
+  touchablestyle: {
+    //height: SH(50),
+    //width: '100%',
+    alignSelf: 'center',
+    width: SW(300),
+    //justifyContent: 'center',
+    //alignContent: 'center',
+    backgroundColor: Colors.darkBlue,
+    borderTopLeftRadius: SF(20),
+    borderBottomRightRadius: SF(20),
+    //marginTop: SH(250),
+  },
+  btntext: {
+    color: 'white',
+    fontSize: SF(16),
+    fontWeight: '700',
+  },
+  //////////splashscreenend/////
 
-//////////RegistrationStyle//////
-HalfView:{
-  flex: 0.7,
+  //////////RegistrationStyle//////
+  HalfView: {
+    flex: 0.7,
 
-          width: '100%',
-          justifyContent: 'center',
-          alignItem: 'center',
-},
-touchablestyleIcon: {
-  // width: SW(300),
-  alignSelf: 'center',
-  width: '90%',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  paddingHorizontal: '8%',
-  margin: '2%',
-  backgroundColor: Colors.darkBlue,
-  borderTopLeftRadius: SF(20),
-  borderBottomRightRadius: SF(20),
-  //marginTop: SH(250),
-},
+    width: '100%',
+    justifyContent: 'center',
+    alignItem: 'center',
+  },
+  touchablestyleIcon: {
+    // width: SW(300),
+    alignSelf: 'center',
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: '8%',
+    margin: '2%',
+    backgroundColor: Colors.darkBlue,
+    borderTopLeftRadius: SF(20),
+    borderBottomRightRadius: SF(20),
+    //marginTop: SH(250),
+  },
   Iconstyle: {
     //marginTop: SH(2),
     paddingHorizontal: 5,
     paddingVertical: 12,
   },
 
-  Continuebtntext:{
+  Continuebtntext: {
     color: 'white',
     fontSize: SF(14),
     fontWeight: '700',
-    marginTop:10,
-    paddingLeft:12
+    marginTop: 10,
+    paddingLeft: 12,
   },
   googleimg: {
     height: SH(17),
@@ -110,42 +110,14 @@ touchablestyleIcon: {
 
     // marginHorizontal: '2%',
   },
-  GoogleIconstyle:{
+  GoogleIconstyle: {
     height: SH(17),
     width: SW(16),
     marginTop: SH(13),
-    marginLeft:30
+    marginLeft: 30,
   },
-////////////EndRegistrationStyle///
+  ////////////EndRegistrationStyle///
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
   dropdownStyle: {
     backgroundColor: '#293170',
     color: 'white',
@@ -199,7 +171,7 @@ touchablestyleIcon: {
   ScrollViewTestHeight: {
     width: '100%',
 
-    height: '100%',
+    flex: 1,
   },
 
   imgstyleS: {
@@ -228,7 +200,6 @@ touchablestyleIcon: {
     //marginTop: SH(250),
   },
 
-
   touchablestyleW: {
     width: '78%',
     alignSelf: 'center',
@@ -241,7 +212,7 @@ touchablestyleIcon: {
     borderTopLeftRadius: SF(20),
     borderBottomRightRadius: SF(20),
   },
- 
+
   btntextB: {
     color: 'black',
     fontSize: SF(16),
@@ -338,7 +309,7 @@ touchablestyleIcon: {
     width: SW(80),
     // backgroundColor: 'red',
     justifyContent: 'space-between ',
-    marginHorizontal: '1%',
+    marginHorizontal: 3,
   },
   imageView: {
     backgroundColor: 'red',

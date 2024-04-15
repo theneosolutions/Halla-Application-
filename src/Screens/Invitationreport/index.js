@@ -17,6 +17,7 @@ import {Spacing, Search, Button} from '../../Components';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {SH, Colors, SW, SF} from '../../utils';
 import IconG from 'react-native-vector-icons/Ionicons';
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import Egypto from 'react-native-vector-icons/Entypo';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import images from '../../index';
@@ -46,6 +47,8 @@ const Invitationreport = ({route, ...props}) => {
   const [selectedContactId, setSelectedContactId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [isShareOptionsVisible, setIsShareOptionsVisible] = useState(false);
+
   const DeleteEventFromList = async eventId => {
     try {
       const response = await deleteEventbyId(eventId);
@@ -69,9 +72,12 @@ const Invitationreport = ({route, ...props}) => {
       console.error('Error deleting event:', error);
     }
   };
-
+  const toggleShareOptions = () => {
+    setIsShareOptionsVisible(!isShareOptionsVisible);
+  };
   const handleRefresh = () => {
     setRefreshing(true);
+
     // Fetch data again
     handleGetByUserId();
 
@@ -234,33 +240,39 @@ const Invitationreport = ({route, ...props}) => {
     setShowModal(false);
   };
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView
+        // style={{backgroundColor: 'red'}}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={SplashStyl.ScrollViewTestHeight}
+        contentContainerStyle={styles.scrollViewContainer}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }>
-        <View style={SplashStyl.Container}>
+        <View
+          style={{
+            ...styles.Container,
+            backgroundColor: 'transparent',
+            marginBottom: 0,
+          }}>
           <View style={styles.headerContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
               <IconF size={SF(20)} name="left" style={styles.headerIcon} />
             </TouchableOpacity>
             <Text style={styles.headerText}>Invitation Report</Text>
 
-            {isViewVisible && (
+            {/* {isViewVisible && (
               <View style={styles.modalContentView}>
                 <TouchableOpacity
                   style={styles.option}
                   onPress={() => navigation.navigate('EditEvent', {id})}>
-                  <Text style={styles.boldstyle}>Edit Event</Text>
+                  <IconF size={SF(20)} name="edit" style={styles.boldstyle} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleDeleteEvent(singleData?.id)}>
-                  <Text style={styles.boldstyle}>Delete Event</Text>
+                  <IconM size={SF(20)} name="delete" style={styles.boldstyle} />
                 </TouchableOpacity>
               </View>
-            )}
+            )} */}
             <TouchableOpacity onPress={toggleView} style={styles.iconContainer}>
               <Egypto
                 size={20}
@@ -269,7 +281,19 @@ const Invitationreport = ({route, ...props}) => {
               />
             </TouchableOpacity>
           </View>
-
+          {isViewVisible && (
+            <View style={styles.modalContentDotView}>
+              <TouchableOpacity
+                style={styles.option}
+                onPress={() => navigation.navigate('EditEvent', {id})}>
+                <IconF size={SF(20)} name="edit" style={styles.boldstyle} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleDeleteEvent(singleData?.id)}>
+                <IconM size={SF(20)} name="delete" style={styles.boldstyle} />
+              </TouchableOpacity>
+            </View>
+          )}
           {loading ? (
             <ActivityIndicator
               style={styles.loader}
@@ -280,18 +304,19 @@ const Invitationreport = ({route, ...props}) => {
             <>
               <View
                 style={{
-                  flexDirection: 'column',
-                  width: '95%',
-                  height: 120,
-                  backgroundColor: 'white',
+                  flexDirection: 'row',
+                  width: '96%',
+                  height: 100,
+                  margin: 5,
+                  backgroundColor: '#ffff',
                   marginBottom: 10,
                 }}>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    marginTop: 15,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    marginTop: 5,
+                    // alignItems: 'center',
+                    // justifyContent: 'center',
                   }}>
                   <Text
                     style={{
@@ -299,73 +324,103 @@ const Invitationreport = ({route, ...props}) => {
                       fontSize: 17,
                       fontWeight: '600',
                       color: 'black',
-                      marginTop: 20,
+                      marginTop: 15,
+                      marginLeft: 10,
                     }}>
                     Invitation Report
                   </Text>
-                  {/* Right side containing dropdown */}
-                  <View
+                  <Text
                     style={{
-                      width: '35%',
-                      marginLeft: 110,
-                      height: 10,
-                      marginTop: 10,
-                      color: 'white',
+                      textAlign: 'start',
+                      fontSize: 14,
+                      fontWeight: '600',
+                      color: 'black',
+                      marginLeft: 10,
+                      // marginBottom: 10,
                     }}>
-                    <DropDownPicker
-                      items={[
-                        {label: 'Remainder', value: 'Remainder'},
-                        {label: 'Invitation', value: 'Invitation'},
-                      ]}
-                      style={{
-                        backgroundColor: '#293170',
-                        borderTopLeftRadius: 28,
-                        borderBottomRightRadius: 28,
-                        borderWidth: 1,
-                        borderColor: 'gray',
-                      }}
-                      itemStyle={{justifyContent: 'flex-start'}}
-                      labelStyle={{color: 'white'}}
-                      dropDownStyle={{
-                        backgroundColor: '#293170',
-                        borderTopLeftRadius: 28,
-                        borderBottomRightRadius: 28,
-                      }}
-                      placeholderStyle={{color: 'white', fontWeight: '800'}}
-                      onChangeValue={handleChangeValue}
-                      setOpen={setIsOpen}
-                      open={isOpen}
-                      value={value}
-                      setValue={setValue}
-                      placeholder="Share"
-                      iconStyle={{color: 'white'}}
-                    />
-                    {inviteLoading && (
-                      <ActivityIndicator
-                        style={{
-                          position: 'absolute',
-                          top: 15,
-                          right: 40,
-                          zIndex: 1000000,
-                        }}
-                        size="small"
-                        color="white"
-                      />
-                    )}
-                  </View>
+                    Your event invitation report is here
+                  </Text>
                 </View>
-
-                {/* Subheading */}
-                <Text
+                {/* Right side containing dropdown */}
+                <View
                   style={{
-                    textAlign: 'start',
-                    fontSize: 14,
-                    fontWeight: '600',
-                    color: 'black',
-                    marginBottom: 10,
+                    width: '16%',
+                    // backgroundColor: 'red',
+                    // marginLeft: 'auto',
+                    height: 15,
+                    marginTop: 15,
+                    color: 'white',
+                    position: 'absolute',
+                    right: 0,
+                    marginLeft: 120,
                   }}>
-                  Your event invitation report is here
-                </Text>
+                  <TouchableOpacity
+                    onPress={toggleShareOptions}
+                    style={styles.iconContainer}>
+                    <Egypto size={20} name="share" style={styles.headerIcon} />
+                  </TouchableOpacity>
+                  {/* <DropDownPicker
+                    items={[
+                      {label: 'Remainder', value: 'Remainder'},
+                      {label: 'Invitation', value: 'Invitation'},
+                    ]}
+                    style={{
+                      backgroundColor: '#293170',
+                      // borderTopLeftRadius: 28,
+                      // borderBottomRightRadius: 28,
+                      // borderWidth: 1,
+                      // borderColor: 'gray',
+                    }}
+                    itemStyle={{justifyContent: 'flex-start'}}
+                    labelStyle={{color: 'white'}}
+                    dropDownStyle={{
+                      backgroundColor: '#293170',
+                      // borderTopLeftRadius: 28,
+                      // borderBottomRightRadius: 28,
+                    }}
+                    placeholderStyle={{color: 'white', fontWeight: '800'}}
+                    onChangeValue={handleChangeValue}
+                    setOpen={setIsOpen}
+                    open={isOpen}
+                    value={value}
+                    setValue={setValue}
+                    placeholder="Send"
+                    iconStyle={{color: 'white'}}
+                  /> */}
+                  {inviteLoading && (
+                    <ActivityIndicator
+                      style={{
+                        position: 'absolute',
+                        top: 15,
+                        right: 40,
+                        zIndex: 1000000,
+                      }}
+                      size="small"
+                      color="white"
+                    />
+                  )}
+                </View>
+                {isShareOptionsVisible && (
+                  <View style={styles.shareOptions}>
+                    <TouchableOpacity
+                      style={styles.option}
+                      onPress={() => {
+                        // Implement share functionality
+                        toggleShareOptions();
+                      }}>
+                      <Text style={styles.optionText}>Invite</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.option}
+                      onPress={() => {
+                        // Implement other share functionality
+                        toggleShareOptions();
+                      }}>
+                      <Text style={styles.optionText}>Remainder</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                {/* Subheading */}
 
                 {/* Display selected option in a separate column */}
                 {selectedOption && (
@@ -377,7 +432,7 @@ const Invitationreport = ({route, ...props}) => {
               </View>
               <Spacing space={SH(60)} />
               {/* ////////////////boxrow1///////////////////// */}
-              <View style={SplashStyl.RowView}>
+              <View style={styles.RowView}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -451,7 +506,7 @@ const Invitationreport = ({route, ...props}) => {
               {/* ////////////////////box1end//////// */}
               {/* <Spacing space={SH(20)} /> */}
               {/* ////////////////boxrow1///////////////////// */}
-              <View style={SplashStyl.RowView}>
+              <View style={styles.RowView}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -524,46 +579,20 @@ const Invitationreport = ({route, ...props}) => {
                   </View>
                 </View>
               </View>
-              <TouchableOpacity
-                // onPress={()=> HandleAddEventGuest()}
-                // >
-                onPress={openContactslist}>
-                {/* onPress={() => navigation.navigate('AddNewGuest',{eventId:id})}>  */}
-                <View
-                  style={{
-                    backgroundColor: '#EFEFF4',
-                    height: '25%',
-                    width: 330,
-                    borderTopLeftRadius: 20,
-                    borderBottomRightRadius: 20,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+              <TouchableOpacity onPress={openContactslist}>
+                <View style={styles.addGuestButton}>
                   <Image
                     source={images.gridicons_add}
                     style={{height: 40, width: 40, marginRight: 10}}
                   />
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: '600',
-                      paddingRight: 10,
-                      color: '#293170',
-                    }}>
-                    Add new Guest
-                  </Text>
+                  <Text style={styles.addGuestButtonText}>Add new Guest</Text>
                 </View>
               </TouchableOpacity>
-
               <View
                 style={{
-                  height: 30,
-                  width: 340,
-                  // elevation: 10,
-                  // shadowOpacity: 20,
-                  borderTopRightRadius: 20,
-                  borderBottomRightRadius: 20,
+                  height: SH(100),
+                  width: SW(100),
+                  marginBottom: 200,
                 }}>
                 <View style={styles.slide}>
                   <View
@@ -575,11 +604,18 @@ const Invitationreport = ({route, ...props}) => {
                       style={{
                         color: 'black',
                         fontWeight: '600',
-                        fontSize: 16,
+                        fontSize: 12,
+                        marginRight: 30,
                       }}>
                       {singleData?.name}
                     </Text>
-                    <Text style={{color: 'black'}}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontWeight: '600',
+                        fontSize: 12,
+                        marginLeft: 35,
+                      }}>
                       {singleData?.eventDate}
                     </Text>
                   </View>
@@ -625,13 +661,16 @@ const Invitationreport = ({route, ...props}) => {
 };
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flexGrow: 1,
+  },
   headerContainer: {
-    width: '100%',
     flexDirection: 'row',
     height: 60,
-    backgroundColor: '#ffff',
-    padding: SW(2),
+    backgroundColor: '#fff',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   headerText: {
     flex: 1,
@@ -651,23 +690,63 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: '#000',
   },
-  container: {
+  Container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  addGuestButton: {
+    backgroundColor: '#EFEFF4',
+    height: 60,
+    width: '88%',
+    borderTopLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginLeft: 22,
+  },
+  addGuestButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#293170',
   },
   slide: {
-    //flex: 1,
-    marginLeft: 15,
-    height: '70%',
-    elevation: 30,
-    shadowOpacity: 10,
-    //alignItems: 'center',
-    justifyContent: 'center',
+    height: SH(210),
+    width: SW(320),
+    borderRadius: 10,
+    // flex: 1,
+    // marginLeft: 15,
 
-    // backgroundColor:'transparent',
-    borderBottomRightRadius: 20,
+    // elevation: 30,
+    // shadowOpacity: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    // backgroundColor: 'red',
+    marginLeft: SW(28),
+    // elevation: 10,
+    // borderBottomRightRadius: 20,
+  },
+  images: {
+    height: SH(200),
+    width: SW(320),
+    borderRadius: 10,
+
+    //borderRadius: 23,
+    // borderTopLeftRadius: 20,
+    //borderTopRightRadius: 12,
+    // marginLeft: 0,
+    // borderBottomRightRadius: 40,
+    // borderTopLeftRadius: 30,
+    //borderBottomLeftradius: 20,
+    // marginTop: 10,
+    // marginBottom: 60,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // textAlign: 'center',
   },
   title: {
     fontSize: 15,
@@ -676,19 +755,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     //marginBottom: 20,
   },
-  images: {
-    height: SH(200),
-    width: SW(310),
-    //borderRadius: 23,
-    borderTopLeftRadius: 20,
-    //borderTopRightRadius: 12,
-    marginLeft: 0,
-    borderBottomRightRadius: 40,
-    borderTopLeftRadius: 30,
-    //borderBottomLeftradius: 20,
-    // marginTop: 10,
-    marginBottom: 10,
-  },
+
   text: {
     marginRight: 'auto',
     fontWeight: '700',
@@ -699,7 +766,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 30,
   },
   text2: {
-    marginLeft: 'auto',
+    // marginLeft: 'auto',
     fontWeight: '700',
     color: 'black',
     //textAlign: 'center',
@@ -741,8 +808,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     // marginLeft: 20,
     marginTop: 2,
-    borderWidth: 1,
-    marginLeft: 30,
+    elevation: 10,
+    // borderWidth: 1,
+    // marginLeft: 0,
+  },
+  modalContentDotView: {
+    backgroundColor: '#ffff',
+    borderRadius: 10,
+    position: 'absolute',
+    right: 0,
+    marginRight: 40,
+    marginTop: 5,
+    width: SW(50),
+    // marginLeft: 20,
+    // marginTop: 2,
+    elevation: 10,
   },
   modalContentM: {
     backgroundColor: '#ffff',
@@ -751,15 +831,17 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   option: {
-    paddingVertical: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DCC7F8',
+    paddingVertical: 2,
+    paddingHorizontal: 2,
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#DCC7F8',
   },
   boldstyle: {
     fontWeight: '600',
     color: 'black',
     fontSize: 12,
     padding: 5,
+    textAlign: 'center',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -799,6 +881,30 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
     textAlign: 'center',
     paddingHorizontal: 20,
+  },
+  RowView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    right: 0,
+    marginLeft: 30,
+  },
+  shareOptions: {
+    paddingVertical: 2,
+    paddingHorizontal: 2,
+    backgroundColor: 'white',
+    marginLeft: 32,
+    height: SH(60),
+    width: SW(80),
+    marginTop: 25,
+    elevation: 5,
+    borderRadius: 10,
+  },
+  optionText: {
+    color: 'black',
+    fontSize: SF(12),
   },
 });
 export default Invitationreport;

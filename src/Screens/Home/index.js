@@ -20,6 +20,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {
   getEventCategorywithid,
   getProfileWithUserId,
+  getEventWithUserId,
 } from '../../Services/ApiList';
 import moment from 'moment';
 import MessagingStyles from '../../styles/CommonStyle/MessagingStyles';
@@ -36,6 +37,7 @@ import {SF, SW, SH, Colors} from '../../utils';
 import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import notifee from '@notifee/react-native';
 import styles from './styles';
+import Feather from 'react-native-vector-icons/Feather';
 const Home = () => {
   const navigation = useNavigation();
   const screenWidth = Dimensions.get('window').width;
@@ -45,30 +47,64 @@ const Home = () => {
   const [upcomming, setUpcomming] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [wallet, setWallet] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [take, setTake] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [events, setEvents] = useState('');
   ////////////get api by userid//////////////
 
   const handleRefresh = () => {
     setRefreshing(true);
     // Fetch data again
     handleGetByUserId();
+    handleGetdataByUserId();
     setRefreshing(false);
   };
   const handleGetByUserId = async () => {
     try {
       const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
       const response = await getEventCategorywithid(Gettingtoken.id);
+
       console.log('response---------------+++', response?.data);
-      console.log('response?.data?.upcoming======', response?.data?.upcoming); // Pass user ID if requitransparent
-      console.log('Events:.....======______====', response?.data?.drafts);
+      // console.log('response?.data?.upcoming======', response?.data?.upcoming); // Pass user ID if requitransparent
+      // console.log('Events:.....======______====', response?.data?.drafts);
       setCard(response?.data?.allEvents);
       setUpcomming(response?.data?.upcoming);
-      console.log('data========', response?.data);
+      // console.log('data========', response?.data);
       setLoading(false);
     } catch (error) {}
   };
 
+  const handleGetdataByUserId = async () => {
+    try {
+      const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+      const response = await getEventWithUserId(Gettingtoken.id);
+      console.log(
+        'response---------------+++getbyuserid',
+        response?.data?.data,
+      );
+      setEvents(response?.data?.data);
+      console.log('eventssssss', events);
+      setPageCount(response?.data?.meta?.pageCount);
+      setTake(response?.data?.meta?.take);
+      setHasNextPage(response?.data?.meta.hasNextPage);
+      // if (response?.data?.data) {
+      //   console.log('setEvents', events);
+      //   setEvents(prevEvents => [...prevEvents, ...response.data]);
+      //   setHasNextPage(response.meta.hasNextPage);
+      // }
+      // console.log('response?.data?.upcoming======', response?.data?.upcoming); // Pass user ID if requitransparent
+      // console.log('Events:.....======______====', response?.data?.drafts);
+      // setCard(response?.data?.allEvents);
+      // setUpcomming(response?.data?.upcoming);
+      // console.log('data========', response?.data);
+      setLoading(false);
+    } catch (error) {}
+  };
   useEffect(() => {
     handleGetByUserId();
+    handleGetdataByUserId();
   }, []);
   const {Colors} = useTheme();
   const [showRealApp, setShowRealApp] = useState(false);
@@ -217,12 +253,67 @@ const Home = () => {
     });
   };
 
+  const renderItem = ({item}) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        margin: 5,
+        elevation: 2,
+        height: 120,
+        borderRadius: 2,
+      }}>
+      <Image
+        source={{uri: item.image}}
+        style={{height: 110, marginTop: 6, width: 180, borderRadius: 5}}
+      />
+      <View>
+        <Text
+          style={{
+            color: 'black',
+            fontSize: 12,
+            fontWeight: '500',
+            marginTop: 30,
+          }}>
+          {item.name}
+        </Text>
+        <Text style={{color: 'black', fontSize: 12, fontWeight: '500'}}>
+          {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+        </Text>
+      </View>
+
+      {/* Render other event details as needed */}
+    </View>
+  );
+
+  const handleLoadMore = () => {
+    if (!loading && hasNextPage) {
+      setPage(prevPage => prevPage + 1); // Increment page count
+    }
+  };
+
   return (
     <View style={styles.mainview}>
-      <Search />
+      {/* <Search /> */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#000"
+          value={searchText}
+          onChangeText={text => setSearchText(text)}
+        />
+        <Feather
+          name="search"
+          size={24}
+          color="black"
+          style={styles.searchIcon}
+        />
+      </View>
       <View style={HomeTabStyle.Container}>
         <View style={{marginBottom: 120}}>
           <ScrollView
+            showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
             contentContainerStyle={{
               paddingVertical: 5,
@@ -251,108 +342,81 @@ const Home = () => {
                 </View>
               </View>
 
-              <View>
-                <View style={styles.firstView}>
-                  {/* {card.length == 0 ? (
-                    <SkeletonPlaceholder>
-                      <SkeletonPlaceholder.Item>
-                        <SkeletonPlaceholder.Item
-                          width={'100%'}
-                          height={20}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          marginTop={14}
-                          width={'100%'}
-                          height={47}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          width={'100%'}
-                          height={20}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          marginTop={14}
-                          width={'100%'}
-                          height={47}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          width={'100%'}
-                          height={20}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          marginTop={14}
-                          width={'100%'}
-                          height={47}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          width={'100%'}
-                          height={20}
-                          borderRadius={4}
-                        />
-                        <SkeletonPlaceholder.Item
-                          marginTop={14}
-                          width={'100%'}
-                          height={47}
-                          borderRadius={4}
-                        />
-                      </SkeletonPlaceholder.Item>
-                    </SkeletonPlaceholder>
-                  ) : ( */}
-                  <View style={styles.appintroView}>
-                    <AppIntroSlider
-                      renderItem={_renderItem}
-                      data={card}
-                      showNextButton={false} // Set showNextButton to false
-                      showDoneButton={false}
-                    />
-                  </View>
-                  {/* )} */}
+              <View style={styles.firstView}>
+                <View style={styles.appintroView}>
+                  <AppIntroSlider
+                    renderItem={_renderItem}
+                    data={card}
+                    showNextButton={false} // Set showNextButton to false
+                    showDoneButton={false}
+                  />
                 </View>
-
-                <ScrollView
-                  keyboardShouldPersistTaps="handled"
-                  contentContainerStyle={styles.ScrollViewTestHeight}>
-                  <View style={styles.cardView}>
-                    <BirthdayCard
-                      title="Upcoming Events"
-                      imageUrl={images.cardOneImg}
-                      onPress={() => handleUpcomingEventsPress()}
-                      data={upcomming}
-                    />
-
-                    <BirthdayCard
-                      title="Attended Events"
-                      imageUrl={images.CardTwoimg}
-                      onPress={() => {
-                        navigation.navigate('Attendedevents');
-                      }}
-                    />
-                  </View>
-
-                  <View style={styles.cardView}>
-                    <BirthdayCard
-                      title="Missed Events"
-                      imageUrl={images.CardThreeImg}
-                      onPress={() => {
-                        navigation.navigate('MissedEvent');
-                      }}
-                    />
-                    <BirthdayCard
-                      title="New Events"
-                      imageUrl={images.cardFourimg}
-                      onPress={() => {
-                        navigation.navigate('NewEvents');
-                      }}
-                    />
-                  </View>
-                  <Spacing space={SH(150)} />
-                </ScrollView>
               </View>
+
+              {/* <ScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={styles.ScrollViewTestHeight}> */}
+              <View style={styles.cardView}>
+                <BirthdayCard
+                  title="Upcoming Events"
+                  imageUrl={images.cardOneImg}
+                  onPress={() => handleUpcomingEventsPress()}
+                  data={upcomming}
+                />
+
+                <BirthdayCard
+                  title="Attended Events"
+                  imageUrl={images.CardTwoimg}
+                  onPress={() => {
+                    navigation.navigate('Attendedevents');
+                  }}
+                />
+              </View>
+
+              <View style={styles.cardView}>
+                <BirthdayCard
+                  title="Missed Events"
+                  imageUrl={images.CardThreeImg}
+                  onPress={() => {
+                    navigation.navigate('MissedEvent');
+                  }}
+                />
+                <BirthdayCard
+                  title="New Events"
+                  imageUrl={images.cardFourimg}
+                  onPress={() => {
+                    navigation.navigate('NewEvents');
+                  }}
+                />
+              </View>
+              {/* <Spacing space={SH(150)} /> */}
+
+              {/* Pagination list of data */}
+              <View
+                style={{flex: 1, backgroundColor: 'white', marginBottom: 60}}>
+                <FlatList
+                  data={events}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id.toString()}
+                  onEndReached={handleLoadMore}
+                  onEndReachedThreshold={0.5}
+                  ListFooterComponent={
+                    loading && <ActivityIndicator size="large" />
+                  }
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={handleRefresh}
+                    />
+                  }
+                />
+              </View>
+
+              {/* Pagination buttons */}
+              {/* <View style={styles.paginationContainer}>
+                    {renderPaginationButtons()}
+                  </View> */}
+              {/* </ScrollView> */}
             </View>
           </ScrollView>
         </View>

@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   johnboxtwo: {
     height: SH(30),
     width: SW(180),
-    color: Colors.black_text_color,
+    color: '#293170',
     paddingLeft: SW(10),
     paddingTop: SH(4),
     fontSize: SF(15),
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
   basicMemberStyle: {
     fontSize: 10,
-    color: 'black',
+    color: '#293170',
     paddingLeft: SW(10),
   },
   Jognboxthree: {
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     width: SW(40),
     marginLeft: 'auto',
     paddingTop: SH(15),
-    color: 'black',
+    color: '#293170',
   },
   accountview: {
     height: SH(50),
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   accountstyle: {
     fontSize: SF(17),
-    color: 'black',
+    color: '#293170',
     fontWeight: '700',
     padding: SF(14),
   },
@@ -253,13 +253,13 @@ const styles = StyleSheet.create({
     marginTop: SH(2),
     color: 'black',
     borderBottomWidth: 0.5,
-    borderColor: 'gray',
+    borderColor: '#BD9956',
   },
   LeftIconStyles: {
     width: SW(30),
     height: SH(70),
     paddingTop: SH(26),
-    color: 'black',
+    color: '#293170',
     marginLeft: SW(10),
   },
 

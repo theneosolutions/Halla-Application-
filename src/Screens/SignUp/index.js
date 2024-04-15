@@ -259,6 +259,7 @@ const SignUp = () => {
       <View style={styles.MinViewScreen}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={Style.ScrollViewStyles}>
           <View style={styles.AccountView}>
             <Text style={styles.Loginheader}>{t('SignUp')}</Text>
