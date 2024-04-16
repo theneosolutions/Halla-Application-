@@ -247,7 +247,8 @@ const styles = StyleSheet.create({
   },
   flatListView: {
     padding: 10,
-
+    borderWidth: 1,
+    borderColor: '#BD9956',
     height: SH(180),
     backgroundColor: '#f8f9fc',
     width: '98%',

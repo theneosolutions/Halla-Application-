@@ -84,7 +84,7 @@ export const GetCardInfo = async () => {
   console.log('res-------------', res);
   return res;
 };
-export const getEventWithUserId = async (user,page=1,take=100) => {
+export const getEventWithUserId = async (user, page = 1, take = 100) => {
   const url = `/api/events/byUserId/${user}?order=DESC&page=${page}&take=${take}`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
@@ -172,6 +172,13 @@ export const deleteEventbyId = async id => {
   const url = `/api/events/${id}`;
   // console.log('🚀 ~ deleteeventby iidd', url);
   const res = await api(baseUrl, url, {}, 'DELETE', true, false);
+  // console.log('res.....', res);
+  return res;
+};
+export const getEventCategoryByUserId = async id => {
+  const url = `/api/events/categorize/byUserId/131?order=DESC&page=1&take=10&filter=all`;
+  console.log('url', url);
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
   // console.log('res.....', res);
   return res;
 };

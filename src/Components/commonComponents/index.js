@@ -7,3 +7,4 @@ export {default as MyCalendar} from './Calendar';
 export {default as PhotoPicker} from './PhotoPicker';
 export {default as BirthdayCard} from './BirthdayCard';
 export {default as CountryCodePickerModal} from './CountryCodePickerModal';
+export {default as CountryPickerInput} from './CountryPickerInput';

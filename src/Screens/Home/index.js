@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,8 +12,9 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 // import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { Spacing, Search, Button } from '../../Components';
+import {Spacing, Search, Button} from '../../Components';
 import Style from '../../styles/CommonStyle/Style';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -21,26 +22,28 @@ import {
   getEventCategorywithid,
   getProfileWithUserId,
   getEventWithUserId,
+  getEventCategoryByUserId,
 } from '../../Services/ApiList';
 import moment from 'moment';
 import MessagingStyles from '../../styles/CommonStyle/MessagingStyles';
 import IconG from 'react-native-vector-icons/Ionicons';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   useNavigation,
   useTheme,
   useFocusEffect,
 } from '@react-navigation/native';
 import images from '../../index';
-import { getFromLocalStorage } from '../../Services/Api';
-import { useTranslation } from 'react-i18next';
-import { SF, SW, SH, Colors } from '../../utils';
+import {getFromLocalStorage} from '../../Services/Api';
+import {useTranslation} from 'react-i18next';
+import {SF, SW, SH, Colors} from '../../utils';
 import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import notifee from '@notifee/react-native';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
 const Home = () => {
   const navigation = useNavigation();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [loading, setLoading] = useState(true);
   const [card, setCard] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -50,26 +53,53 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [take, setTake] = useState(10);
+  const [take, setTake] = useState(5);
   const [loadingMore, setLoadingMore] = useState(false);
 
+  const [selectedFilter, setSelectedFilter] = useState('ALL'); // State to store selected filter
+
+  useEffect(() => {
+    handleGetEvents(selectedFilter); // Fetch events initially with 'ALL' filter
+  }, [selectedFilter]);
+  console.log('selectedFilter', selectedFilter);
+  const handleGetEvents = async filter => {
+    try {
+      const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
+      const response = await getEventCategoryByUserId(userInfo.id, {
+        order: 'DESC',
+        page: 1,
+        take: take,
+        filter: filter,
+      });
+      console.log('response---', response?.data?.data);
+      setEvents(response.data);
+      setCurrentPage(response?.meta?.page);
+      setPageCount(response?.meta?.pageCount);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+  const handleBirthdayCardClick = async filter => {
+    setSelectedFilter(filter);
+  };
   const handleRefresh = async () => {
     setRefreshing(true);
     await Promise.all([handleGetByUserId(), handleGetdataByUserId()]);
     setRefreshing(false);
   };
 
-  const handleGetByUserId = async () => {
-    try {
-      const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await getEventCategorywithid(Gettingtoken.id);
-      setCard(response.data.allEvents);
-      setUpcoming(response.data.upcoming);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
+  // const handleGetByUserId = async () => {
+  //   try {
+  //     const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+  //     const response = await getEventCategorywithid(Gettingtoken.id);
+  //     setCard(response.data.allEvents);
+  //     setUpcoming(response.data.upcoming);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching events:', error);
+  //   }
+  // };
 
   const handleGetdataByUserId = async () => {
     try {
@@ -95,7 +125,7 @@ const Home = () => {
       }
     };
     fetchData();
-    handleGetByUserId();
+    // handleGetByUserId();
     handleGetdataByUserId();
   }, []);
 
@@ -104,7 +134,11 @@ const Home = () => {
       setLoadingMore(true);
       try {
         const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-        const response = await getEventWithUserId(Gettingtoken.id, currentPage + 1, take);
+        const response = await getEventWithUserId(
+          Gettingtoken.id,
+          currentPage + 1,
+          take,
+        );
         setEvents(prevEvents => [...prevEvents, ...response.data.data]);
         setCurrentPage(currentPage + 1);
       } catch (error) {
@@ -116,19 +150,20 @@ const Home = () => {
   };
 
   const handleUpcomingEventsPress = () => {
-    navigation.navigate('Upcommingevents', { upcoming: upcoming });
+    navigation.navigate('Upcommingevents', {upcoming: upcoming});
   };
 
-  const _renderItem = ({ item }) => {
+  const _renderItem = ({item}) => {
     if (loading) {
       return <ActivityIndicator size="large" color="#293170" />;
     }
+
     return (
       <View style={styles.slide}>
         <TouchableOpacity
           onPress={() => {
             console.log('🚀 ~ Home ~ test:', item.id);
-            navigation.navigate('Invitationreport', { id: item.id });
+            navigation.navigate('Invitationreport', {id: item.id});
           }}>
           <View style={styles.textrow}>
             <Text style={styles.textStyle}>{item.name}</Text>
@@ -137,16 +172,13 @@ const Home = () => {
             </Text>
           </View>
 
-          <Image source={{ uri: item.image }} style={styles.images} />
+          <Image source={{uri: item.image}} style={styles.images} />
 
           <Text style={styles.drafttext}>All Events</Text>
         </TouchableOpacity>
       </View>
     );
   };
-
-
-
 
   ///////////////////////////////////////
   const DisplayingHome = () => {
@@ -157,39 +189,124 @@ const Home = () => {
     });
   };
 
-  const renderItem = ({ item }) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        margin: 5,
-        elevation: 2,
-        height: 120,
-        borderRadius: 2,
+  const renderItem = ({item}) => (
+    <TouchableOpacity
+      onPress={() => {
+        console.log('🚀 ~ Home ~ test:', item.id);
+        navigation.navigate('Invitationreport', {id: item.id});
       }}>
-      <Image
-        source={{ uri: item.image }}
-        style={{ height: 110, marginTop: 6, width: 180, borderRadius: 5 }}
-      />
-      <View>
-        <Text
+      <View
+        style={{
+          flexDirection: 'column',
+        }}>
+        <View
           style={{
-            color: 'black',
-            fontSize: 12,
-            fontWeight: '500',
-            marginTop: 30,
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+            marginLeft: 12,
+            elevation: 2,
+            shadowColor: '#BD9956',
+            alignItems: 'center',
+            height: 160,
+            width: '94%',
+            borderRadius: 2,
+            borderWidth: 1,
+            borderColor: '#BD9956',
+            // marginRight: 15,
+            margin: 5,
           }}>
-          {item.name}
-        </Text>
-        <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>
-          {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-        </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={{uri: item.image}}
+              style={{height: 110, marginTop: 1, width: 200, borderRadius: 5}}
+            />
+            <View>
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 12,
+                  fontWeight: '500',
+                  marginTop: 30,
+                  // textAlign: 'center',
+                }}>
+                {item.name}
+              </Text>
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 12,
+                  fontWeight: '500',
+                  textAlign: 'center',
+                }}>
+                {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              // backgroundColor: 'green',
+              width: '91%',
+              borderTopWidth: 1,
+              borderColor: '#BD9956',
+              paddingVertical: 1,
+              paddingHorizontal: 2,
+            }}>
+            <View
+              style={{
+                width: 120,
+                flexDirection: 'row',
+                width: 60,
+                justifyContent: 'space-between',
+              }}>
+              <MCIcon
+                size={SF(20)}
+                name="account-multiple-plus"
+                style={styles.boldstyle}
+              />
+              <MCIcon
+                size={SF(20)}
+                name="account-multiple-check-outline"
+                style={styles.boldstyle}
+              />
+              <MCIcon
+                size={SF(20)}
+                name="account-multiple-remove"
+                style={styles.boldstyle}
+              />
+              <MCIcon
+                size={SF(20)}
+                name="android-messages"
+                style={styles.boldstyle}
+              />
+            </View>
+            <TouchableOpacity
+              style={{
+                height: 30,
+                width: 80,
+                backgroundColor: '#BD9956',
+                color: 'white',
+                marginLeft: 'auto',
+                borderRadius: 6,
+              }}>
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  paddingVertical: 2,
+                  fontWeight: '400',
+                }}>
+                Draft
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Render other event details as needed */}
+        </View>
       </View>
-
-      {/* Render other event details as needed */}
-    </View>
+    </TouchableOpacity>
   );
-
 
   return (
     <View style={styles.mainview}>
@@ -210,7 +327,7 @@ const Home = () => {
         />
       </View>
       <View style={HomeTabStyle.Container}>
-        <View style={{ marginBottom: 120 }}>
+        <View style={{marginBottom: 120}}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
@@ -224,7 +341,7 @@ const Home = () => {
                 onRefresh={handleRefresh}
               />
             }>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <Spacing space={SH(10)} />
 
               <View style={styles.maincontainer}>
@@ -241,7 +358,7 @@ const Home = () => {
                 </View>
               </View>
 
-              <View style={styles.firstView}>
+              {/* <View style={styles.firstView}>
                 <View style={styles.appintroView}>
                   <AppIntroSlider
                     renderItem={_renderItem}
@@ -250,49 +367,50 @@ const Home = () => {
                     showDoneButton={false}
                   />
                 </View>
-              </View>
+              </View> */}
 
               {/* <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={styles.ScrollViewTestHeight}> */}
-              <View style={styles.cardView}>
-                <BirthdayCard
-                  title="Upcoming Events"
-                  imageUrl={images.cardOneImg}
-                  onPress={() => handleUpcomingEventsPress()}
-                  data={upcoming}
-                />
-
-                <BirthdayCard
-                  title="Attended Events"
-                  imageUrl={images.CardTwoimg}
-                  onPress={() => {
-                    navigation.navigate('Attendedevents');
-                  }}
-                />
+              <View style={{flex: 1}}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View style={styles.cardRow}>
+                    <BirthdayCard
+                      title="New Events"
+                      imageUrl={images.cardFourimg}
+                      // onPress={() => {
+                      // navigation.navigate('NewEvents');
+                      // }}
+                      onPress={() => handleBirthdayCardClick('ALL')}
+                    />
+                    <BirthdayCard
+                      title="Upcoming Events"
+                      imageUrl={images.cardOneImg}
+                      // onPress={handleUpcomingEventsPress}
+                      data={upcoming}
+                    />
+                    <BirthdayCard
+                      title="Attended Events"
+                      imageUrl={images.CardTwoimg}
+                      onPress={() => {
+                        // navigation.navigate('Attendedevents');
+                      }}
+                    />
+                    <BirthdayCard
+                      title="Missed Events"
+                      imageUrl={images.CardThreeImg}
+                      onPress={() => {
+                        // navigation.navigate('MissedEvent');
+                      }}
+                    />
+                  </View>
+                </ScrollView>
               </View>
 
-              <View style={styles.cardView}>
-                <BirthdayCard
-                  title="Missed Events"
-                  imageUrl={images.CardThreeImg}
-                  onPress={() => {
-                    navigation.navigate('MissedEvent');
-                  }}
-                />
-                <BirthdayCard
-                  title="New Events"
-                  imageUrl={images.cardFourimg}
-                  onPress={() => {
-                    navigation.navigate('NewEvents');
-                  }}
-                />
-              </View>
               {/* <Spacing space={SH(150)} /> */}
             </View>
             {/* Pagination list of data */}
-            <View
-              style={{ flex: 1, backgroundColor: 'white', marginBottom: 60 }}>
+            <View style={{flex: 1, backgroundColor: 'white', marginBottom: 60}}>
               <FlatList
                 data={events}
                 renderItem={renderItem}
@@ -302,7 +420,11 @@ const Home = () => {
                     <TouchableOpacity
                       onPress={loadMoreData}
                       style={styles.scanstyle}>
-                      {loadingMore ? <ActivityIndicator color={'#fff'} /> : <Text style={styles.scanText}>Load more </Text>}
+                      {loadingMore ? (
+                        <ActivityIndicator color={'#fff'} />
+                      ) : (
+                        <Text style={styles.scanText}>Load more </Text>
+                      )}
                     </TouchableOpacity>
                   ) : null
                 }

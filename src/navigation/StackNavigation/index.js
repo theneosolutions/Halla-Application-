@@ -247,24 +247,43 @@ const TabNavigator = ({navigation, route}) => {
       <Tab.Screen
         name="Home"
         component={Home}
-        options={{
+        options={({focused}) => ({
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: '#DEE1F5',
+            backgroundColor: focused ? '#DEE1F5' : '#DEE1F5',
+            zIndex: focused && focusedTab !== 'Home' ? -30 : 0,
           },
-          tabBarIcon: ({focused, color, size}) => (
-            <Icon
-              name={'home'}
-              size={24}
-              color={focused ? '#293170' : 'gray'}
-            />
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 56,
+                width: 56,
+                backgroundColor: focused ? '#293170' : '#DEE1F5',
+                borderRadius: 35,
+                marginVertical: 20,
+              }}>
+              <Icon
+                name={'home'}
+                size={24}
+                color={focused ? 'white' : '#293170'}
+              />
+            </View>
           ),
-          tabBarLabel: ({focused, color, size}) => (
-            <Text style={{color: focused ? '#293170' : 'gray'}}>Home</Text>
-          ),
-        }}
+          tabBarLabel: ({focused}) =>
+            focused ? (
+              <Svg width={maxWidth} height={scale(60)}>
+                <Path fill={'#DEE1F5'} {...{d: returnpathDown}} />
+              </Svg>
+            ) : (
+              <Text>Home</Text>
+            ),
+        })}
       />
+
       <Tab.Screen
         name="messages"
         component={MessageV2}
@@ -274,14 +293,14 @@ const TabNavigator = ({navigation, route}) => {
             margin: 0,
             backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <Icon
               name={'message-square'}
               size={24}
               color={focused ? '#293170' : 'gray'}
             />
           ),
-          tabBarLabel: ({focused, color, size}) => (
+          tabBarLabel: ({focused}) => (
             <Text style={{color: focused ? '#293170' : 'gray'}}>Messages</Text>
           ),
         }}
@@ -296,7 +315,7 @@ const TabNavigator = ({navigation, route}) => {
             margin: 0,
             zIndex: -50,
           },
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <View
               style={{
                 display: 'flex',
@@ -310,7 +329,7 @@ const TabNavigator = ({navigation, route}) => {
               <Icon name={'plus'} size={24} color={'white'} />
             </View>
           ),
-          tabBarLabel: ({focused, color, size}) => (
+          tabBarLabel: ({focused}) => (
             <View>
               <Svg width={maxWidth} height={scale(60)}>
                 <Path fill={'#DEE1F5'} {...{d: returnpathDown}} />
@@ -328,14 +347,14 @@ const TabNavigator = ({navigation, route}) => {
             margin: 0,
             backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <MaterialCommunityIcons
               name={'line-scan'}
               size={24}
               color={focused ? '#293170' : 'gray'}
             />
           ),
-          tabBarLabel: ({focused, color, size}) => (
+          tabBarLabel: ({focused}) => (
             <Text style={{color: focused ? '#293170' : 'gray'}}>ScanList</Text>
           ),
         }}
@@ -350,14 +369,14 @@ const TabNavigator = ({navigation, route}) => {
             margin: 0,
             backgroundColor: '#DEE1F5',
           },
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <FontAwesome
               name={'user-circle-o'}
               size={24}
               color={focused ? '#293170' : 'gray'}
             />
           ),
-          tabBarLabel: ({focused, color, size}) => (
+          tabBarLabel: ({focused}) => (
             <Text style={{color: focused ? '#293170' : 'gray'}}>Profile</Text>
           ),
         }}

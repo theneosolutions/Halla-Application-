@@ -362,27 +362,27 @@ const CreateEvent = ({navigation, route}) => {
               <TouchableOpacity
                 onPress={() => setDatePickerVisible(true)}
                 style={{
-                  width: '90%',
-                  height: SH(58),
-                  borderWidth: 1,
+                  width: '88%',
+                  // height: SH(50),
+                  borderWidth: 1.3,
                   borderColor: '#BD9956',
 
-                  marginLeft: SW(10),
+                  marginLeft: SW(20),
                   // paddingVertical: SH(18),
                   // paddingHorizontal: SW(14),
-                  borderTopLeftRadius: SF(23),
-                  borderBottomRightRadius: SF(20),
+                  borderTopLeftRadius: SF(24),
+                  borderBottomRightRadius: SF(21),
                 }}>
                 <Text
                   style={{
-                    backgroundColor: '#F8F9FC',
+                    backgroundColor: '#ffff',
                     height: 55,
                     paddingLeft: 12,
                     paddingVertical: 16,
-                    borderWidth: 0.3,
+                    // borderWidth: 0.3,
                     borderTopLeftRadius: 20,
                     borderBottomRightRadius: 20,
-                    color: 'grey',
+                    // color: 'grey',
                     fontWeight: '500',
                   }}>
                   {selectedDateTime ? (

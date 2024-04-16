@@ -33,13 +33,6 @@ const Scanstyle = StyleSheet.create({
     // borderTopLeftRadius: SF(20),
     // borderBottomRightRadius: SF(20),
     borderWidth: 0.3,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: Platform.OS === 'ios' ? 0 : 0,
-    // },
-    // shadowOpacity: 0.58,
-    // shadowRadius: Platform.OS === 'ios' ? 0 : 0,
-    // elevation: Platform.OS === 'ios' ? 0 : 0,
   },
   InputSpaceView: {
     width: '98%',

@@ -7,6 +7,11 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
   },
+  cardRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 10, // Adjust as needed
+    marginBottom: 20, // Adjust as needed
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -36,7 +41,7 @@ const styles = StyleSheet.create({
     borderColor: '#BD9956', // Added marginRight for search input
   },
   firstView: {
-    height: '25%',
+    height: '30%',
 
     backgroundColor: '#f8f9fc',
 
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
     borderColor: '#BD9956',
   },
   appintroView: {
-    height: 210,
+    height: 200,
     backgroundColor: 'transparent',
     width: SW(340),
     borderTopLeftRadius: 30,
@@ -81,7 +86,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   drafttext: {
-    marginTop: 5,
+    marginTop: 1,
     color: 'black',
     fontWeight: '700',
     textAlign: 'center',
@@ -134,14 +139,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    padding: 2,
+    backgroundColor: 'red',
+    // padding: 2,
   },
   textStyle: {
-    color: 'black',
+    color: 'red',
     fontSize: 13,
     fontWeight: '700',
     paddingHorizontal: 5,
-    marginLeft: 10,
+    marginLeft: 20,
   },
   textStyleLight: {
     color: 'black',
@@ -210,12 +216,12 @@ const styles = StyleSheet.create({
     height: 40,
     width: SW(300),
     backgroundColor: '#293170',
-    marginHorizontal:'auto',
-    marginVertical:10,
-    alignSelf:"center",
+    marginHorizontal: 'auto',
+    marginVertical: 10,
+    alignSelf: 'center',
     borderTopLeftRadius: 20,
-    justifyContent:'center',
-    alignItems:"center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderBottomRightRadius: 20,
   },
   scanText: {
