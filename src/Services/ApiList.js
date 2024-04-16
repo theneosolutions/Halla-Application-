@@ -84,8 +84,8 @@ export const GetCardInfo = async () => {
   console.log('res-------------', res);
   return res;
 };
-export const getEventWithUserId = async user => {
-  const url = `/api/events/byUserId/${user}?order=DESC&page=1&take=100&filter=monthly`;
+export const getEventWithUserId = async (user,page=1,take=100) => {
+  const url = `/api/events/byUserId/${user}?order=DESC&page=${page}&take=${take}`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
 };

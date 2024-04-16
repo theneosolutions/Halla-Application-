@@ -206,5 +206,24 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   cardView: {flexDirection: 'row', justifyContent: 'center', margin: SF(5)},
+  scanstyle: {
+    height: 40,
+    width: SW(300),
+    backgroundColor: '#293170',
+    marginHorizontal:'auto',
+    marginVertical:10,
+    alignSelf:"center",
+    borderTopLeftRadius: 20,
+    justifyContent:'center',
+    alignItems:"center",
+    borderBottomRightRadius: 20,
+  },
+  scanText: {
+    alignItems: 'center',
+    color: 'white',
+    textAlign: 'center',
+    paddingVertical: 10,
+    fontWeight: '700',
+  },
 });
 export default styles;

@@ -59,8 +59,8 @@ const Login = () => {
   const [TextInputPassword, setTextInputPassword] = useState('');
   // const [callingCode, setCallingCode] = useState('');
   const [selectedOption, setSelectedOption] = useState('email');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('hyhello57@gmail.com');
+  const [password, setPassword] = useState('Hello@1234');
   const [showPassword, setShowPassword] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);

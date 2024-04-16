@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   RefreshControl,
 } from 'react-native';
 // import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {Spacing, Search, Button} from '../../Components';
+import { Spacing, Search, Button } from '../../Components';
 import Style from '../../styles/CommonStyle/Style';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -31,121 +31,95 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import images from '../../index';
-import {getFromLocalStorage} from '../../Services/Api';
-import {useTranslation} from 'react-i18next';
-import {SF, SW, SH, Colors} from '../../utils';
+import { getFromLocalStorage } from '../../Services/Api';
+import { useTranslation } from 'react-i18next';
+import { SF, SW, SH, Colors } from '../../utils';
 import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import notifee from '@notifee/react-native';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
 const Home = () => {
   const navigation = useNavigation();
-  const screenWidth = Dimensions.get('window').width;
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [card, setCard] = useState([]);
-  const [upcomming, setUpcomming] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [wallet, setWallet] = useState(false);
+  const [wallet, setWallet] = useState('');
   const [searchText, setSearchText] = useState('');
-  const [take, setTake] = useState(1);
+  const [events, setEvents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [hasNextPage, setHasNextPage] = useState(false);
-  const [events, setEvents] = useState('');
-  ////////////get api by userid//////////////
+  const [take, setTake] = useState(10);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setRefreshing(true);
-    // Fetch data again
-    handleGetByUserId();
-    handleGetdataByUserId();
+    await Promise.all([handleGetByUserId(), handleGetdataByUserId()]);
     setRefreshing(false);
   };
+
   const handleGetByUserId = async () => {
     try {
       const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
       const response = await getEventCategorywithid(Gettingtoken.id);
-
-      console.log('response---------------+++', response?.data);
-      // console.log('response?.data?.upcoming======', response?.data?.upcoming); // Pass user ID if requitransparent
-      // console.log('Events:.....======______====', response?.data?.drafts);
-      setCard(response?.data?.allEvents);
-      setUpcomming(response?.data?.upcoming);
-      // console.log('data========', response?.data);
+      setCard(response.data.allEvents);
+      setUpcoming(response.data.upcoming);
       setLoading(false);
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
   };
 
   const handleGetdataByUserId = async () => {
     try {
       const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await getEventWithUserId(Gettingtoken.id);
-      console.log(
-        'response---------------+++getbyuserid',
-        response?.data?.data,
-      );
-      setEvents(response?.data?.data);
-      console.log('eventssssss', events);
+      const response = await getEventWithUserId(Gettingtoken.id, 1, take);
+      setEvents(response.data.data);
+      setCurrentPage(response?.data?.meta?.page);
       setPageCount(response?.data?.meta?.pageCount);
-      setTake(response?.data?.meta?.take);
-      setHasNextPage(response?.data?.meta.hasNextPage);
-      // if (response?.data?.data) {
-      //   console.log('setEvents', events);
-      //   setEvents(prevEvents => [...prevEvents, ...response.data]);
-      //   setHasNextPage(response.meta.hasNextPage);
-      // }
-      // console.log('response?.data?.upcoming======', response?.data?.upcoming); // Pass user ID if requitransparent
-      // console.log('Events:.....======______====', response?.data?.drafts);
-      // setCard(response?.data?.allEvents);
-      // setUpcomming(response?.data?.upcoming);
-      // console.log('data========', response?.data);
       setLoading(false);
-    } catch (error) {}
-  };
-  useEffect(() => {
-    handleGetByUserId();
-    handleGetdataByUserId();
-  }, []);
-  const {Colors} = useTheme();
-  const [showRealApp, setShowRealApp] = useState(false);
-  const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-        strokeWidth: 2,
-      },
-    ],
-    legend: ['Rainy Days'],
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
   };
 
   useEffect(() => {
-    const fetchData = async id => {
+    const fetchData = async () => {
       try {
         const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
         const response = await getProfileWithUserId(Gettingtoken.id);
-        console.log(
-          'profilee:.....======---wallet===========',
-          setWallet(response?.data?.wallet),
-        );
-        // setProfileData(response.data);
-        // console.log('setProfileData=====', profileData?.firstName);
-        // setLoading(false);
+        setWallet(response.data.wallet);
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
     };
-
     fetchData();
+    handleGetByUserId();
+    handleGetdataByUserId();
   }, []);
 
-  const handleUpcomingEventsPress = () => {
-    navigation.navigate('Upcommingevents', {upcoming: upcomming});
+  const loadMoreData = async () => {
+    if (!loadingMore && currentPage < pageCount) {
+      setLoadingMore(true);
+      try {
+        const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+        const response = await getEventWithUserId(Gettingtoken.id, currentPage + 1, take);
+        setEvents(prevEvents => [...prevEvents, ...response.data.data]);
+        setCurrentPage(currentPage + 1);
+      } catch (error) {
+        console.error('Error loading more events:', error);
+      } finally {
+        setLoadingMore(false);
+      }
+    }
   };
-  console.log('upcomming', upcomming);
 
-  const _renderItem = ({item}) => {
+  const handleUpcomingEventsPress = () => {
+    navigation.navigate('Upcommingevents', { upcoming: upcoming });
+  };
+
+  const _renderItem = ({ item }) => {
     if (loading) {
       return <ActivityIndicator size="large" color="#293170" />;
     }
@@ -154,7 +128,7 @@ const Home = () => {
         <TouchableOpacity
           onPress={() => {
             console.log('🚀 ~ Home ~ test:', item.id);
-            navigation.navigate('Invitationreport', {id: item.id});
+            navigation.navigate('Invitationreport', { id: item.id });
           }}>
           <View style={styles.textrow}>
             <Text style={styles.textStyle}>{item.name}</Text>
@@ -163,86 +137,16 @@ const Home = () => {
             </Text>
           </View>
 
-          <Image source={{uri: item.image}} style={styles.images} />
+          <Image source={{ uri: item.image }} style={styles.images} />
 
           <Text style={styles.drafttext}>All Events</Text>
         </TouchableOpacity>
       </View>
     );
   };
-  const _renderItemM = ({item}) => {
-    return (
-      <View style={styles.slide}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Image
-          source={item.image5}
-          style={{
-            // height: SH(200),
-            width: SW(400),
-            //borderRadius: 23,
-            borderTopRightRadius: 40,
-            //borderTopRightRadius: 12,
-            marginLeft: 15,
-            borderBottomRightRadius: 30,
-            //borderBottomLeftradius: 20,
-            marginTop: 0,
-            marginBottom: 10,
-          }}
-        />
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.text}>{item.text}</Text>
-        </View>
-      </View>
-    );
-  };
 
-  const _onDone = () => {
-    setShowRealApp(true);
-  };
 
-  const [color, setcolor] = useState('Clean_Text');
-  const [selectedDay, setSelectedDay] = useState(null);
 
-  const renderRecentConversations = () => {
-    return recentconversation.map(item => (
-      <View key={item.id} style={HomeTabStyle.FImgViewHome}>
-        <Image source={item.image} style={HomeTabStyle.flatlistimgHome} />
-        <Text style={HomeTabStyle.textOnehome}>{item.texttwo}</Text>
-      </View>
-    ));
-  };
-  // const onDisplayNotification = async () => {
-  //   try {
-  //     if (Platform.OS === 'android') {
-  //       const permissionStatus = await notifee.requestPermission();
-  //       // console.log('first', permissionStatus);
-  //       // if (permissionStatus !== 'granted') {
-  //       //   Alert.alert('Permission Requitransparent', 'Please allow notifications');
-  //       //   return;
-  //       // }
-  //     }
-  //     // console.log('first', permissionStatus);
-  //     const channelId = await notifee.createChannel({
-  //       id: 'default',
-  //       name: 'Default Channel',
-  //     });
-
-  //     await notifee.displayNotification({
-  //       title: 'welcome to Home screen ',
-  //       body: 'you have successfully login to halla app ',
-  //       android: {
-  //         channelId,
-  //         // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-  //         // pressAction is needed if you want the notification to open the app when pressed
-  //         pressAction: {
-  //           id: 'default',
-  //         },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     console.error('Error displaying notification:', error);
-  //   }
-  // };
 
   ///////////////////////////////////////
   const DisplayingHome = () => {
@@ -253,7 +157,7 @@ const Home = () => {
     });
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <View
       style={{
         flexDirection: 'row',
@@ -264,8 +168,8 @@ const Home = () => {
         borderRadius: 2,
       }}>
       <Image
-        source={{uri: item.image}}
-        style={{height: 110, marginTop: 6, width: 180, borderRadius: 5}}
+        source={{ uri: item.image }}
+        style={{ height: 110, marginTop: 6, width: 180, borderRadius: 5 }}
       />
       <View>
         <Text
@@ -277,7 +181,7 @@ const Home = () => {
           }}>
           {item.name}
         </Text>
-        <Text style={{color: 'black', fontSize: 12, fontWeight: '500'}}>
+        <Text style={{ color: 'black', fontSize: 12, fontWeight: '500' }}>
           {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
         </Text>
       </View>
@@ -286,11 +190,6 @@ const Home = () => {
     </View>
   );
 
-  const handleLoadMore = () => {
-    if (!loading && hasNextPage) {
-      setPage(prevPage => prevPage + 1); // Increment page count
-    }
-  };
 
   return (
     <View style={styles.mainview}>
@@ -311,7 +210,7 @@ const Home = () => {
         />
       </View>
       <View style={HomeTabStyle.Container}>
-        <View style={{marginBottom: 120}}>
+        <View style={{ marginBottom: 120 }}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
@@ -325,7 +224,7 @@ const Home = () => {
                 onRefresh={handleRefresh}
               />
             }>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Spacing space={SH(10)} />
 
               <View style={styles.maincontainer}>
@@ -361,7 +260,7 @@ const Home = () => {
                   title="Upcoming Events"
                   imageUrl={images.cardOneImg}
                   onPress={() => handleUpcomingEventsPress()}
-                  data={upcomming}
+                  data={upcoming}
                 />
 
                 <BirthdayCard
@@ -390,33 +289,24 @@ const Home = () => {
                 />
               </View>
               {/* <Spacing space={SH(150)} /> */}
-
-              {/* Pagination list of data */}
-              <View
-                style={{flex: 1, backgroundColor: 'white', marginBottom: 60}}>
-                <FlatList
-                  data={events}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.id.toString()}
-                  onEndReached={handleLoadMore}
-                  onEndReachedThreshold={0.5}
-                  ListFooterComponent={
-                    loading && <ActivityIndicator size="large" />
-                  }
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={handleRefresh}
-                    />
-                  }
-                />
-              </View>
-
-              {/* Pagination buttons */}
-              {/* <View style={styles.paginationContainer}>
-                    {renderPaginationButtons()}
-                  </View> */}
-              {/* </ScrollView> */}
+            </View>
+            {/* Pagination list of data */}
+            <View
+              style={{ flex: 1, backgroundColor: 'white', marginBottom: 60 }}>
+              <FlatList
+                data={events}
+                renderItem={renderItem}
+                keyExtractor={item => item.id.toString()}
+                ListFooterComponent={
+                  currentPage < pageCount ? (
+                    <TouchableOpacity
+                      onPress={loadMoreData}
+                      style={styles.scanstyle}>
+                      {loadingMore ? <ActivityIndicator color={'#fff'} /> : <Text style={styles.scanText}>Load more </Text>}
+                    </TouchableOpacity>
+                  ) : null
+                }
+              />
             </View>
           </ScrollView>
         </View>
