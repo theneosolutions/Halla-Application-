@@ -20,7 +20,10 @@ const BirthdayCard = ({
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <TouchableOpacity onPress={onPress} style={styles.container}>
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={onPress}
+        style={styles.container}>
         <View style={styles.imageContainer}>
           {imageUrl && <Image source={imageUrl} style={styles.image} />}
         </View>

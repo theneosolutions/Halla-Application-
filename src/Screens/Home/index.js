@@ -53,10 +53,10 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [take, setTake] = useState(5);
+  const [take, setTake] = useState(10);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const [selectedFilter, setSelectedFilter] = useState('ALL'); // State to store selected filter
+  const [selectedFilter, setSelectedFilter] = useState('all'); // State to store selected filter
 
   useEffect(() => {
     handleGetEvents(selectedFilter); // Fetch events initially with 'ALL' filter
@@ -65,16 +65,28 @@ const Home = () => {
   const handleGetEvents = async filter => {
     try {
       const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await getEventCategoryByUserId(userInfo.id, {
-        order: 'DESC',
-        page: 1,
-        take: take,
-        filter: filter,
-      });
-      console.log('response---', response?.data?.data);
-      setEvents(response.data);
-      setCurrentPage(response?.meta?.page);
-      setPageCount(response?.meta?.pageCount);
+      const response = await getEventCategoryByUserId(
+        userInfo.id,
+        pageCount,
+        take,
+        selectedFilter,
+      );
+      console.log('0wwwwwwwwww', userInfo.id, pageCount, take, filter);
+      //    {
+      //   order: 'DESC',
+      //   page: 1,
+      //   take: take,
+      //   filter: filter,
+      // });
+      // console.log('filterResponse================', response);
+      console.log('response---+++', response?.data);
+      setEvents(response?.data?.data);
+      // console.log('events--=-=-', events);
+      setCurrentPage(response?.data?.page);
+      // console.log('setCurrentPage=-=-=', currentPage);
+      setPageCount(response?.data?.meta?.pageCount);
+      setTake(response?.data?.meta?.take);
+      // console.log('setPageCount-----', pageCount);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -82,10 +94,14 @@ const Home = () => {
   };
   const handleBirthdayCardClick = async filter => {
     setSelectedFilter(filter);
+    console.log('setSelectedFilter', selectedFilter);
   };
   const handleRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([handleGetByUserId(), handleGetdataByUserId()]);
+    await Promise.all([
+      // handleGetByUserId(),
+      // handleGetdataByUserId()
+    ]);
     setRefreshing(false);
   };
 
@@ -101,18 +117,18 @@ const Home = () => {
   //   }
   // };
 
-  const handleGetdataByUserId = async () => {
-    try {
-      const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await getEventWithUserId(Gettingtoken.id, 1, take);
-      setEvents(response.data.data);
-      setCurrentPage(response?.data?.meta?.page);
-      setPageCount(response?.data?.meta?.pageCount);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
+  // const handleGetdataByUserId = async () => {
+  //   try {
+  //     const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
+  //     const response = await getEventWithUserId(Gettingtoken.id, 1, take);
+  //     setEvents(response.data.data);
+  //     setCurrentPage(response?.data?.meta?.page);
+  //     setPageCount(response?.data?.meta?.pageCount);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching events:', error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,7 +142,7 @@ const Home = () => {
     };
     fetchData();
     // handleGetByUserId();
-    handleGetdataByUserId();
+    // handleGetdataByUserId();
   }, []);
 
   const loadMoreData = async () => {
@@ -376,32 +392,30 @@ const Home = () => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View style={styles.cardRow}>
                     <BirthdayCard
+                      title="All Events"
+                      imageUrl={images.CardThreeImg}
+                      onPress={() => handleBirthdayCardClick('all')}
+                      // navigation.navigate('MissedEvent');
+                    />
+                    <BirthdayCard
                       title="New Events"
                       imageUrl={images.cardFourimg}
                       // onPress={() => {
                       // navigation.navigate('NewEvents');
                       // }}
-                      onPress={() => handleBirthdayCardClick('ALL')}
+                      onPress={() => handleBirthdayCardClick('new')}
                     />
                     <BirthdayCard
                       title="Upcoming Events"
                       imageUrl={images.cardOneImg}
-                      // onPress={handleUpcomingEventsPress}
+                      onPress={() => handleBirthdayCardClick('upcoming')}
                       data={upcoming}
                     />
                     <BirthdayCard
-                      title="Attended Events"
+                      title="Attende Events"
                       imageUrl={images.CardTwoimg}
-                      onPress={() => {
-                        // navigation.navigate('Attendedevents');
-                      }}
-                    />
-                    <BirthdayCard
-                      title="Missed Events"
-                      imageUrl={images.CardThreeImg}
-                      onPress={() => {
-                        // navigation.navigate('MissedEvent');
-                      }}
+                      onPress={() => handleBirthdayCardClick('attended')}
+                      // navigation.navigate('Attendedevents');
                     />
                   </View>
                 </ScrollView>
