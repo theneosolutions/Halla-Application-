@@ -2,28 +2,27 @@ import {StyleSheet} from 'react-native';
 import {Fonts, SF, SH, SW, Colors} from '../../utils';
 
 const styles = StyleSheet.create({
-    Container: {
-        flex: 1,
-        backgroundColor: 'white',
-        alignItems: 'center',
-      },
-      firstHalfView:{
-      flex: 0.4,
-      backgroundColor: 'white',
-      width: '100%',
-      justifyContent: 'center',
-      alignItem: 'center',
-
-      },
-      forgotstyle:{
-        color: '#293170',
-        fontWeight: '800',
-        justifyContent: 'center',
-        alignItem: 'center',
-        textAlign: 'center',
-        fontSize: SF(20),
-        margin: 20,
-      },
+  Container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  firstHalfView: {
+    flex: 0.4,
+    backgroundColor: 'white',
+    width: '100%',
+    justifyContent: 'center',
+    alignItem: 'center',
+  },
+  forgotstyle: {
+    color: '#293170',
+    fontWeight: '800',
+    justifyContent: 'center',
+    alignItem: 'center',
+    textAlign: 'center',
+    fontSize: SF(20),
+    margin: 20,
+  },
 
   imgstyleS: {
     height: SH(180),
@@ -33,11 +32,11 @@ const styles = StyleSheet.create({
     marginTop: SH(2),
     //marginBottom: SH(10),
   },
-  secondHalfView:{
+  secondHalfView: {
     flex: 0.4,
-  width: '100%',
-  justifyContent: 'center',
-  alignItem: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    alignItem: 'center',
   },
 
   touchablestyleW: {
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
     paddingVertical: 1,
     borderColor: '#293170',
-    borderWidth: 0.6,
+    borderWidth: 1,
     backgroundColor: 'white',
     borderTopLeftRadius: SF(20),
     borderBottomRightRadius: SF(20),
@@ -66,14 +65,12 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
   },
   btntextS: {
-    color: 'black',
+    color: '#BD9956',
     fontSize: SF(12),
     fontWeight: '200',
-    // alignItems: 'center',
+    fontWeight: '400',
     paddingLeft: SW(12),
     paddingVertical: 1,
   },
-  
-      
 });
 export default styles;

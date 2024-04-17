@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     marginLeft: SW(8),
     marginTop: SH(2),
     color: 'black',
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.8,
     borderColor: '#BD9956',
   },
   LeftIconStyles: {
@@ -263,13 +263,13 @@ const styles = StyleSheet.create({
     marginLeft: SW(10),
   },
 
-  Jognboxthree: {
-    height: SH(50),
-    width: SW(40),
-    marginLeft: 'auto',
-    paddingTop: SH(15),
-    color: 'black',
-  },
+  // Jognboxthree: {
+  //   height: SH(50),
+  //   width: SW(40),
+  //   marginLeft: 'auto',
+  //   paddingTop: SH(15),
+  //   color: 'black',
+  // },
   profiledetailboxview: {
     height: SH(40),
     width: SW(340),

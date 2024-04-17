@@ -189,10 +189,20 @@ const CreateEvent = ({navigation, route}) => {
           cardId: 1,
           image: response.data.link,
         };
+        console.log('🚀 ~ handleImageUpload ~ data:', data);
+
         const eventResponse = await createEventInfo(data);
-        console.log('🚀 ~ handleImageUpload ~ eventResponse:', eventResponse);
-        if (eventResponse.data) {
+        console.log(
+          '🚀 ~ handleImageUplo000000000000000000ad ~ eventResponse:',
+          eventResponse,
+        );
+        console.log(
+          '🚀 ~ handleImageUpload ~ eventResponse:',
+          eventResponse?.data,
+        );
+        if (eventResponse) {
           setLoading(false);
+
           navigation.navigate('AllDone');
         }
       }

@@ -15,16 +15,11 @@ const ForgotPass = ({navigation}) => {
   const {t, i18n} = useTranslation();
   return (
     <View style={styles.Container}>
-      <View
-        style={styles.firstHalfView}>
-        <Text
-          style={styles.forgotstyle}>
-          {t('ForgotPassword')}
-        </Text>
+      <View style={styles.firstHalfView}>
+        <Text style={styles.forgotstyle}>{t('ForgotPassword')}</Text>
         <Image source={images.halalogo} style={styles.imgstyleS} />
       </View>
-      <View
-        style={styles.secondHalfView}>
+      <View style={styles.secondHalfView}>
         <TouchableOpacity
           style={styles.touchablestyleW}
           onPress={() => navigation.navigate('Forgotemail')}>
@@ -45,7 +40,7 @@ const ForgotPass = ({navigation}) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={SplashStyl.touchablestyleW}
+          style={styles.touchablestyleW}
           onPress={() => navigation.navigate('Forgotemail')}>
           <View style={{flexDirection: 'row'}}>
             <AntDesign
@@ -56,11 +51,10 @@ const ForgotPass = ({navigation}) => {
             />
             <View style={{flexDirection: 'column'}}>
               <Text style={SplashStyl.btntextB}>{t('SendviaSMS')}</Text>
-              <Text style={SplashStyl.btntextS}>
+              <Text style={styles.btntextS}>
                 Link reset will be send to your email address
               </Text>
             </View>
-     
           </View>
         </TouchableOpacity>
       </View>

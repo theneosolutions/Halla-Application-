@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  ActivityIndicator, Image, Keyboard, Modal, ScrollView, StyleSheet, Text, TextInput,
+  ActivityIndicator,
+  Image,
+  Keyboard,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback, View
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Spacing } from '../../Components';
+import {Spacing} from '../../Components';
 
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
-import { onGoogleButtonPress } from '../../SocailLogins/index';
+import {onGoogleButtonPress} from '../../SocailLogins/index';
 import Login from '../../styles/CommonStyle/LoginScreenStyle';
 import Style from '../../styles/CommonStyle/Style';
 
@@ -18,15 +26,15 @@ import ConfirmationPopup from '../../utils/ConfirmationPopUp';
 //   NotificationServices,
 //   requestUserPermission,
 // } from '../../utils/PushNotification_helper';
-import { useNavigation, useTheme } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
+import {useNavigation, useTheme} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import images from '../../index';
-import { setItemInLocalStorage } from '../../Services/Api';
-import { signInEmail, signInPhone } from '../../Services/ApiList';
+import {setItemInLocalStorage} from '../../Services/Api';
+import {signInEmail, signInPhone} from '../../Services/ApiList';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
-import { SF, SH, SW } from '../../utils';
+import {SF, SH, SW} from '../../utils';
 const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
 // import {setItemInLocalStorage} from '../../Services/Api';
 const GoogleLogin = () => {
@@ -99,7 +107,6 @@ const GoogleLogin = () => {
         // });
       })
       .catch(err => {
-        console.log('errerrrrrr');
         // console.log(
         //   '🚀 ~ file: index.js:74 ~ onGoogleButtonPress ~ err.data:',
         //   err.data,
@@ -174,11 +181,13 @@ const GoogleLogin = () => {
       if (response?.data) {
         // setMessage(response?.data?.message);
         const {accessToken, id, email} = response?.data;
-// new method to set data in async storage
- 
+        // new method to set data in async storage
 
         setItemInLocalStorage('@UserToken', accessToken);
-        setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user));
+        setItemInLocalStorage(
+          '@UserInfo',
+          JSON.stringify(response?.data?.user),
+        );
         // setItemInLocalStorage('@UserId', response?.data?.user?.id);
         setCurrentComponent('login');
 
@@ -464,12 +473,12 @@ const GoogleLogin = () => {
               <Spacing space={10} />
             </>
           )}
-          <View style={{width:150,marginLeft:'auto'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
-            <Text style={Login.ForgetPasswordStyles}>
-              {t('ForgotPassword')}
-            </Text>
-          </TouchableOpacity> 
+          <View style={{width: 150, marginLeft: 'auto'}}>
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
+              <Text style={Login.ForgetPasswordStyles}>
+                {t('ForgotPassword')}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
@@ -495,7 +504,6 @@ const GoogleLogin = () => {
                 {btnLoading ? (
                   <ActivityIndicator color="#FFF" />
                 ) : (
-
                   <Text style={SplashStyl.btntext}>{t('SignIn')}</Text>
                 )}
               </View>
@@ -523,7 +531,13 @@ const GoogleLogin = () => {
               <Image
                 source={images.google}
                 size={SF(27)}
-                style={{height:16,width:16,marginTop:10,marginLeft:10,marginRight:3}}
+                style={{
+                  height: 16,
+                  width: 16,
+                  marginTop: 10,
+                  marginLeft: 10,
+                  marginRight: 3,
+                }}
               />
               <Text style={Login.googletext}>{t('Google')}</Text>
             </View>
@@ -533,7 +547,15 @@ const GoogleLogin = () => {
           <View style={Login.NotRegisterView}>
             <Text style={Login.NotRegisterText}>{t('Notregister')}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-              <Text style={{fontSize:13,fontWeight:'600',color:'black',paddingLeft:2}}>{t('Createaccount')}</Text>
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontWeight: '600',
+                  color: 'black',
+                  paddingLeft: 2,
+                }}>
+                {t('Createaccount')}
+              </Text>
             </TouchableOpacity>
           </View>
           <Modal

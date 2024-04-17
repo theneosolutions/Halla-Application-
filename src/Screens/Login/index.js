@@ -124,7 +124,7 @@ const Login = () => {
         );
       })
       .catch(err => {
-        console.log('errerrrrrr');
+        console.log('🚀 ~ onGoogleLogin ~ err:', err);
       });
   };
 

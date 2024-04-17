@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '80%',
-    paddingHorizontal: 2,
-    paddingVertical: 1,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     margin: SH(3),
     color: 'black',
   },
@@ -93,9 +93,10 @@ const styles = StyleSheet.create({
   LabelEmail: {
     marginRight: 'auto',
     color: 'black',
-    paddingLeft: 50,
+    paddingLeft: 40,
     fontWeight: '500',
-    fontSize: SF(15),
+    fontSize: SF(12),
+    margin: SW(2),
   },
   ContinuTouchView: {
     height: 100,

@@ -231,5 +231,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontWeight: '700',
   },
+  boldstyle: {
+    marginLeft: 5,
+    color: '#293170',
+  },
 });
 export default styles;

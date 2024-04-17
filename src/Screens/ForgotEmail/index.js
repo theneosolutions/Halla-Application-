@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import images from '../../index';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,6 +20,8 @@ import styles from './styles';
 const Forgotemail = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const {t, i18n} = useTranslation();
   useEffect(() => {
     const fetchToken = async () => {
@@ -35,15 +38,30 @@ const Forgotemail = ({navigation}) => {
   }, []);
 
   const forgotpass = async () => {
+    if (!email.trim()) {
+      setError('Please enter your email.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
     const data = {
       email: email,
       token: token,
     };
     console.log('data=======', data);
-    const response = await confirmemail(data);
+    try {
+      const response = await confirmemail(data);
 
-    console.log('confirmemail==========', response);
-    navigation.navigate('OTPVerify', {email});
+      console.log('confirmemail==========', response);
+      navigation.navigate('OTPVerify', {email});
+    } catch (error) {
+      console.error('Error confirming email:', error);
+      setError('An error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,7 +104,11 @@ const Forgotemail = ({navigation}) => {
             <TouchableOpacity
               style={styles.touchablestyle}
               onPress={() => forgotpass()}>
-              <Text style={styles.btntext}>{t('Continue')}</Text>
+              {loading ? (
+                <ActivityIndicator color={'white'} />
+              ) : (
+                <Text style={styles.btntext}>{t('Continue')}</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

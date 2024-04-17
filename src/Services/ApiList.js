@@ -176,17 +176,7 @@ export const deleteEventbyId = async id => {
   return res;
 };
 export const getEventCategoryByUserId = async (id, page, take, filter) => {
-  console.log(
-    'id, page, take, filterid, page, take, filter',
-    id,
-    page,
-    take,
-    filter,
-  );
   const url = `/api/events/categorize/byUserId/${id}?order=DESC&page=${page}&take=${take}&filter=${filter}`;
-
-  console.log('url-----', url);
   const res = await api(baseUrl, url, {}, 'GET', true, false);
-  // console.log('res.....', res);
   return res;
 };

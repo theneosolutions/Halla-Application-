@@ -45,6 +45,10 @@ const AllDone = ({navigation, route}) => {
         </Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('Invitationreport', {eventData})}
+          // onPress={() => {
+          //   console.log('0000000000000000');
+          //   navigation.navigate('Home');
+          // }}
           // onPress={shareEvent}
           style={{
             height: '8%',

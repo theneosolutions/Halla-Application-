@@ -93,7 +93,6 @@ export const onGoogleButtonPress = () => {
           message: 'Already logged in with google',
         });
       } else {
-        console.log('Continue Login');
         const userInfo = await GoogleSignin.signIn();
         console.log('hellllllllleo');
         const accessToken = await GoogleSignin.getTokens();

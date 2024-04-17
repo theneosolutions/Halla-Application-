@@ -666,7 +666,7 @@ const SignUp = () => {
                 </Text>
               ) : null}
 
-              <Spacing space={10} />
+              <Spacing space={30} />
 
               <TouchableOpacity
                 style={{
@@ -674,9 +674,30 @@ const SignUp = () => {
                   backgroundColor: '#293170',
                 }}
                 onPress={handleSignUpPhoneNu}
-                disabled={btnLoading}>
-                {/* disabled={!buttonEnable}> */}
+                disabled={!buttonEnable}>
                 <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingHorizontal: '2%',
+                    justifyContent: 'center',
+                    height: 50,
+                  }}>
+                  {btnLoading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+              {/* <TouchableOpacity
+                style={{
+                  ...styles.touchablestyle,
+                  backgroundColor: '#293170',
+                }}
+                onPress={handleSignUpPhoneNu}
+                disabled={btnLoading}> */}
+              {/* disabled={!buttonEnable}> */}
+              {/* <View
                   style={{
                     flexDirection: 'row',
                     paddingHorizontal: '5%',
@@ -689,7 +710,7 @@ const SignUp = () => {
                     <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
                   )}
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </>
           )}
 

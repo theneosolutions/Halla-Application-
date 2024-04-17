@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { Spacing, Search, Button } from '../../Components';
+import {Spacing, Search, Button} from '../../Components';
 import Style from '../../styles/CommonStyle/Style';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -34,16 +34,16 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 import images from '../../index';
-import { getFromLocalStorage } from '../../Services/Api';
-import { useTranslation } from 'react-i18next';
-import { SF, SW, SH, Colors } from '../../utils';
+import {getFromLocalStorage} from '../../Services/Api';
+import {useTranslation} from 'react-i18next';
+import {SF, SW, SH, Colors} from '../../utils';
 import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import notifee from '@notifee/react-native';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
 const Home = () => {
   const navigation = useNavigation();
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [loading, setLoading] = useState(true);
   const [card, setCard] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -74,7 +74,10 @@ const Home = () => {
         selectedFilter,
       );
 
-      console.log("🚀 ~ handleGetEvents ~ response?.data?.data:", response?.data)
+      console.log(
+        '🚀 ~ handleGetEvents ~ response?.data?.data:',
+        response?.data,
+      );
       setEvents(response?.data?.data || []); // Set events data or empty array if undefined
 
       if (response?.data) {
@@ -89,7 +92,6 @@ const Home = () => {
       console.error('Error fetching events:', error);
     }
   };
-
 
   const handleBirthdayCardClick = async filter => {
     setSelectedFilter(filter);
@@ -118,7 +120,6 @@ const Home = () => {
       }
     };
     fetchData();
-
   }, []);
 
   const loadMoreData = async () => {
@@ -133,7 +134,10 @@ const Home = () => {
           selectedFilter,
         );
 
-        console.log("🚀 ~ handleGetEvents ~ response?.data?.data:", response?.data)
+        console.log(
+          '🚀 ~ handleGetEvents ~ response?.data?.data:',
+          response?.data,
+        );
         setEvents(prevEvents => [...prevEvents, ...response.data.data]); // Set events data or empty array if undefined
 
         if (response?.data) {
@@ -152,127 +156,147 @@ const Home = () => {
     }
   };
 
-
   const DisplayingHome = () => {
     navigation.navigate('CreateEvent', {
       latitude: null,
       longitude: null,
     });
   };
+  const renderItem = ({item}) => {
+    // Check if the item type is "draft", if yes, return null to render nothing
+    if (item.type === 'draft') {
+      return null;
+    }
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        console.log('🚀 ~ Home ~ test:', item.id);
-        navigation.navigate('Invitationreport', { id: item.id });
-      }}>
-      <View
-        style={{
-          flexDirection: 'column',
+    let buttonText;
+    if (selectedFilter === 'all') {
+      buttonText = 'All Events';
+    } else if (selectedFilter === 'new') {
+      buttonText = 'New Events';
+    } else if (selectedFilter === 'upcoming') {
+      buttonText = 'Upcoming Events';
+    } else if (selectedFilter === 'attended') {
+      buttonText = 'Attended Events';
+    } else {
+      buttonText = 'Unknown';
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          console.log('🚀 ~ Home ~ test:', item.id);
+          navigation.navigate('Invitationreport', {id: item.id});
         }}>
         <View
           style={{
             flexDirection: 'column',
-            justifyContent: 'space-evenly',
-            marginLeft: 12,
-            elevation: 2,
-            shadowColor: '#BD9956',
-            alignItems: 'center',
-            height: 160,
-            width: '94%',
-            borderRadius: 2,
-            borderWidth: 1,
-            borderColor: '#BD9956',
-            margin: 5,
           }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Image
-              source={{ uri: item.image }}
-              style={{ height: 110, marginTop: 1, width: 200, borderRadius: 5 }}
-            />
-            <View>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 12,
-                  fontWeight: '500',
-                  marginTop: 30,
-                }}>
-                {item.name}
-              </Text>
-              <Text
-                style={{
-                  color: 'black',
-                  fontSize: 12,
-                  fontWeight: '500',
-                  textAlign: 'center',
-                }}>
-                {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-              </Text>
-            </View>
-          </View>
-
           <View
             style={{
-              flexDirection: 'row',
-              width: '91%',
-              borderTopWidth: 1,
+              flexDirection: 'column',
+              justifyContent: 'space-evenly',
+              marginLeft: 12,
+              elevation: 2,
+              shadowColor: '#BD9956',
+              alignItems: 'center',
+              height: 160,
+              width: '94%',
+              borderRadius: 3,
+              borderWidth: 1,
               borderColor: '#BD9956',
-              paddingVertical: 1,
-              paddingHorizontal: 2,
+              margin: 5,
             }}>
+            <View style={{flexDirection: 'row'}}>
+              <Image
+                source={{uri: item.image}}
+                style={{height: 110, marginTop: 1, width: 200, borderRadius: 5}}
+              />
+              <View>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 12,
+                    fontWeight: '500',
+                    marginTop: 30,
+                  }}>
+                  {item.name}
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 12,
+                    fontWeight: '500',
+                    textAlign: 'center',
+                  }}>
+                  {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                </Text>
+              </View>
+            </View>
+
             <View
               style={{
-                width: 120,
                 flexDirection: 'row',
-                width: 60,
-                justifyContent: 'space-between',
+                width: '91%',
+                borderTopWidth: 1,
+                borderColor: '#BD9956',
+                paddingVertical: 1,
+                paddingHorizontal: 2,
               }}>
-              <MCIcon
-                size={SF(20)}
-                name="account-multiple-plus"
-                style={styles.boldstyle}
-              />
-              <MCIcon
-                size={SF(20)}
-                name="account-multiple-check-outline"
-                style={styles.boldstyle}
-              />
-              <MCIcon
-                size={SF(20)}
-                name="account-multiple-remove"
-                style={styles.boldstyle}
-              />
-              <MCIcon
-                size={SF(20)}
-                name="android-messages"
-                style={styles.boldstyle}
-              />
-            </View>
-            <TouchableOpacity
-              style={{
-                height: 30,
-                width: 80,
-                backgroundColor: '#BD9956',
-                color: 'white',
-                marginLeft: 'auto',
-                borderRadius: 6,
-              }}>
-              <Text
+              <View
                 style={{
-                  color: 'white',
-                  textAlign: 'center',
-                  paddingVertical: 2,
-                  fontWeight: '400',
+                  width: 120,
+                  flexDirection: 'row',
+                  width: 60,
+                  justifyContent: 'space-between',
                 }}>
-                Draft
-              </Text>
-            </TouchableOpacity>
+                <MCIcon
+                  size={SF(20)}
+                  name="account-multiple-plus"
+                  style={styles.boldstyle}
+                />
+                <MCIcon
+                  size={SF(20)}
+                  name="account-multiple-check-outline"
+                  style={styles.boldstyle}
+                />
+                <MCIcon
+                  size={SF(20)}
+                  name="account-multiple-remove"
+                  style={styles.boldstyle}
+                />
+                <MCIcon
+                  size={SF(20)}
+                  name="android-messages"
+                  style={styles.boldstyle}
+                />
+              </View>
+              {/* Render button text based on the selected category */}
+              <TouchableOpacity
+                style={{
+                  height: 35,
+                  width: 120,
+                  backgroundColor: '#BD9956',
+                  color: 'white',
+                  marginLeft: 'auto',
+                  borderRadius: 6,
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    textAlign: 'center',
+                    paddingVertical: 10,
+                    fontWeight: '400',
+                    fontSize: SF(12),
+                  }}>
+                  {buttonText}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.mainview}>
@@ -292,7 +316,7 @@ const Home = () => {
         />
       </View>
       <View style={HomeTabStyle.Container}>
-        <View style={{ marginBottom: 120 }}>
+        <View style={{marginBottom: 120}}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled={true}
@@ -306,7 +330,7 @@ const Home = () => {
                 onRefresh={handleRefresh}
               />
             }>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <Spacing space={SH(10)} />
 
               <View style={styles.maincontainer}>
@@ -323,7 +347,7 @@ const Home = () => {
                 </View>
               </View>
 
-              <View style={{ flex: 1 }}>
+              <View style={{flex: 1}}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View style={styles.cardRow}>
                     <BirthdayCard
@@ -357,10 +381,10 @@ const Home = () => {
               ) : events && events?.length < 1 ? (
                 <TouchableOpacity
                   onPress={() => handleGetEvents(selectedFilter)}
-                  style={{ ...styles.scanstyle, marginTop: 50 }}>
-
-                  <Text style={styles.scanText}>No Events found.Try again </Text>
-
+                  style={{...styles.scanstyle, marginTop: 50}}>
+                  <Text style={styles.scanText}>
+                    No Events found.Try again{' '}
+                  </Text>
                 </TouchableOpacity>
               ) : (
                 <FlatList

@@ -105,7 +105,7 @@ const Profile = props => {
           </View>
 
           {/* //////////////////////////// */}
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+          <View style={styles.mainsecboxViewJohn}>
             <FeIcon
               size={SF(20)}
               name="settings"
@@ -118,7 +118,7 @@ const Profile = props => {
           </View>
 
           {/* //////////////////////////// */}
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+          <View style={styles.mainsecboxViewJohn}>
             <IconMI
               size={SF(20)}
               name="payment"
@@ -175,7 +175,7 @@ const Profile = props => {
           </View>
 
           {/* //////////////////////////// */}
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+          <View style={styles.mainsecboxViewJohn}>
             <FeIcon
               size={SF(20)}
               name="settings"
@@ -188,7 +188,7 @@ const Profile = props => {
           </View>
 
           {/* //////////////////////////// */}
-          <View style={ProfileTabStyle.mainsecboxViewJohn}>
+          <View style={styles.mainsecboxViewJohn}>
             <IconMI
               size={SF(20)}
               name="payment"
