@@ -1,5 +1,5 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SplashScreen from '../../Screens/SplashScreen/index';
 import ChatScreen from '../../Screens/ChatScreen/index';
 import Profile from '../../Screens/Profile/index';
@@ -33,8 +33,8 @@ import {
   Animated,
 } from 'react-native';
 import Invitationreport from '../../Screens/Invitationreport/index';
-import React, {useState} from 'react';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import React, { useState } from 'react';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import CreateEvent from '../../Screens/CreateEvent/index';
 import ForgotPass from '../../Screens/ForgotPass/index';
 import Forgotemail from '../../Screens/ForgotEmail/index';
@@ -48,9 +48,9 @@ import NewEvents from '../../Screens/NewEvents/index';
 import SignUp from '../../Screens/SignUp/index';
 import AddNewGuest from '../../Screens/AddNewGuest/index';
 import AllDone from '../../Screens/AllDone/index';
-import {getPathDown} from './curve';
-import {Svg, Path} from 'react-native-svg';
-import {scale} from 'react-native-size-scaling';
+import { getPathDown } from './curve';
+import { Svg, Path } from 'react-native-svg';
+import { scale } from 'react-native-size-scaling';
 import Login from '../../Screens/Login/index';
 import ConfirmPassword from '../../Screens/ConfirmPassword/index';
 import ScanList from '../../Screens/ScanList/index';
@@ -58,6 +58,7 @@ import AddMembers from '../../Screens/AddMembers/index';
 import TopUp from '../../Screens/TopUp/index';
 import PaymentDetails from '../../Screens/PaymentDetails/index';
 import WebViewScreen from '../../Screens/PaymentDetails/WebViewScreen';
+import { useFocusEffect, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -70,141 +71,141 @@ const AuthStack = () => {
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="RegistrationScreen"
         component={RegistrationScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="ImagePicker"
         component={ImagePicker}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="MapScreen"
         component={MapScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="AddGuest"
         component={AddGuest}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AddMembers"
         component={AddMembers}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="ForgotPass"
         component={ForgotPass}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Forgotemail"
         component={Forgotemail}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="OTPVerify"
         component={OTPVerify}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ResetPass"
         component={ResetPass}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ResetPassDone"
         component={ResetPassDone}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SignUp"
         component={SignUp}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="Invitationreport"
         component={Invitationreport}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AddNewGuest"
         component={AddNewGuest}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* <Stack.Screen name="Notification" Component={Notification} />  */}
       <Stack.Screen
         name="ChatScreen"
         component={ChatScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Home"
         component={TabNavigator}
         //component={Home}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TopUp"
         component={TopUp}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PaymentDetails"
         component={PaymentDetails}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="WebViewScreen"
         component={WebViewScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="Upcommingevents"
         component={Upcommingevents}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Attendedevents"
         component={Attendedevents}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="MissedEvent"
         component={MissedEvent}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="NewEvents"
         component={NewEvents}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="CreateEvent"
         component={CreateEvent}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="EditEvent"
         component={EditEvent}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen name="SettingScreen" component={SettingScreen} />
@@ -216,24 +217,35 @@ const AuthStack = () => {
       <Stack.Screen
         name="Card"
         component={Card}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AllDone"
         component={AllDone}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name="Scan"
         component={Scan}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
 };
-const TabNavigator = ({navigation, route}) => {
+const TabNavigator = ({ navigation, route }) => {
   const [maxWidth, setMaxWidth] = useState(Dimensions.get('window').width);
   const returnpathDown = getPathDown(maxWidth, 60, 50);
+  const [activeTab, setActiveTab] = useState('Home');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const routeName = getFocusedRouteNameFromRoute(route);
+      console.log("🚀 ~ React.useCallback ~ routeName:", routeName)
+      // Set the active tab name
+      setActiveTab(routeName);
+    }, [route])
+  );
+
 
   return (
     <Tab.Navigator
@@ -251,19 +263,44 @@ const TabNavigator = ({navigation, route}) => {
         options={{
           headerShown: false,
           tabBarItemStyle: {
+            top: activeTab == 'Home' ? 4 : 0,
             margin: 0,
-            backgroundColor: '#DEE1F5',
+            backgroundColor: activeTab == 'Home' ? 'transparent' : '#DEE1F5',
+            zIndex: activeTab == 'Home' ? -50 : 0,
           },
-          tabBarIcon: ({focused, color, size}) => (
-            <Icon
-              name={'home'}
-              size={24}
-              color={focused ? '#293170' : 'gray'}
-            />
-          ),
-          tabBarLabel: ({focused, color, size}) => (
-            <Text style={{color: focused ? '#293170' : 'gray'}}>Home</Text>
-          ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return focused ? (
+              <View
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 56,
+                  width: 56,
+                  backgroundColor: '#293170',
+                  borderRadius: 35,
+                }}>
+                <Icon name={'home'} size={24} color={'white'} />
+              </View>
+            ) : (
+              <Icon
+                name={'home'}
+                size={24}
+                color={focused ? '#293170' : 'gray'}
+              />
+            )
+          },
+          tabBarLabel: ({ focused, color, size }) => {
+            return focused ? (
+              <View>
+                <Svg width={maxWidth} height={scale(60)}>
+                  <Path fill={'#DEE1F5'} {...{ d: returnpathDown }} />
+                </Svg>
+              </View>
+            ) : (
+              <Text style={{ color: focused ? '#293170' : 'gray' }}>Home</Text>
+            )
+          },
         }}
       />
       <Tab.Screen
@@ -272,19 +309,44 @@ const TabNavigator = ({navigation, route}) => {
         options={{
           headerShown: false,
           tabBarItemStyle: {
+            top: activeTab == 'messages' ? 4 : 0,
             margin: 0,
-            backgroundColor: '#DEE1F5',
+            backgroundColor: activeTab == 'messages' ? 'transparent' : '#DEE1F5',
+            zIndex: activeTab == 'messages' ? -50 : 0,
           },
-          tabBarIcon: ({focused, color, size}) => (
-            <Icon
-              name={'message-square'}
-              size={24}
-              color={focused ? '#293170' : 'gray'}
-            />
-          ),
-          tabBarLabel: ({focused, color, size}) => (
-            <Text style={{color: focused ? '#293170' : 'gray'}}>Messages</Text>
-          ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return focused ? (
+              <View
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 56,
+                  width: 56,
+                  backgroundColor: '#293170',
+                  borderRadius: 35,
+                }}>
+                <Icon name={'message-square'} size={24} color={'white'} />
+              </View>
+            ) : (
+              <Icon
+                name={'message-square'}
+                size={24}
+                color={focused ? '#293170' : 'gray'}
+              />
+            )
+          },
+          tabBarLabel: ({ focused, color, size }) => {
+            return focused ? (
+              <View>
+                <Svg width={maxWidth} height={scale(60)}>
+                  <Path fill={'#DEE1F5'} {...{ d: returnpathDown }} />
+                </Svg>
+              </View>
+            ) : (
+              <Text style={{ color: focused ? '#293170' : 'gray' }}>Messages</Text>
+            )
+          },
         }}
       />
       <Tab.Screen
@@ -295,29 +357,40 @@ const TabNavigator = ({navigation, route}) => {
           unmountOnBlur: false,
           tabBarItemStyle: {
             margin: 0,
-            zIndex: -50,
+            backgroundColor: activeTab == 'CreateEvent' ? 'transparent' : '#DEE1F5',
+            zIndex: activeTab == 'CreateEvent' ? -50 : 0,
           },
-          tabBarIcon: ({focused, color, size}) => (
-            <View
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 56,
-                width: 56,
-                backgroundColor: '#293170',
-                borderRadius: 35,
-              }}>
-              <Icon name={'plus'} size={24} color={'white'} />
-            </View>
-          ),
-          tabBarLabel: ({focused, color, size}) => (
-            <View>
-              <Svg width={maxWidth} height={scale(60)}>
-                <Path fill={'#DEE1F5'} {...{d: returnpathDown}} />
-              </Svg>
-            </View>
-          ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return focused ? (
+              <View
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 56,
+                  width: 56,
+                  backgroundColor: '#293170',
+                  borderRadius: 35,
+                }}>
+                <Icon name={'plus'} size={24} color={'white'} />
+              </View>
+            ) : <Icon
+              name={'plus'}
+              size={24}
+              color={focused ? '#293170' : 'gray'}
+            />
+          },
+          tabBarLabel: ({ focused, color, size }) => {
+            return focused ? (
+              <View>
+                <Svg width={maxWidth} height={scale(60)}>
+                  <Path fill={'#DEE1F5'} {...{ d: returnpathDown }} />
+                </Svg>
+              </View>
+            ) : (
+              <Text style={{ color: 'gray' }}>Event</Text>
+            )
+          },
         }}
       />
       <Tab.Screen
@@ -327,18 +400,43 @@ const TabNavigator = ({navigation, route}) => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: '#DEE1F5',
+            top: activeTab == 'ScanList' ? 4 : 0,
+            backgroundColor: activeTab == 'ScanList' ? 'transparent' : '#DEE1F5',
+            zIndex: activeTab == 'ScanList' ? -50 : 0,
           },
-          tabBarIcon: ({focused, color, size}) => (
-            <MaterialCommunityIcons
-              name={'line-scan'}
-              size={24}
-              color={focused ? '#293170' : 'gray'}
-            />
-          ),
-          tabBarLabel: ({focused, color, size}) => (
-            <Text style={{color: focused ? '#293170' : 'gray'}}>ScanList</Text>
-          ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return focused ? (
+              <View
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 56,
+                  width: 56,
+                  backgroundColor: '#293170',
+                  borderRadius: 35,
+                }}>
+                <MaterialCommunityIcons name={'line-scan'} size={24} color={'white'} />
+              </View>
+            ) : (
+              <MaterialCommunityIcons
+                name={'line-scan'}
+                size={24}
+                color={focused ? '#293170' : 'gray'}
+              />
+            )
+          },
+          tabBarLabel: ({ focused, color, size }) => {
+            return focused ? (
+              <View>
+                <Svg width={maxWidth} height={scale(60)}>
+                  <Path fill={'#DEE1F5'} {...{ d: returnpathDown }} />
+                </Svg>
+              </View>
+            ) : (
+              <Text style={{ color: focused ? '#293170' : 'gray' }}>ScanList</Text>
+            )
+          },
         }}
       />
       <Tab.Screen
@@ -349,18 +447,43 @@ const TabNavigator = ({navigation, route}) => {
           headerShown: false,
           tabBarItemStyle: {
             margin: 0,
-            backgroundColor: '#DEE1F5',
+            top: activeTab == 'Profile' ? 4 : 0,
+            backgroundColor: activeTab == 'Profile' ? 'transparent' : '#DEE1F5',
+            zIndex: activeTab == 'Profile' ? -50 : 0,
           },
-          tabBarIcon: ({focused, color, size}) => (
-            <FontAwesome
-              name={'user-circle-o'}
-              size={24}
-              color={focused ? '#293170' : 'gray'}
-            />
-          ),
-          tabBarLabel: ({focused, color, size}) => (
-            <Text style={{color: focused ? '#293170' : 'gray'}}>Profile</Text>
-          ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return focused ? (
+              <View
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 56,
+                  width: 56,
+                  backgroundColor: '#293170',
+                  borderRadius: 35,
+                }}>
+                <FontAwesome name={'user-circle-o'} size={24} color={'white'} />
+              </View>
+            ) : (
+              <FontAwesome
+                name={'user-circle-o'}
+                size={24}
+                color={focused ? '#293170' : 'gray'}
+              />
+            )
+          },
+          tabBarLabel: ({ focused, color, size }) => {
+            return focused ? (
+              <View>
+                <Svg width={maxWidth} height={scale(60)}>
+                  <Path fill={'#DEE1F5'} {...{ d: returnpathDown }} />
+                </Svg>
+              </View>
+            ) : (
+              <Text style={{ color: focused ? '#293170' : 'gray' }}>Profile</Text>
+            )
+          },
         }}
       />
     </Tab.Navigator>

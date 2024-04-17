@@ -1,28 +1,40 @@
-import React, {useEffect, useState} from 'react';
-import {View, Image, Text, TouchableOpacity, Animated} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Image, Text, TouchableOpacity, Animated } from 'react-native';
 import images from '../../index';
-import {SH, SF, SW, Colors} from '../../utils';
+import { SH, SF, SW, Colors } from '../../utils';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconF from 'react-native-vector-icons/FontAwesome';
 import Languages from '../../Language/i18n';
-import {useTranslation} from 'react-i18next';
-import {onGoogleButtonPress} from '../../SocailLogins/index';
+import { useTranslation } from 'react-i18next';
+import { onGoogleButtonPress } from '../../SocailLogins/index';
+import {setItemInLocalStorage} from '../../Services/Api';
 import styles from './styles';
-const RegistrationScreen = ({navigation}) => {
-  const {t, i18n} = useTranslation();
+const RegistrationScreen = ({ navigation }) => {
+  const { t, i18n } = useTranslation();
   const [backgroundIndex, setBackgroundIndex] = useState(0);
   const [opacity] = useState(new Animated.Value(1));
 
   const onGoogleLogin = () => {
     onGoogleButtonPress()
       .then(res => {
-        console.log(
-          '🚀 ~ file: index.js:71 ~ onGoogleButtonPress ~ res.data:',
-          res.data,
-        );
+        console.log('Google sign-in successful:', res);
+        if (res?.data) {
+          const {accessToken, id, email} = res?.data;
+          setItemInLocalStorage('@UserToken', accessToken);
+          setItemInLocalStorage(
+            '@UserInfo',
+            JSON.stringify(res?.data?.user),
+          );
+          navigation.navigate('Home');
+          
+        } else if (res?.response?.data?.message) {
+          console.log("🚀 ~ onGoogleLogin ~ res?.response?.data?.message:", res?.response?.data?.message)
+        }
+        // Handle successful response here
       })
       .catch(err => {
-        console.log('🚀 ~ onGoog777777777777777leLogin ~ err:', err);
+        console.log('Error during Google sign-in:', err.message);
+        // Handle error here
       });
   };
 
@@ -59,7 +71,7 @@ const RegistrationScreen = ({navigation}) => {
             </TouchableOpacity>
           </>
         ) : (
-          <View style={{width: '90%'}}>
+          <View style={{ width: '90%' }}>
             <TouchableOpacity
               style={styles.touchablestyleIcon}
               onPress={() => navigation.navigate('Login')}>
@@ -95,7 +107,7 @@ const RegistrationScreen = ({navigation}) => {
           </View>
         )}
       </View>
-      <View style={{flexDirection: 'end'}}>
+      <View style={{ flexDirection: 'end' }}>
         <Image
           source={images.wallbackground}
           size={SF(27)}

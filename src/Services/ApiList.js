@@ -7,6 +7,13 @@ export const signUp = async data => {
   const res = await api(baseUrl, url, data, 'POST', false, false);
   return res;
 };
+
+export const LoginWithGoogle = async idToken => {
+  const url = `/api/auth/google`;
+  const res = await api(baseUrl, url, {idToken:idToken}, 'POST', false, false);
+  return res;
+};
+
 export const signUpPhoneNu = async data => {
   const url = `/api/auth/sign-up/phone`;
 

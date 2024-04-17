@@ -69,49 +69,35 @@ import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {Alert} from 'react-native';
+import { LoginWithGoogle } from '../Services/ApiList';
 
 GoogleSignin.configure({
   webClientId:
-    '703619378540-ts05k6hplkg00mgfmn41jh9fkji8hqug.apps.googleusercontent.com',
-  androidClientId:
-    '703619378540-5djnt1bd7s5df5uhfo636mp2qs8h3tfo.apps.googleusercontent.com',
-  iosClientId:
-    '703619378540-lbcpb16v9o3nbin7v96o8199bcq5og2u.apps.googleusercontent.com',
-  forceCodeForRefreshToken: true,
+    '275688306512-3gl98v3c5gpq2fldt75ubpudgn9dmcd0.apps.googleusercontent.com',
+  offlineAccess: true,
 });
 export const onGoogleButtonPress = () => {
   return new Promise(async (resolve, reject) => {
     try {
       await GoogleSignin.signOut();
-      const isSignedIn = await GoogleSignin.isSignedIn();
-      if (isSignedIn) {
-        Alert.alert('User is already signed in');
-        let info = await GoogleSignin.signInSilently();
-        resolve({
-          data: info,
-          message: 'Already logged in with google',
-        });
-      } else {
-        const userInfo = await GoogleSignin.signIn();
-        console.log('hellllllllleo');
-        const accessToken = await GoogleSignin.getTokens();
-        resolve({
-          data: userInfo,
-          accessToken: accessToken,
-          message: 'Successfully login with google',
-        });
-        console.log('message', message);
-      }
+      // Check if your device supports Google Play
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      // Get the users ID token
+      const { idToken } = await GoogleSignin.signIn();
+      // Make a POST request to your API endpoint with the ID token
+      const response = await LoginWithGoogle(idToken);
+      // Resolve with the response data if successful
+      resolve(response);
     } catch (err) {
+      // Handle different error scenarios
       if (err.code === statusCodes.SIGN_IN_CANCELLED) {
-        reject({data: err, message: 'goopgle sign in cancelled'});
+        reject({ data: err, message: 'Google sign-in cancelled' });
       } else if (err.code === statusCodes.IN_PROGRESS) {
-        reject({data: err, message: 'Error in google login, timeout'});
+        reject({ data: err, message: 'Error in Google login: Timeout' });
       } else if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        reject({data: err, message: 'Error play service not available'});
+        reject({ data: err, message: 'Error: Play services not available' });
       } else {
-        reject({data: err, message: 'Error in google login'});
+        reject({ data: err, message: 'Error in Google login' });
       }
     }
   });
@@ -122,9 +108,9 @@ const onGoogleSignOut = async () => {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      resolve({data: null, message: 'Google user sign out successfully'});
+      resolve({ data: null, message: 'Google user sign out successfully' });
     } catch (error) {
-      reject({data: error, message: 'Google user sign out Failed'});
+      reject({ data: error, message: 'Google user sign out Failed' });
     }
   });
 };
