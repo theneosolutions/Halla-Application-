@@ -650,5 +650,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666666',
   },
+  btntextS: {
+    paddingVertical: 17,
+    paddingHorizontal: 28,
+    color: 'white',
+    padding: SH(30),
+    textAlign: 'center',
+    fontWeight: '600',
+  },
 });
 export default styles;

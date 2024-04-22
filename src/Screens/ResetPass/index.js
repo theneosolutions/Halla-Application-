@@ -60,7 +60,7 @@ const ResetPass = ({navigation, route}) => {
       <View style={styles.Container}>
         <View style={styles.firstHalfView}>
           <Text style={styles.boldText}>{t('ResetPassword')}</Text>
-          <Text style={styles.lightText}>{t('resetpasstext')}</Text>
+          {/* <Text style={styles.lightText}>{t('resetpasstext')}</Text> */}
           <Image source={images.halalogo} style={styles.imgstyle} />
         </View>
 
@@ -69,13 +69,13 @@ const ResetPass = ({navigation, route}) => {
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
                 name="lock"
-                size={SF(20)}
+                size={SF(17)}
                 style={styles.iconStyleeye}
                 color={Colors.black}
               />
               <TextInput
                 style={styles.input}
-                placeholder={t('Enteryourpassword')}
+                placeholder={t('Reset your password')}
                 value={password1}
                 onChangeText={setPassword1}
                 placeholderTextColor={'black'}
@@ -84,7 +84,7 @@ const ResetPass = ({navigation, route}) => {
               <TouchableOpacity onPress={togglePasswordVisibility1}>
                 <FontAwesome
                   name={showPassword1 ? 'eye-slash' : 'eye'}
-                  size={SF(20)}
+                  size={SF(17)}
                   style={styles.iconStyle}
                   color={'#293170'}
                 />
@@ -96,13 +96,13 @@ const ResetPass = ({navigation, route}) => {
             <View style={{flexDirection: 'row'}}>
               <FontAwesome
                 name="lock"
-                size={SF(20)}
+                size={SF(17)}
                 style={styles.iconStyleeye}
                 color={Colors.black}
               />
               <TextInput
                 style={styles.input}
-                placeholder={t('Enteryourpassword')}
+                placeholder={t('Reset your password')}
                 value={password2}
                 onChangeText={setpassword2}
                 placeholderTextColor={'black'}
@@ -111,7 +111,7 @@ const ResetPass = ({navigation, route}) => {
               <TouchableOpacity onPress={togglePasswordVisibility2}>
                 <FontAwesome
                   name={showPassword2 ? 'eye-slash' : 'eye'}
-                  size={SF(20)}
+                  size={SF(17)}
                   style={styles.iconStyle}
                   color={'#293170'}
                 />
@@ -128,13 +128,7 @@ const ResetPass = ({navigation, route}) => {
         </View>
         <View style={styles.ButtonView}>
           <TouchableOpacity
-            style={[
-              styles.button,
-              {
-                backgroundColor:
-                  password1 === password2 ? '#293170' : 'lightgray',
-              },
-            ]}
+            style={[styles.button]}
             disabled={password1 !== password2}
             onPress={resetpassword}>
             <Text style={styles.buttonText}>Continue</Text>

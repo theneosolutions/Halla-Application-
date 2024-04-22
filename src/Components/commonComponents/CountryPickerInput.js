@@ -45,21 +45,22 @@ export const CountryPickerInput = ({
         value={value}
         onChangeText={onChangeText}
         returnKeyType="done"
+        maxLength={12}
       />
     </View>
   );
 };
 const styles = StyleSheet.create({
   countryPickerInputContainer: {
-    width: SW(320),
+    width: SW(310),
     alignSelf: 'center',
     height: SH(60),
     alignItems: 'center',
     flexDirection: 'row',
-    borderWidth: 1,
+    borderWidth: 0.8,
     borderTopLeftRadius: 15,
     borderBottomRightRadius: 15,
-    borderColor: 'black',
+    borderColor: '#293170',
     paddingHorizontal: SW(3),
     marginTop: SH(1.5),
   },

@@ -66,11 +66,11 @@ const ForgotPass = ({navigation}) => {
           justifyContent: 'center',
           alignItem: 'center',
         }}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={SplashStyl.touchablestyle}
           onPress={() => navigation.navigate('OTPVerify')}>
           <Text style={SplashStyl.btntext}>{t('SendRequest')}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

@@ -1,5 +1,7 @@
 import api from './Api';
 const baseUrl = 'https://backend.halla.sa';
+// const baseUrl = 'https://d319-110-39-18-42.ngrok-free.app';
+
 export const GOOGLE_MAPS_APIKEY = 'AIzaSyAFZBGvY2p25djzXAG-0p3vq42SzGw9WxQ';
 
 export const signUp = async data => {
@@ -10,7 +12,8 @@ export const signUp = async data => {
 
 export const LoginWithGoogle = async idToken => {
   const url = `/api/auth/google`;
-  const res = await api(baseUrl, url, {idToken:idToken}, 'POST', false, false);
+  console.log('url=======', url);
+  const res = await api(baseUrl, url, {idToken: idToken}, 'POST', false, false);
   return res;
 };
 

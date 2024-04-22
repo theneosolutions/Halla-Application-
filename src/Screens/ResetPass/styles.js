@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
   //   container: {
   //     padding: 20,
   //   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
+  // input: {
+  //   height: 40,
+  //   borderColor: 'gray',
+  //   borderWidth: 1,
+  //   marginBottom: 10,
+  //   paddingHorizontal: 8,
+  // },
   error: {
     color: 'red',
     marginBottom: 20,
@@ -60,14 +60,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   button: {
-    backgroundColor: 'blue',
-    paddingVertical: 14,
+    backgroundColor: '#293170',
+    paddingVertical: SH(14),
     borderTopLeftRadius: SF(15),
     borderBottomRightRadius: SF(15),
-    width: '80%',
+    width: '85%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 40,
+    alignSelf: 'center',
   },
   buttonText: {
     color: 'white',
@@ -281,12 +281,12 @@ const styles = StyleSheet.create({
   },
 
   touchablestyleW: {
-    width: '80%',
+    width: '85%',
     alignSelf: 'center',
     marginVertical: 5,
 
     paddingHorizontal: 3,
-    paddingVertical: 4,
+    paddingVertical: 7,
     //width: SW(280),
     //justifyContent: 'center',
     //alignContent: 'center',
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
   },
 
   iconStyle: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 10,
     // padding: SH(30),
   },

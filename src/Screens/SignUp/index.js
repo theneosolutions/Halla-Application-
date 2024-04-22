@@ -61,7 +61,9 @@ const SignUp = () => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
   const [countryNameCode, setCountryNameCode] = useState('GB');
-  const [callingCode, setCallingCode] = useState('+44'); // State to track focused input
+  const [callingCode, setCallingCode] = useState('+996');
+
+  // State to track focused input
   const onCountrySelect = value => {
     setCountryNameCode(value.cca2);
     setCallingCode('+' + value.callingCode);
@@ -215,38 +217,48 @@ const SignUp = () => {
     setBtnLoading(true);
     try {
       const data = {
-        callingCode: selectedCountry ? selectedCountry.phone : '',
+        callingCode: callingCode,
         phoneNumber: phoneNumber,
       };
-
+      // console.log('data', data);
       // Call the API
       const response = await signUpPhoneNu(data);
-      console.log('response................phonumberrr', response);
-      setButtonEnable(true);
-      if (data.callingCode && data.phoneNumber) {
-        setUserData(response?.data);
-        if (response?.data) {
-          setMessage('User Registered Successfully');
-          setCurrentComponent('signUpSuccess');
-          navigation.navigate('Login');
-        } else if (response?.response?.data?.message) {
-          setMessage(response?.response?.data?.message);
-          setBtnLoading(false);
-          setLoading(false);
-          setCurrentComponent('signUpError');
-          setButtonEnable(false);
-        }
-      } else {
-        setButtonEnable(false);
-        // Handle incomplete fields
-        Alert.alert(
-          'Please complete both calling code and phone number fields',
-        );
+      // console.log('🚀 ~ handleSignUpPhoneNu ~ response:--------', response);
+      // console.log('resssss', response?.data?.message);
+      if (response?.data?.message) {
+        // setMessage(response?.data?.message);
+        // setCurrentComponent('signUpSuccess');
+        navigation.navigate('SignUpOTP', {phoneNumber, callingCode});
       }
+
+      // console.log(
+      //   'response................phonumberrr',
+      //   response?.data?.message,
+      // );
+      // setButtonEnable(true);
+      // if (data.callingCode && data.phoneNumber) {
+      setUserData(response?.data);
+      // console.log('ssss', setUserData);
+      // if (response?.data) {
+      // setMessage('User Registered Successfully');
+
+      // navigation.navigate('SignUpOTP', {phoneNumber, callingCode});
+      // } else if (response?.response?.data?.message) {
+      // setMessage(response?.response?.data?.message);
+      // setBtnLoading(false);
+      // setLoading(false);
+      // setCurrentComponent('signUpError');
+      // setButtonEnable(false);
+      // }
+      // }
+      //  else {
+      //   setButtonEnable(false);
+      //   // Handle incomplete fields
+      // }
     } catch (error) {
       console.error('SignUp Error:', error);
-      setMessage('An error occurred during sign up');
-      setCurrentComponent('signUpError');
+      // setMessage('An error occurred during sign up');
+      // setCurrentComponent('signUpError');
       setButtonEnable(false);
       // setLoading(false);
       // setBtnLoading(true);
@@ -648,7 +660,7 @@ const SignUp = () => {
                 onChangeText={setPhoneNumber}
               />
 
-              {submitted && phoneNumber == '' ? (
+              {/* {submitted && phoneNumber == '' ? (
                 <Text
                   style={{
                     color: 'red',
@@ -662,55 +674,22 @@ const SignUp = () => {
                     color: 'red',
                     fontSize: SF(12),
                   }}>
-                  must contain 10 numbers
+                  must contain 11 numbers
                 </Text>
-              ) : null}
+              ) : null} */}
 
               <Spacing space={30} />
 
+              {/* ////////// */}
+
               <TouchableOpacity
-                style={{
-                  ...styles.touchablestyle,
-                  backgroundColor: '#293170',
-                }}
-                onPress={handleSignUpPhoneNu}
-                disabled={!buttonEnable}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingHorizontal: '2%',
-                    justifyContent: 'center',
-                    height: 50,
-                  }}>
-                  {btnLoading ? (
-                    <ActivityIndicator color="white" />
-                  ) : (
-                    <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
-                  )}
-                </View>
+                style={styles.touchablestyle}
+                onPress={() => {
+                  handleSignUpPhoneNu();
+                }}>
+                <Text style={styles.btntextS}>{t('SignUp')}</Text>
               </TouchableOpacity>
-              {/* <TouchableOpacity
-                style={{
-                  ...styles.touchablestyle,
-                  backgroundColor: '#293170',
-                }}
-                onPress={handleSignUpPhoneNu}
-                disabled={btnLoading}> */}
-              {/* disabled={!buttonEnable}> */}
-              {/* <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingHorizontal: '5%',
-                    justifyContent: 'center',
-                    height: 50,
-                  }}>
-                  {btnLoading ? (
-                    <ActivityIndicator color="white" />
-                  ) : (
-                    <Text style={SplashStyl.btntext}>{t('SignUp')}</Text>
-                  )}
-                </View>
-              </TouchableOpacity> */}
+              {/* /////// */}
             </>
           )}
 
@@ -765,32 +744,5 @@ const SignUp = () => {
     </TouchableWithoutFeedback>
   );
 };
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 20,
-//   },
-//   input: {
-//     height: 90,
-//     borderColor: 'gray',
-//     width: '90%',
-//     borderWidth: 1,
-//     marginBottom: 10,
-//     // paddingHorizontal: 15,
-//   },
-//   error: {
-//     color: 'red',
-//     marginBottom: 10,
-//     fontSize: 12,
-//   },
-//   button: {
-//     backgroundColor: 'blue',
-//     padding: 10,
-//     borderRadius: 5,
-//     alignItems: 'center',
-//   },
-//   buttonText: {
-//     color: 'white',
-//     fontSize: 18,
-//   },
-// });
+
 export default SignUp;

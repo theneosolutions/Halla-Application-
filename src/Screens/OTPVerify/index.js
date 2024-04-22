@@ -36,7 +36,7 @@ const OTPVerify = ({navigation, route}) => {
     <View style={styles.Container}>
       <View style={styles.firstView}>
         <Text style={styles.boldstyle}>{t('EnterYourCode')}</Text>
-        <Text style={styles.lighttext}>{t('OTPtext')}</Text>
+        {/* <Text style={styles.lighttext}>{t('OTPtext')}</Text> */}
         <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
 
@@ -57,7 +57,7 @@ const OTPVerify = ({navigation, route}) => {
           ))}
         </View>
 
-        <Text style={styles.codeExpireStyle}>{t('CodeExpires')}</Text>
+        {/* <Text style={styles.codeExpireStyle}>{t('CodeExpires')}</Text> */}
 
         <View style={styles.dontreviewopt}>
           <Text style={styles.lighttextgray}>{t('dontrecevidOTP')}</Text>

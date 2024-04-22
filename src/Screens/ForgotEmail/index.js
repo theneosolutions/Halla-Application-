@@ -70,10 +70,10 @@ const Forgotemail = ({navigation}) => {
         <View style={styles.Container}>
           <View style={styles.firstHalfView}>
             <Text style={styles.forgotstyle}> Forgot Password</Text>
-            <Text style={styles.textStyle}>
+            {/* <Text style={styles.textStyle}>
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do
               amet sintvelit officia consequat duis enim velit mollit.
-            </Text>
+            </Text> */}
             <View style={styles.imageview}>
               <Image source={images.halalogo} style={styles.imgstyle} />
             </View>
@@ -85,7 +85,7 @@ const Forgotemail = ({navigation}) => {
             onPress={() => navigation.navigate('Forgotemail')}>
             <View style={{flexDirection: 'row'}}>
               <FontC
-                size={SF(25)}
+                size={SF(17)}
                 name="email-outline"
                 style={styles.Iconstyle}
                 color={'#293170'}

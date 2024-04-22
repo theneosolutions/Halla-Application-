@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     //marginBottom: SH(10),
   },
   secondHalfView: {
-    flex: 0.4,
+    flex: 0.5,
     width: '100%',
     justifyContent: 'center',
     alignItem: 'center',
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: SF(20),
     borderBottomRightRadius: SF(20),
+    marginTop: 20,
   },
   Iconstyle: {
     //marginTop: SH(2),

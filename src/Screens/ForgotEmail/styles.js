@@ -39,6 +39,14 @@ const styles = StyleSheet.create({
 
     //marginBottom: SH(10),
   },
+  imgstyleS: {
+    height: SH(190),
+    width: SW(90),
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: SH(2),
+    //marginBottom: SH(10),
+  },
   textStyle: {
     width: 280,
     textAlign: 'center',
@@ -61,12 +69,12 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   touchablestyleW: {
-    width: '80%',
+    width: '85%',
     alignSelf: 'center',
     marginVertical: 1,
 
     paddingHorizontal: 3,
-    paddingVertical: 3,
+    paddingVertical: 7,
 
     borderColor: '#293170',
     borderWidth: 0.6,
@@ -78,7 +86,8 @@ const styles = StyleSheet.create({
   touchablestyle: {
     paddingVertical: 14,
     alignSelf: 'center',
-    width: SW(300),
+    width: '85%',
+
     marginTop: 20,
     backgroundColor: Colors.darkBlue,
     borderTopLeftRadius: SF(20),

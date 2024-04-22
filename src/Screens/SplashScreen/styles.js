@@ -10,14 +10,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 'auto',
-    borderRadius: 10,
+    borderRadius: 15,
     height: '4%',
     paddingHorizontal: 2,
-    backgroundColor: '#f2f2f4',
+    // backgroundColor: '#f2f2f4',
     shadowOpacity: 20,
     capacity: 20,
     margin: '2%',
-    marginTop: '8%',
+    marginTop: '5%',
+    borderWidth: 1,
   },
 
   SwitchImage: {

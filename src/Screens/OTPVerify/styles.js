@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   lighttext: {
     color: 'gray',
-    fontWeight: '500',
+    fontWeight: '400',
     justifyContent: 'center',
     alignItem: 'center',
     textAlign: 'center',
@@ -49,17 +49,18 @@ const styles = StyleSheet.create({
   dontreviewopt: {
     flexDirection: 'row',
     textAlign: 'center',
-    width: SW(220),
+    width: SW(210),
   },
   lighttextgray: {
-    marginLeft: SF(90),
+    marginLeft: SF(60),
+    textAlign: 'center',
     marginTop: SH(14),
     color: 'gray',
-    fontWeight: '600',
+    fontWeight: '500',
   },
   underlinetext: {
     textDecorationLine: 'underline',
-    color: 'blue',
+    color: '#293170',
     alignItem: 'center',
     textAlign: 'center',
     marginLeft: SF(5),

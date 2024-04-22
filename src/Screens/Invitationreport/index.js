@@ -405,8 +405,9 @@ const Invitationreport = ({route, ...props}) => {
                     <TouchableOpacity
                       style={styles.option}
                       onPress={() => {
+                        handleSendInvites();
                         // Implement share functionality
-                        toggleShareOptions();
+                        // toggleShareOptions();
                       }}>
                       <Text style={styles.optionText}>Invite</Text>
                     </TouchableOpacity>
@@ -817,9 +818,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     position: 'absolute',
     right: 0,
-    marginRight: 40,
+    marginRight: 45,
     marginTop: 5,
-    width: SW(50),
+    width: SW(60),
     // marginLeft: 20,
     // marginTop: 2,
     elevation: 10,

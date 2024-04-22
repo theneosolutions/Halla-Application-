@@ -96,6 +96,7 @@ const ScanList = () => {
                     borderBottomWidth: 0.5,
                     borderColor: 'black',
                     marginTop: 30,
+                    alignSelf: 'center',
                   }}
                 />
                 <TouchableOpacity
@@ -232,8 +233,9 @@ const styles = StyleSheet.create({
     height: 40,
     width: SW(300),
     backgroundColor: '#293170',
-    marginLeft: 'auto',
-    marginRight: 5,
+    alignSelf: 'center',
+    // marginLeft: 'auto',
+    // marginRight: 5,
     marginTop: 5,
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 20,

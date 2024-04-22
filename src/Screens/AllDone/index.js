@@ -44,7 +44,7 @@ const AllDone = ({navigation, route}) => {
           All Done
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Invitationreport', {eventData})}
+          onPress={() => navigation.navigate('Home', {eventData})}
           // onPress={() => {
           //   console.log('0000000000000000');
           //   navigation.navigate('Home');

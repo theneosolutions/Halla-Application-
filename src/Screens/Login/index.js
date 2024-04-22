@@ -59,8 +59,8 @@ const Login = () => {
   const [TextInputPassword, setTextInputPassword] = useState('');
   // const [callingCode, setCallingCode] = useState('');
   const [selectedOption, setSelectedOption] = useState('email');
-  const [email, setEmail] = useState('hyhello58@gmail.com');
-  const [password, setPassword] = useState('Hello@1234');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
@@ -71,7 +71,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null); // State to track focused input
 
-  const [callingCode, setCallingCode] = useState('+44');
+  const [callingCode, setCallingCode] = useState('+996');
   const [showCountryPickerModal, setShowCountryPickerModal] = useState('');
   const [countryNameCode, setCountryNameCode] = useState('GB');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -90,7 +90,7 @@ const Login = () => {
     if (selectedOption === 'email') {
       setButtonEnable(email !== '' && password !== '');
     } else if (selectedOption === 'phoneNumber') {
-      setButtonEnable(phoneNumber.length === 10);
+      setButtonEnable(phoneNumber.length === 12);
     }
   }, [email, password, phoneNumber]);
 
@@ -106,35 +106,12 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      // do something with userInfo
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const onGoogleLogin = () => {
-    onGoogleButtonPress()
-      .then(res => {
-        console.log(
-          '🚀 ~ file: index.js:71 ~ onGoogleButtonPress ~ res.data:',
-          res.data,
-        );
-      })
-      .catch(err => {
-        console.log('🚀 ~ onGoogleLogin ~ err:', err);
-      });
-  };
-
   const signInWithEmailAndPassword = async () => {
     setBtnLoading(true);
     const data = {
       emailOrUsername: email.trim(),
       password: password,
     };
-
     try {
       const response = await signInEmail(data);
       console.log('Response from signInEmail..: ', response);
@@ -145,7 +122,6 @@ const Login = () => {
           '@UserInfo',
           JSON.stringify(response?.data?.user),
         );
-
         setCurrentComponent('login');
         setLoading(false);
         navigation.navigate('Home');
@@ -202,51 +178,59 @@ const Login = () => {
     </TouchableOpacity>
   );
 
-  const handleSignUpPhoneNu = async () => {
+  const handleSignInPhoneNu = async () => {
     setBtnLoading(true);
     try {
       const data = {
-        callingCode: selectedCountry ? selectedCountry.phone : '',
+        callingCode: callingCode,
         phoneNumber: phoneNumber,
       };
-
-      if (data.callingCode && data.phoneNumber) {
-        // Call the API
-        const response = await signInPhone(data);
-        console.log('response.........rrrrrrrQQQ', response);
-        if (response) {
-          setCurrentComponent('signUpSuccess');
-          navigation.navigate('Home');
-        }
-        // setUserData(response?.data);
-        if (response?.data) {
-          setMessage('User Registered Successfully');
-          setCurrentComponent('signUpSuccess');
-          navigation.navigate('Home');
-        } else if (response?.response?.data?.message) {
-          setMessage(response?.response?.data?.message);
-          setCurrentComponent('signUpError');
-          setBtnLoading(false);
-          setLoading(false);
-        }
-      } else {
-        setBtnLoading(false);
-        setLoading(false);
-        // Handle incomplete fields
-        Alert.alert(
-          'Please complete both calling code and phone number fields',
-        );
-        // setBtnLoading(false);
-        // setLoading(false);
+      console.log('data----', data);
+      const response = await signInPhone(data);
+      console.log('response', response);
+      if (response) {
+        // setMessage(response?.data?.message);
+        // setCurrentComponent('signUpSuccess');
+        navigation.navigate('SignInOTP', {phoneNumber, callingCode});
       }
+      setBtnLoading(false);
+      // if (data.callingCode && data.phoneNumber) {
+      //   // Call the API
+
+      //   console.log('response.........rrrrrrrQQQ', response);
+      //   if (response) {
+      //     setCurrentComponent('signUpSuccess');
+      //     navigation.navigate('Home');
+      //   }
+      //   // setUserData(response?.data);
+      //   if (response?.data) {
+      //     setMessage('User Registered Successfully');
+      //     setCurrentComponent('signUpSuccess');
+      //     navigation.navigate('Home');
+      //   } else if (response?.response?.data?.message) {
+      //     setMessage(response?.response?.data?.message);
+      //     setCurrentComponent('signUpError');
+      //     setBtnLoading(false);
+      //     setLoading(false);
+      //   }
+      // } else {
+      //   setBtnLoading(false);
+      //   setLoading(false);
+      //   // Handle incomplete fields
+      //   Alert.alert(
+      //     'Please complete both calling code and phone number fields',
+      //   );
+      //   // setBtnLoading(false);
+      //   // setLoading(false);
+      // }
     } catch (error) {
       console.error('SignUp Error:', error);
       setMessage('An error occurred during sign up');
       setCurrentComponent('signUpError');
       setLoading(false);
-      setBtnLoading(true);
+      setBtnLoading(false);
     }
-    setBtnLoading(true);
+    // setBtnLoading(true);
     setLoading(false);
   };
   return (
@@ -330,7 +314,7 @@ const Login = () => {
                 <View style={styles.emailView}>
                   <MatIcon
                     name="mail"
-                    size={SF(20)}
+                    size={SF(17)}
                     style={styles.iconStylemail}
                   />
                   <TextInput
@@ -371,7 +355,7 @@ const Login = () => {
                   }}>
                   <FontAwesome
                     name="lock"
-                    size={SF(20)}
+                    size={SF(17)}
                     style={styles.iconStyleeye}
                   />
                   <TextInput
@@ -390,7 +374,7 @@ const Login = () => {
                   <TouchableOpacity onPress={togglePasswordVisibility}>
                     <FontAwesome
                       name={showPassword ? 'eye-slash' : 'eye'}
-                      size={SF(20)}
+                      size={SF(17)}
                       color={'#293170'}
                       style={styles.iconStyle}
                     />
@@ -426,8 +410,7 @@ const Login = () => {
                   </View>
                 </TouchableOpacity>
               ) : (
-                <View
-                  style={{...styles.touchablestyle, backgroundColor: '#ccc'}}>
+                <View style={{...styles.touchablestyle}}>
                   <View style={styles.signInView}>
                     <Text style={styles.btntext}>{t('SignIn')}</Text>
                   </View>
@@ -516,32 +499,34 @@ const Login = () => {
                 </Text>
               ) : null}
               <Spacing space={30} />
-              {buttonEnable ? (
-                <TouchableOpacity
-                  style={styles.touchablestyle}
-                  onPress={handleSignUpPhoneNu}>
-                  <View style={styles.signInView}>
-                    {btnLoading ? (
+              {/* {buttonEnable ? ( */}
+              <TouchableOpacity
+                style={styles.touchablestyle}
+                onPress={() => {
+                  handleSignInPhoneNu();
+                }}>
+                <View style={styles.signInView}>
+                  {/* {btnLoading ? (
                       <ActivityIndicator color="#FFF" />
-                    ) : (
-                      <Text style={styles.btntext}>{t('SignIn')}</Text>
-                    )}
-                  </View>
-                </TouchableOpacity>
-              ) : (
+                    ) : ( */}
+                  <Text style={styles.btntext}>{t('SignIn')}</Text>
+                  {/* )} */}
+                </View>
+              </TouchableOpacity>
+              {/* ) : (
                 <View
-                  style={{...styles.touchablestyle, backgroundColor: '#ccc'}}>
+                  style={{...styles.touchablestyle}}>
                   <View style={styles.signInView}>
                     <Text style={styles.btntext}>{t('SignIn')}</Text>
                   </View>
                 </View>
-              )}
+              )} */}
             </>
           )}
 
           <Spacing space={SH(30)} />
 
-          <TouchableOpacity onPress={onGoogleLogin}>
+          {/* <TouchableOpacity onPress={onGoogleLogin}>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <Text style={styles.Signuptext}>{t('signupwith')}</Text>
               <Image
@@ -552,7 +537,7 @@ const Login = () => {
               <Text style={styles.googletext}>{t('Google')}</Text>
             </View>
             <Spacing space={SH(20)} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <View style={styles.NotRegisterView}>
             <Text style={styles.NotRegisterText}>{t('Notregister')}</Text>

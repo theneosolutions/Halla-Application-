@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconStylemail: {
-    paddingTop: 12,
+    paddingTop: 10,
     marginLeft: 10,
     color: '#293170',
   },
@@ -189,8 +189,8 @@ const styles = StyleSheet.create({
   },
   btntext: {
     color: 'white',
-    fontSize: SF(16),
-    fontWeight: '700',
+    fontSize: SF(15),
+    fontWeight: '500',
   },
   touchablestyle: {
     alignSelf: 'center',

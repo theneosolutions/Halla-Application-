@@ -185,18 +185,18 @@ const ContactScreen = ({route, ...props}) => {
         user: Number(userInfo?.id),
         contacts: selectedContacts,
       };
-      console.log('Selected Contacts:', contacts);
-      console.log('requestData', requestData);
-      const {id: eventId} = route.params;
-      console.log('...........', eventId);
+      // console.log('Selected Contacts:', contacts);
+      // console.log('requestData', requestData);
+      // const {id} = route.params;
+      // console.log('...........', id);
 
-      const response = await addGuestById(eventId, requestData);
+      const response = await addGuestById(id, requestData);
       console.log('selectedContactIds', response.apiSuccess);
 
       if (response.apiSuccess) {
         console.log('Data:', response.data);
         console.log('Selected Contact IDs:', selectedContacts);
-        navigation.navigate('AddNewGuest', {id: eventId});
+        navigation.navigate('AddNewGuest', {id});
       } else {
         alert('Failed to add contact. Please try again.');
       }
@@ -285,7 +285,7 @@ const ContactScreen = ({route, ...props}) => {
       <TouchableOpacity
         style={styles.continueButton}
         onPress={() =>
-          navigation.navigate('AddMembers', {selectedContacts, event: id})
+          navigation.navigate('AddMembers', {selectedContacts, id})
         }
         // disabled={guestloading || selectedContacts.length === 0} // Disable the button when loading
       >

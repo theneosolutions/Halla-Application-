@@ -37,8 +37,9 @@ const AddNewGuest = props => {
     setLoading(true);
     try {
       // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await guestListByID(id); // Pass user ID if requitransparent
-      console.log('Events:.....======+++++', response?.data?.data);
+      const response = await guestListByID(id);
+      console.log('response++++++++======addnewguest', response); // Pass user ID if requitransparent
+      // console.log('Events:.....======+++++', response?.data?.data);
 
       const guestsData = response?.data?.data;
       console.log('guestsData............', guestsData);
