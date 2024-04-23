@@ -211,7 +211,7 @@ const EditDetail = props => {
           {/* ///////////////////////williomjonson//////////////// */}
           <View style={styles.profiledetailboxview}>
             <Text style={styles.boxone}>{username ?? '-'}</Text>
-            <Text style={styles.boxtwo}></Text>
+            {/* <Text style={styles.boxtwo}></Text> */}
             <TouchableOpacity onPress={() => handleEditField('firstName')}>
               <Icon size={SF(30)} name="pencil" style={styles.boxthree} />
             </TouchableOpacity>
@@ -259,7 +259,7 @@ const EditDetail = props => {
                   style={{
                     borderRadius: 10,
                     backgroundColor: 'white',
-                    elevation: 5,
+                    // elevation: 5,
                     marginHorizontal: SW(2),
                     paddingVertical: SW(2),
                     alignSelf: 'center',
@@ -292,7 +292,7 @@ const EditDetail = props => {
                   animationType="slide"
                   transparent={true}
                   visible={modalVisible}
-                  style={{height: 40}}
+                  style={{height: 140}}
                   onRequestClose={() => setModalVisible(false)}>
                   <View style={styles.modalCallingCodeContainer}>
                     <FlatList

@@ -179,6 +179,16 @@ const Login = () => {
   );
 
   const handleSignInPhoneNu = async () => {
+    if (!phoneNumber || !callingCode) {
+      // Show Snackbar if phone number or calling code field is empty
+      Snackbar.show({
+        text: 'Phone number is required',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#293170',
+      });
+      return false;
+    }
+
     setBtnLoading(true);
     try {
       const data = {
@@ -194,6 +204,7 @@ const Login = () => {
         navigation.navigate('SignInOTP', {phoneNumber, callingCode});
       }
       setBtnLoading(false);
+
       // if (data.callingCode && data.phoneNumber) {
       //   // Call the API
 

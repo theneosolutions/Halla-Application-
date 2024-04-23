@@ -183,23 +183,23 @@ const styles = StyleSheet.create({
     margin: SH(8),
   },
   boxone: {
-    width: SW(150),
+    width: SW(295),
     // paddingTop: SH(1),
     fontSize: SF(17),
     color: Colors.black_text_color,
-    fontWeight: '500',
+    fontWeight: '400',
     // backgroundColor: 'red',
   },
   boxoneP: {
     width: SW(135),
   },
-  boxtwo: {
-    height: SH(50),
-    width: SW(150),
-    // backgroundColor: 'purple',
-    paddingLeft: SW(80),
-    paddingTop: SH(10),
-  },
+  // boxtwo: {
+  //   height: SH(50),
+  //   width: SW(1),
+  //   backgroundColor: 'purple',
+  //   paddingLeft: SW(80),
+  //   paddingTop: SH(10),
+  // },
   ActiveButton: {
     height: SH(40),
     width: SW(90),

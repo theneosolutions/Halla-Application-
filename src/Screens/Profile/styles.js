@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     paddingLeft: SW(10),
     paddingTop: SH(4),
     fontSize: SF(15),
-    fontWeight: '300',
+    fontWeight: '400',
   },
   basicMemberStyle: {
     fontSize: 10,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     marginTop: SH(2),
     color: 'black',
     borderBottomWidth: 0.8,
-    borderColor: '#BD9956',
+    borderColor: '#293170',
   },
   LeftIconStyles: {
     width: SW(30),
@@ -294,6 +294,25 @@ const styles = StyleSheet.create({
     color: Colors.ghost_white_color,
     fontSize: SF(17),
     textAlign: 'center',
+  },
+  boldtext: {
+    color: 'black',
+    padding: SH(10),
+    fontWeight: '600',
+    fontSize: SF(15),
+  },
+  btnstyle: {
+    backgroundColor: '#293170',
+    height: SH(50),
+    width: SW(220),
+    margin: SH(10),
+    borderRadius: SF(10),
+  },
+  btntext: {
+    color: 'white',
+    textAlign: 'center',
+    padding: SH(15),
+    fontWeight: '500',
   },
 });
 export default styles;

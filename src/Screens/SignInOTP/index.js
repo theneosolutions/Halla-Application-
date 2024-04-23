@@ -16,7 +16,7 @@ import {useTranslation} from 'react-i18next';
 import Languages from '../../Language/i18n';
 import {otpVerify, otpResend} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
-
+import Snackbar from 'react-native-snackbar';
 const SignInOTP = ({navigation, route}) => {
   const {phoneNumber, callingCode} = route.params;
   console.log('emailOOOO', phoneNumber);
@@ -58,7 +58,9 @@ const SignInOTP = ({navigation, route}) => {
     }
     setBtnLoading(false);
   };
-
+  const isOTPComplete = () => {
+    return otp.every(digit => digit !== ''); // Check if every digit of OTP is filled
+  };
   return (
     <View style={styles.Container}>
       <View style={styles.firstView}>
@@ -93,7 +95,20 @@ const SignInOTP = ({navigation, route}) => {
       </View>
       <TouchableOpacity
         style={styles.touchablestyle}
-        onPress={handleSignUpOTPVerify}
+        // onPress={handleSignUpOTPVerify}
+        onPress={() => {
+          if (isOTPComplete()) {
+            // If OTP is completely filled, hit the API
+            handleSignUpOTPVerify();
+          } else {
+            // If OTP is not complete, show a Snackbar
+            Snackbar.show({
+              text: 'Fill the OTP first',
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: '#293170',
+            });
+          }
+        }}
         disabled={btnLoading}>
         <Text style={styles.btntext}>
           {btnLoading ? 'Verifying...' : t('Continue')}

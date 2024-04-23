@@ -16,7 +16,7 @@ import Languages from '../../Language/i18n';
 import {otpVerify, otpResend} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
 import styles from './styles';
-
+import Snackbar from 'react-native-snackbar';
 const OTPVerify = ({navigation, route}) => {
   const {email} = route.params;
   console.log('emailOOOO', email);
@@ -31,6 +31,9 @@ const OTPVerify = ({navigation, route}) => {
     if (index < otp.length - 1 && value) {
       otpTextInputRefs.current[index + 1].focus();
     }
+  };
+  const isOTPComplete = () => {
+    return otp.every(digit => digit !== '');
   };
   return (
     <View style={styles.Container}>
@@ -68,7 +71,18 @@ const OTPVerify = ({navigation, route}) => {
       </View>
       <TouchableOpacity
         style={styles.touchablestyle}
-        onPress={() => navigation.navigate('ResetPass', {email, otp})}>
+        onPress={() => {
+          if (isOTPComplete()) {
+            navigation.navigate('ResetPass', {email, otp});
+          } else {
+            // Show error message if OTP is not complete
+            Snackbar.show({
+              text: 'Fill the otp first',
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: '#293170',
+            });
+          }
+        }}>
         <Text style={styles.btntext}>{t('Continue')}</Text>
       </TouchableOpacity>
     </View>

@@ -56,7 +56,7 @@ const Home = () => {
   const [take, setTake] = useState(10);
   const [loadingMore, setLoadingMore] = useState(false);
   const [dataNotFound, setDataNotFound] = useState(false); // State for showing data not found message
-
+  const [username, setUsername] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all'); // State to store selected filter
 
   useEffect(() => {
@@ -114,6 +114,8 @@ const Home = () => {
       try {
         const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
         const response = await getProfileWithUserId(Gettingtoken.id);
+        // console.log('response++++++++++', response?.data?.username);
+        setUsername(response?.data?.username);
         setWallet(response.data.wallet);
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -216,8 +218,9 @@ const Home = () => {
                   style={{
                     color: 'black',
                     fontSize: 12,
-                    fontWeight: '500',
+                    fontWeight: '600',
                     marginTop: 30,
+                    margin: 3,
                   }}>
                   {item.name}
                 </Text>
@@ -225,8 +228,9 @@ const Home = () => {
                   style={{
                     color: 'black',
                     fontSize: 12,
-                    fontWeight: '500',
+                    fontWeight: '400',
                     textAlign: 'center',
+                    margin: 3,
                   }}>
                   {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                 </Text>
@@ -238,7 +242,7 @@ const Home = () => {
                 flexDirection: 'row',
                 width: '91%',
                 borderTopWidth: 1,
-                borderColor: '#BD9956',
+                borderColor: '#293170',
                 paddingVertical: 1,
                 paddingHorizontal: 2,
               }}>
@@ -248,26 +252,28 @@ const Home = () => {
                   flexDirection: 'row',
                   width: 60,
                   justifyContent: 'space-between',
+                  paddingVertical: 5,
+                  paddingHorizontal: 2,
                 }}>
                 <MCIcon
                   size={SF(20)}
                   name="account-multiple-plus"
-                  style={styles.boldstyle}
+                  style={{...styles.boldstyle, marginRight: 3}}
                 />
                 <MCIcon
                   size={SF(20)}
                   name="account-multiple-check-outline"
-                  style={styles.boldstyle}
+                  style={{...styles.boldstyle, marginRight: 3}}
                 />
                 <MCIcon
                   size={SF(20)}
                   name="account-multiple-remove"
-                  style={styles.boldstyle}
+                  style={{...styles.boldstyle, marginRight: 3}}
                 />
                 <MCIcon
                   size={SF(20)}
                   name="android-messages"
-                  style={styles.boldstyle}
+                  style={{...styles.boldstyle, marginRight: 3}}
                 />
               </View>
               {/* Render button text based on the selected category */}
@@ -275,10 +281,11 @@ const Home = () => {
                 style={{
                   height: 35,
                   width: 120,
-                  backgroundColor: '#BD9956',
+                  backgroundColor: '#293170',
                   color: 'white',
                   marginLeft: 'auto',
-                  borderRadius: 6,
+                  borderTopLeftRadius: SF(10),
+                  borderBottomRightRadius: SF(10),
                 }}>
                 <Text
                   style={{
@@ -300,6 +307,16 @@ const Home = () => {
 
   return (
     <View style={styles.mainview}>
+      {/* <Text
+        style={{
+          fontSize: SF(13),
+          color: 'black',
+          marginLeft: SW(18),
+          marginTop: SH(5),
+          fontWeight: '500',
+        }}>
+        WELCOME {username}
+      </Text> */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -352,23 +369,23 @@ const Home = () => {
                   <View style={styles.cardRow}>
                     <BirthdayCard
                       title="All Events"
-                      imageUrl={images.CardThreeImg}
+                      imageUrl={images.Newimgone}
                       onPress={() => handleBirthdayCardClick('all')}
                     />
                     <BirthdayCard
                       title="New Events"
-                      imageUrl={images.cardFourimg}
+                      imageUrl={images.allimgtwo}
                       onPress={() => handleBirthdayCardClick('new')}
                     />
                     <BirthdayCard
                       title="Upcoming Events"
-                      imageUrl={images.cardOneImg}
+                      imageUrl={images.Upcommingimgthree}
                       onPress={() => handleBirthdayCardClick('upcoming')}
                       data={upcoming}
                     />
                     <BirthdayCard
                       title="Attende Events"
-                      imageUrl={images.CardTwoimg}
+                      imageUrl={images.Attendedimagefour}
                       onPress={() => handleBirthdayCardClick('attended')}
                     />
                   </View>
@@ -380,11 +397,13 @@ const Home = () => {
                 <ActivityIndicator size="large" color="#000" />
               ) : events && events?.length < 1 ? (
                 <TouchableOpacity
-                  onPress={() => handleGetEvents(selectedFilter)}
-                  style={{...styles.scanstyle, marginTop: 50}}>
-                  <Text style={styles.scanText}>
-                    No Events found.Try again{' '}
-                  </Text>
+                  onPress={() => handleGetEvents(selectedFilter)}>
+                  {/* // style={{...styles.scanstyle, marginTop: 50}}> */}
+                  <Image
+                    style={{...styles.scanstyle, marginTop: 50}}
+                    source={images.emptyerror}
+                  />
+                  {/* <Text style={styles.scanText}>No Events found.Try again</Text> */}
                 </TouchableOpacity>
               ) : (
                 <FlatList

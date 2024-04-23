@@ -16,7 +16,7 @@ import {useTranslation} from 'react-i18next';
 import {resetpass} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import styles from './styles';
-
+import Snackbar from 'react-native-snackbar';
 const ResetPass = ({navigation, route}) => {
   const {email, otp} = route.params;
 
@@ -39,6 +39,15 @@ const ResetPass = ({navigation, route}) => {
   const {t, i18n} = useTranslation();
 
   const resetpassword = async () => {
+    if (!password1 || !password2) {
+      // Show Snackbar if phone number or calling code field is empty
+      Snackbar.show({
+        text: 'email is required',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#293170',
+      });
+      return false;
+    }
     const token = await getFromLocalStorage('@UserToken');
     const data = {
       password1: password1,
@@ -83,7 +92,7 @@ const ResetPass = ({navigation, route}) => {
               />
               <TouchableOpacity onPress={togglePasswordVisibility1}>
                 <FontAwesome
-                  name={showPassword1 ? 'eye-slash' : 'eye'}
+                  name={showPassword1 ? 'eye' : 'eye-slash'}
                   size={SF(17)}
                   style={styles.iconStyle}
                   color={'#293170'}
@@ -110,7 +119,7 @@ const ResetPass = ({navigation, route}) => {
               />
               <TouchableOpacity onPress={togglePasswordVisibility2}>
                 <FontAwesome
-                  name={showPassword2 ? 'eye-slash' : 'eye'}
+                  name={showPassword2 ? 'eye' : 'eye-slash'}
                   size={SF(17)}
                   style={styles.iconStyle}
                   color={'#293170'}
@@ -129,7 +138,7 @@ const ResetPass = ({navigation, route}) => {
         <View style={styles.ButtonView}>
           <TouchableOpacity
             style={[styles.button]}
-            disabled={password1 !== password2}
+            // disabled={password1 !== password2}
             onPress={resetpassword}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>

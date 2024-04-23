@@ -16,7 +16,7 @@ import {useTranslation} from 'react-i18next';
 import Languages from '../../Language/i18n';
 import {otpVerify, otpResend} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
-
+import Snackbar from 'react-native-snackbar';
 const SignUpOTP = ({navigation, route}) => {
   const {phoneNumber, callingCode} = route.params;
   console.log('emailOOOO', phoneNumber);
@@ -36,10 +36,11 @@ const SignUpOTP = ({navigation, route}) => {
 
   const handleSignUpOTPVerify = async () => {
     setBtnLoading(true);
+
     try {
       const otpValue = parseInt(otp.join(''));
-      console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', typeof otpValue);
-      console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', otpValue);
+      // console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', typeof otpValue);
+      // console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', otpValue);
       const data = {
         callingCode: callingCode,
         phoneNumber: phoneNumber,
@@ -47,8 +48,11 @@ const SignUpOTP = ({navigation, route}) => {
       };
       console.log('🚀 ~ handleSignUpOTPVerify ~ data:', data);
       const response = await otpVerify(data);
+      console.log('response.......', response?.data?.data);
+      if (response?.data) {
+        navigation.navigate('Login');
+      }
       navigation.navigate('Login');
-      console.log('response', response);
 
       // Show error message
       // Alert.alert('Error', response.data.message.join(', '));
@@ -58,7 +62,9 @@ const SignUpOTP = ({navigation, route}) => {
     }
     setBtnLoading(false);
   };
-
+  const isOTPComplete = () => {
+    return otp.every(digit => digit !== ''); // Check if every digit of OTP is filled
+  };
   return (
     <View style={styles.Container}>
       <View style={styles.firstView}>
@@ -85,7 +91,7 @@ const SignUpOTP = ({navigation, route}) => {
         </View>
 
         <View style={styles.dontreviewopt}>
-          <Text style={styles.lighttextgray}>{t('dontrecevidOTP')}</Text>
+          <Text style={styles.lighttextgray}>{t('Didn`t recevid OTP')}</Text>
           <TouchableOpacity>
             <Text style={styles.underlinetext}>{t('ResendOTP')}</Text>
           </TouchableOpacity>
@@ -93,10 +99,24 @@ const SignUpOTP = ({navigation, route}) => {
       </View>
       <TouchableOpacity
         style={styles.touchablestyle}
-        onPress={handleSignUpOTPVerify}
+        // onPress={handleSignUpOTPVerify}
+        onPress={() => {
+          if (isOTPComplete()) {
+            // If OTP is completely filled, hit the API
+            handleSignUpOTPVerify();
+          } else {
+            // If OTP is not complete, show a Snackbar
+            Snackbar.show({
+              text: 'Fill the OTP first',
+              duration: Snackbar.LENGTH_SHORT,
+              backgroundColor: '#293170',
+            });
+          }
+        }}
         disabled={btnLoading}>
         <Text style={styles.btntext}>
-          {btnLoading ? 'Verifying...' : t('Continue')}
+          Continue
+          {/* {btnLoading ? 'Verifying...' : t('Continue')} */}
         </Text>
       </TouchableOpacity>
     </View>
@@ -151,20 +171,24 @@ const styles = StyleSheet.create({
   dontreviewopt: {
     flexDirection: 'row',
     textAlign: 'center',
-    width: SW(220),
+    // width: SW(210),
   },
   lighttextgray: {
-    marginLeft: SF(90),
+    textAlign: 'center',
+    alignSelf: 'center',
+
+    marginLeft: SF(60),
     marginTop: SH(14),
-    color: 'gray',
-    fontWeight: '600',
+    color: 'black',
+    fontWeight: '500',
   },
   underlinetext: {
     textDecorationLine: 'underline',
-    color: 'blue',
+    padding: 10,
+    color: '#293170',
     alignItem: 'center',
     textAlign: 'center',
-    marginLeft: SF(5),
+    // marginLeft: SF(5),
     marginTop: SH(14),
   },
   textinputstyle: {

@@ -17,6 +17,7 @@ import {confirmemail} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
+import Snackbar from 'react-native-snackbar';
 const Forgotemail = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
@@ -38,6 +39,16 @@ const Forgotemail = ({navigation}) => {
   }, []);
 
   const forgotpass = async () => {
+    if (!email) {
+      // Show Snackbar if phone number or calling code field is empty
+      Snackbar.show({
+        text: 'email is required',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#293170',
+      });
+      return false;
+    }
+    // setBtnLoading(true);
     if (!email.trim()) {
       setError('Please enter your email.');
       return;

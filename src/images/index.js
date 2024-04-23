@@ -93,6 +93,11 @@ const images = {
   CardTwoimg: require('./CardTwoimg.png'),
   CardThreeImg: require('./CardThreeImg.png'),
   cardFourimg: require('./cardFourimg.png'),
+  Newimgone: require('./Newimgone.png'),
+  Upcommingimgthree: require('./Upcommingimgthree.png'),
+  Attendedimagefour: require('./Attendedimagefour.png'),
+  emptyerror: require('./emptyerror.png'),
+  allimgtwo: require('./allimgtwo.png'),
   // MaskGroupPlus: require('./MaskGroupPlus.png'),
 
   // SearchImg: require('./Search.png'),

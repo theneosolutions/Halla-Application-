@@ -271,7 +271,7 @@ const CreateEvent = ({navigation, route}) => {
                     <Image
                       source={{uri: imagePath.path}}
                       style={{
-                        height: SH(200),
+                        height: SH(190),
                         width: '100%',
                         backgroundColor: 'lightGray',
                         borderTopLeftRadius: SF(20),
@@ -375,7 +375,7 @@ const CreateEvent = ({navigation, route}) => {
                   width: '88%',
                   // height: SH(50),
                   borderWidth: 1.3,
-                  borderColor: '#BD9956',
+                  borderColor: '#293170',
 
                   marginLeft: SW(20),
                   // paddingVertical: SH(18),
@@ -392,7 +392,7 @@ const CreateEvent = ({navigation, route}) => {
                     // borderWidth: 0.3,
                     borderTopLeftRadius: 20,
                     borderBottomRightRadius: 20,
-                    // color: 'grey',
+                    color: 'black',
                     fontWeight: '500',
                   }}>
                   {selectedDateTime ? (
@@ -434,7 +434,7 @@ const CreateEvent = ({navigation, route}) => {
                     margin: SW(15),
                     borderTopLeftRadius: SF(30),
                     borderBottomRightRadius: SF(30),
-                    borderColor: '#BD9956',
+                    borderColor: '#293170',
                     borderWidth: 1,
                   }}>
                   <Image
@@ -474,10 +474,11 @@ const CreateEvent = ({navigation, route}) => {
                   justifyContent: 'center',
                   alignItem: 'center',
                   height: SH(55),
-                  justifyContent: 'space-evenly',
-                  margin: 10,
+
+                  // justifyContent: 'space-evenly',
+                  // margin: 10,
                 }}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   // onPress={handleConfirm}
                   // disabled={loading}
                   // onPress={() => navigation.navigate('Card')}
@@ -492,19 +493,19 @@ const CreateEvent = ({navigation, route}) => {
                   {/* {loading ? (
                     <ActivityIndicator size="small" color="#ffffff" />
                   ) : ( */}
-                  <Text
-                    style={{
-                      alignItems: 'center',
-                      color: 'white',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      paddingVertical: 10,
-                      fontWeight: '700',
-                    }}>
-                    Save as Draft
-                  </Text>
-                  {/* )} */}
-                </TouchableOpacity>
+                {/* <Text
+                  style={{
+                    alignItems: 'center',
+                    color: 'white',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    paddingVertical: 10,
+                    fontWeight: '700',
+                  }}>
+                  Save as Draft
+                </Text> */}
+                {/* )} */}
+                {/* </TouchableOpacity> */}
 
                 <TouchableOpacity
                   onPress={handleConfirm}
@@ -512,11 +513,14 @@ const CreateEvent = ({navigation, route}) => {
                   // onPress={() => navigation.navigate('Card')}
                   style={{
                     height: '100%',
-                    width: SW(130),
+                    width: SW(340),
                     backgroundColor: '#293170',
                     borderTopLeftRadius: 20,
                     borderBottomRightRadius: 20,
                     paddingVertical: 8,
+                    justifyContent: 'center',
+                    alignItem: 'center',
+                    alignSelf: 'center',
                   }}>
                   {loading ? (
                     <ActivityIndicator size="small" color="#ffffff" />
@@ -571,12 +575,12 @@ const styles = StyleSheet.create({
   imagepickerview: {
     height: SH(200),
     width: '90%',
-    borderColor: '#BD9956',
+    borderColor: '#293170',
     justifyContent: 'center',
     alignContent: 'center',
     margin: SW(20),
-    borderTopLeftRadius: SF(30),
-    borderBottomRightRadius: SF(30),
+    borderTopLeftRadius: SF(20),
+    borderBottomRightRadius: SF(20),
     borderWidth: 1,
   },
   InputStyles: {
@@ -588,7 +592,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     marginLeft: SH(18),
-    borderColor: '#BD9956',
+    borderColor: '#293170',
     // borderTopLeftRadius: SF(20),
     // borderBottomRightRadius: SF(20),
     borderWidth: 1,

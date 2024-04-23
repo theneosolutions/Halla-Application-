@@ -2,24 +2,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+  Linking,
+} from 'react-native';
 import IconF from 'react-native-vector-icons/AntDesign';
 import IconE from 'react-native-vector-icons/Entypo';
 import FeIcon from 'react-native-vector-icons/Feather';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconMI from 'react-native-vector-icons/MaterialIcons';
+
 import {getFromLocalStorage} from '../../Services/Api';
 import {getProfileWithUserId} from '../../Services/ApiList';
 import ProfileTabStyle from '../../styles/CommonStyle/ProfileTabStyles';
 import {SF} from '../../utils';
+import {SH} from '../../utils/dimensions';
 import styles from './styles';
 const Profile = props => {
   const {Colors} = useTheme();
   const navigation = useNavigation();
   const {t} = useTranslation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
+
   useEffect(() => {
     const fetchData = async id => {
       try {
@@ -36,13 +47,29 @@ const Profile = props => {
 
     fetchData();
   }, []);
+  const handleSignOut = () => {
+    setModalVisible(true);
+  };
+
+  const handleDeleteAccount = () => {
+    // Code to delete account from local storage
+    // You can use AsyncStorage or any other storage mechanism
+    // Example:
+    // AsyncStorage.removeItem('@UserToken');
+    // AsyncStorage.removeItem('@UserInfo');
+    // After deleting, you may want to navigate to the login screen or perform any other action
+    setModalVisible(false); // Close the modal after deletion
+  };
   const clearLocalStorageData = async () => {
     try {
       await AsyncStorage.removeItem('profileData');
+
       // Other keys to remove if any
       // await AsyncStorage.removeItem('otherKey');
       // ...
       console.log('Local storage data cleared');
+      setModalVisible(false);
+      navigation.navigate('Login');
     } catch (error) {
       console.error('Error clearing local storage:', error);
     }
@@ -53,6 +80,14 @@ const Profile = props => {
     // Other logout actions
     // ...
   };
+  const WebsiteButton = () => {
+    // Open the website URL in the default browser
+    Linking.openURL('https://www.landing.mazoom.sa/');
+  };
+  const shareToWhatsAppWithContact = (text, phoneNumber) => {
+    Linking.openURL(`whatsapp://send?text=${text}&phone=${phoneNumber}`);
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.BackgroundWhite}>
@@ -65,7 +100,9 @@ const Profile = props => {
                 source={{uri: profileData?.profilePhoto}}
               />
               <View>
-                <Text style={styles.johnboxtwo}>{profileData?.firstName}</Text>
+                <Text style={{...styles.johnboxtwo, fontWeight: '500'}}>
+                  {profileData?.firstName}
+                </Text>
                 <Text style={styles.basicMemberStyle}>
                   {profileData?.email}
                 </Text>
@@ -90,69 +127,49 @@ const Profile = props => {
             </View>
           </TouchableOpacity>
 
-          {/* ///////////////////////// */}
-
-          <View style={styles.mainsecboxViewJohn}>
-            <IconM
-              size={SF(20)}
-              name="bell-ring"
-              style={styles.LeftIconStyles}
-            />
-
-            <Text style={styles.johnboxtwo}>OrderManagement</Text>
-
-            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
-          </View>
+          {/* //////////////////////////// */}
 
           {/* //////////////////////////// */}
-          <View style={styles.mainsecboxViewJohn}>
-            <FeIcon
-              size={SF(20)}
-              name="settings"
-              style={styles.LeftIconStyles}
-            />
+          <TouchableOpacity onPress={() => navigation.navigate('TopUp')}>
+            <View style={styles.mainsecboxViewJohn}>
+              <IconMI
+                size={SF(20)}
+                name="payment"
+                style={styles.LeftIconStyles}
+              />
 
-            <Text style={styles.johnboxtwo}>Document Management</Text>
+              <Text style={styles.johnboxtwo}>Payment</Text>
 
-            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
-          </View>
-
+              <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
+            </View>
+          </TouchableOpacity>
           {/* //////////////////////////// */}
-          <View style={styles.mainsecboxViewJohn}>
-            <IconMI
-              size={SF(20)}
-              name="payment"
-              style={styles.LeftIconStyles}
-            />
+          <TouchableOpacity onPress={handleSignOut}>
+            <View style={styles.mainsecboxViewJohn}>
+              <IconMI
+                size={SF(20)}
+                name="align-horizontal-left"
+                style={styles.LeftIconStyles}
+              />
 
-            <Text style={styles.johnboxtwo}>Payment</Text>
+              <Text style={styles.johnboxtwo}>Sign Out</Text>
 
-            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
-          </View>
-
-          {/* //////////////////////////// */}
-          <View style={styles.mainsecboxViewJohn}>
-            <IconMI
-              size={SF(20)}
-              name="align-horizontal-left"
-              style={styles.LeftIconStyles}
-            />
-
-            <Text style={styles.johnboxtwo}>Sign Out</Text>
-
-            <IconF
-              size={SF(20)}
-              name="right"
-              style={ProfileTabStyle.Jognboxthree}
-            />
-          </View>
+              <IconF
+                size={SF(20)}
+                name="right"
+                style={ProfileTabStyle.Jognboxthree}
+              />
+            </View>
+          </TouchableOpacity>
           <View style={styles.accountview}>
             <Text style={styles.accountstyle}>Contact</Text>
           </View>
 
           {/* /////////////johnsmith///////////// */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('ConfirmPassword')}>
+            onPress={() =>
+              shareToWhatsAppWithContact('hello', '+9765443222222')
+            }>
             <View style={styles.mainsecboxViewJohn}>
               <IconE size={SF(20)} name="lock" style={styles.LeftIconStyles} />
               <Text style={styles.johnboxtwo}>+9765443222222</Text>
@@ -161,46 +178,76 @@ const Profile = props => {
           </TouchableOpacity>
 
           {/* ///////////////////////// */}
+          <TouchableOpacity
+            onPress={() => Linking.openURL('mailto:admin@halla.sa')}>
+            <View style={styles.mainsecboxViewJohn}>
+              <IconE size={SF(20)} name="email" style={styles.LeftIconStyles} />
 
-          <View style={styles.mainsecboxViewJohn}>
-            <IconM
-              size={SF(20)}
-              name="bell-ring"
-              style={styles.LeftIconStyles}
-            />
+              <Text style={styles.johnboxtwo}>admin@halla.sa</Text>
 
-            <Text style={styles.johnboxtwo}>admin@halla.sa</Text>
-
-            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
-          </View>
-
+              <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
+            </View>
+          </TouchableOpacity>
           {/* //////////////////////////// */}
-          <View style={styles.mainsecboxViewJohn}>
+          <TouchableOpacity onPress={WebsiteButton}>
+            <View style={styles.mainsecboxViewJohn}>
+              <FeIcon
+                size={SF(20)}
+                name="settings"
+                style={styles.LeftIconStyles}
+              />
+
+              <Text style={styles.johnboxtwo}>www.Halla.sa</Text>
+
+              <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
+            </View>
+          </TouchableOpacity>
+          {/* //////////////////////////// */}
+        </View>
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 10,
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: 'black',
+              height: SH(300),
+            }}>
             <FeIcon
               size={SF(20)}
               name="settings"
-              style={styles.LeftIconStyles}
+              style={{color: 'blue', fontSize: 24}}
             />
+            <Text style={styles.boldtext}>
+              Are you sure you want to sign out?
+            </Text>
 
-            <Text style={styles.johnboxtwo}>www.Halla.sa</Text>
-
-            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
-          </View>
-
-          {/* //////////////////////////// */}
-          <View style={styles.mainsecboxViewJohn}>
-            <IconMI
-              size={SF(20)}
-              name="payment"
-              style={styles.LeftIconStyles}
-            />
-
-            <Text style={styles.johnboxtwo}>Payment</Text>
-
-            <IconF size={SF(20)} name="right" style={styles.Jognboxthree} />
+            <TouchableOpacity
+              onPress={clearLocalStorageData}
+              style={styles.btnstyle}>
+              <Text style={styles.btntext}>Yes, sign out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.btnstyle}>
+              <Text style={styles.btntext}>No, cancel</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </Modal>
     </View>
   );
 };

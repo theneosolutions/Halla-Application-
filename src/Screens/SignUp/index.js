@@ -36,6 +36,7 @@ import SplashStyl from '../../styles/CommonStyle/SplashStyl';
 import {signUp, signUpPhoneNu} from '../../Services/ApiList';
 import {setItemInLocalStorage} from '../../Services/Api';
 import {useAppDispatch} from '../../Services/redux/ReduxHelper';
+import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const SignUp = () => {
   const {dispatchUserData} = useAppDispatch();
@@ -214,6 +215,15 @@ const SignUp = () => {
   );
 
   const handleSignUpPhoneNu = async () => {
+    if (!phoneNumber || !callingCode) {
+      // Show Snackbar if phone number or calling code field is empty
+      Snackbar.show({
+        text: 'Phone number is required',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#293170',
+      });
+      return false;
+    }
     setBtnLoading(true);
     try {
       const data = {

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   cardRow: {
     flexDirection: 'row',
-    paddingHorizontal: 10, // Adjust as needed
+    paddingHorizontal: 2, // Adjust as needed
     marginBottom: 20, // Adjust as needed
   },
   searchContainer: {
@@ -213,9 +213,9 @@ const styles = StyleSheet.create({
   },
   cardView: {flexDirection: 'row', justifyContent: 'center', margin: SF(5)},
   scanstyle: {
-    height: 40,
-    width: SW(300),
-    backgroundColor: '#293170',
+    height: SH(160),
+    width: SW(150),
+    // backgroundColor: '#293170',
     marginHorizontal: 'auto',
     marginVertical: 10,
     alignSelf: 'center',
@@ -232,7 +232,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   boldstyle: {
-    marginLeft: 5,
     color: '#293170',
   },
 });

@@ -17,7 +17,7 @@ import {useTranslation} from 'react-i18next';
 import {getFromLocalStorage} from '../../Services/Api';
 import styles from './styles';
 import {updatepass} from '../../Services/ApiList';
-
+import Snackbar from 'react-native-snackbar';
 const ConfimrPassword = ({navigation}) => {
   //   const {email, otp} = route.params;
 
@@ -39,6 +39,16 @@ const ConfimrPassword = ({navigation}) => {
   const {t, i18n} = useTranslation();
 
   const HandleUpdatePassword = async () => {
+    if (!password1 || !password2 || !password) {
+      // Show Snackbar if phone number or calling code field is empty
+      Snackbar.show({
+        text: 'Fill the field please',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#293170',
+      });
+      return false;
+    }
+    setBtnLoading(true);
     const token = await getFromLocalStorage('@UserToken');
     const data = {
       password1: password1,
@@ -55,24 +65,25 @@ const ConfimrPassword = ({navigation}) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.Container}>
         <View style={styles.firstHalfView}>
-          <Text style={styles.boldText}>Confirm Password</Text>
-          <Text style={styles.lightText}>{t('resetpasstext')}</Text>
+          <Text style={styles.boldText}>Change Password</Text>
+          {/* <Text style={styles.lightText}>{t('resetpasstext')}</Text> */}
 
           <Image source={images.halalogo} style={styles.imgstyle} />
         </View>
         <ScrollView style={{flex: 1, marginTop: 30}}>
           <View style={styles.touchableView}>
-            <TouchableOpacity style={styles.touchablestyleW}>
+            <TouchableOpacity
+              style={{...styles.touchablestyleW, paddingVertical: 10}}>
               <View style={{flexDirection: 'row'}}>
                 <FontAwesome
                   name="lock"
-                  size={SF(20)}
+                  size={SF(17)}
                   style={styles.iconStyleeye}
                   color={Colors.black}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={t('Enteryourpassword')}
+                  placeholder={t('Current password')}
                   value={password}
                   onChangeText={setPassword}
                   placeholderTextColor={'black'}
@@ -85,13 +96,13 @@ const ConfimrPassword = ({navigation}) => {
               <View style={{flexDirection: 'row'}}>
                 <FontAwesome
                   name="lock"
-                  size={SF(20)}
+                  size={SF(17)}
                   style={styles.iconStyleeye}
                   color={Colors.black}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={t('Enteryourpassword')}
+                  placeholder={t('Change password')}
                   value={password1}
                   onChangeText={setPassword1}
                   placeholderTextColor={'black'}
@@ -99,8 +110,8 @@ const ConfimrPassword = ({navigation}) => {
                 />
                 <TouchableOpacity onPress={togglePasswordVisibility}>
                   <FontAwesome
-                    name={showPasswordone ? 'eye-slash' : 'eye'}
-                    size={SF(20)}
+                    name={showPasswordone ? 'eye' : 'eye-slash'}
+                    size={SF(17)}
                     style={styles.iconStyle}
                     color={Colors.black}
                   />
@@ -112,13 +123,13 @@ const ConfimrPassword = ({navigation}) => {
               <View style={{flexDirection: 'row'}}>
                 <FontAwesome
                   name="lock"
-                  size={SF(20)}
+                  size={SF(17)}
                   style={styles.iconStyleeye}
                   color={Colors.black}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={t('Enteryourpassword')}
+                  placeholder={t('Change password')}
                   value={password2}
                   onChangeText={setpassword2}
                   placeholderTextColor={'black'}
@@ -126,10 +137,9 @@ const ConfimrPassword = ({navigation}) => {
                 />
                 <TouchableOpacity onPress={togglePasswordVisibilitytwo}>
                   <FontAwesome
-                    name={showPasswordtwo ? 'eye-slash' : 'eye'}
-                    size={SF(20)}
+                    name={showPasswordtwo ? 'eye' : 'eye-slash'}
+                    size={SF(17)}
                     style={styles.iconStyle}
-                    color={Colors.black}
                   />
                 </TouchableOpacity>
               </View>
@@ -147,12 +157,12 @@ const ConfimrPassword = ({navigation}) => {
             <TouchableOpacity
               style={[
                 styles.button,
-                {
-                  backgroundColor:
-                    password1 === password2 ? '#293170' : 'lightgray',
-                },
+                // {
+                //   backgroundColor:
+                //     password1 === password2 ? '#293170' : 'lightgray',
+                // },
               ]}
-              disabled={password1 !== password2}
+              // disabled={password1 !== password2}
               onPress={HandleUpdatePassword}>
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
