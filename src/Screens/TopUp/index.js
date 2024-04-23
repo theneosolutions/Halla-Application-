@@ -33,6 +33,8 @@ const TopUp = ({route}) => {
   const [numberOfGuest, setNumberOfGuest] = useState([]);
   const [price, setPrice] = useState([]);
   const [list, setList] = useState([]);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
     navigation.navigate('AddGuest', {event});
@@ -67,26 +69,26 @@ const TopUp = ({route}) => {
     setShowModal(true);
   };
   const renderGuestItem = ({item, index}) => {
-    const isSelected = selectedContacts.some(
-      contact => contact.numberOfGuest === item.numberOfGuest,
-    );
+    const isSelected = selectedPackage && selectedPackage.id === item.id;
 
     return (
       <View style={[styles.guestItem]}>
         <TouchableOpacity
-          onPress={() => toggleContactSelection(item.numberOfGuest, item.price)}
-          style={styles.checkbox}>
-          {isSelected ? (
-            <IconF name="checksquare" size={30} color="#293170" />
-          ) : (
-            <Icon name="square-o" size={30} color="#293170" />
-          )}
-        </TouchableOpacity>
+          onPress={() => handlePackageSelection(item)}
+          style={styles.guestItem}>
+          <View style={styles.checkbox}>
+            {isSelected ? (
+              <IconF name="checksquare" size={30} color="#293170" />
+            ) : (
+              <Icon name="square-o" size={30} color="#293170" />
+            )}
+          </View>
 
-        <View style={styles.guestDetails}>
-          <Text style={styles.price}>Price: {price}</Text>
-          <Text style={styles.price}>{numberOfGuest} Guests</Text>
-        </View>
+          <View style={styles.guestDetails}>
+            <Text style={styles.price}>Price: {item.price}</Text>
+            <Text style={styles.price}>{item.numberOfGuest} Guests</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -95,39 +97,57 @@ const TopUp = ({route}) => {
     setLoading(true);
     try {
       const response = await getpakage();
-      console.log('response---------------+++Topupppp', response?.data?.data);
+      console.log(
+        'response---------------+++Topupppp====',
+        response?.data?.data,
+      );
       setList(response?.data?.data || []);
+      setLoading(false);
 
       console.log('list---------', list);
       const packages = response?.data?.data;
-      console.log('packages', packages);
-      if (packages && packages.length > 0) {
-        const firstPackage = packages[0];
-        const {numberOfGuest, price} = firstPackage;
-        setNumberOfGuest(numberOfGuest);
-        setPrice(price);
-      }
+      // console.log('packages...........', packages);
+      // console.log('packagespackages', packages?.price);
+      // if (packages && packages.length > 0) {
+      //   const firstPackage = packages[0];
+      //   const {numberOfGuest, price} = firstPackage;
+      //   setNumberOfGuest(numberOfGuest);
+      //   setPrice(price);
+      // }
       setLoading(false);
-      console.log('response---------------+++Topupppp', numberOfGuest);
+      // console.log('response---------------+++Topupppp', numberOfGuest);
     } catch (error) {
       console.error('Error fetching package:', error);
     }
   };
-
+  const handlePackageSelection = item => {
+    console.log('🚀 ~ handlePackageSelection ~ item:', item);
+    setSelectedPackage(item);
+  };
   useEffect(() => {
     handleGetPakage();
   }, []);
 
   const handleContinue = async () => {
-    setLoading(true);
-    const response = await getpakage();
-    if (selectedContacts.length > 0) {
+    // setLoading(false);
+    // const response = await getpakage();
+    // if (selectedContacts.length > 0) {
+    //   navigation.navigate('PaymentDetails', {
+    //     selectedContacts,
+    //     pakageid: response?.data?.data[0].id,
+    //   });
+    // } else {
+    //   Alert.alert('Please select at least one item');
+    // }
+    if (selectedPackage) {
+      console.log('🚀 ~ handleContinue ~ selectedPackage:', selectedPackage);
+
       navigation.navigate('PaymentDetails', {
-        selectedContacts,
-        pakageid: response?.data?.data[0].id,
+        selectedPackage,
+        // pakageid: response?.data?.data[0].id,
       });
     } else {
-      Alert.alert('Please select at least one item');
+      Alert.alert('Please select a package');
     }
   };
   return (
@@ -149,13 +169,22 @@ const TopUp = ({route}) => {
             <ActivityIndicator size="large" color="#293170" />
           </View>
         ) : (
-          <FlatList data={list} renderItem={renderGuestItem} />
+          <FlatList
+            data={list}
+            renderItem={renderGuestItem}
+            keyExtractor={item => item.id.toString()}
+          />
         )}
       </ScrollView>
 
       <TouchableOpacity
-        style={styles.continueButton}
+        style={[
+          styles.continueButton,
+          {backgroundColor: selectedPackage ? '#293170' : '#ccc'},
+        ]}
+        // style={styles.continueButton}
         onPress={handleContinue}
+        disabled={!selectedPackage}
         // onPress={handleAddGuest}
         // disabled={guestloading || selectedContacts.length === 0} // Disable the button when loading
       >
@@ -242,13 +271,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 10,
+    paddingHorizontal: 2,
+    marginBottom: 5,
     backgroundColor: '#F4F5FE',
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 20,
     paddingVertical: 12,
-    marginHorizontal: 25,
+    marginHorizontal: 10,
   },
   closeIconContainer: {
     padding: 6,

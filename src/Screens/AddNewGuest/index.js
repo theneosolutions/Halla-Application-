@@ -23,7 +23,7 @@ const AddNewGuest = props => {
   const [guest, setGuest] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const {id} = props.route.params;
-
+  console.log('id=-=-=-=-=-=', id);
   const [showModal, setShowModal] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [selectedContactId, setSelectedContactId] = useState(null);
@@ -38,11 +38,14 @@ const AddNewGuest = props => {
     try {
       // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
       const response = await guestListByID(id);
-      console.log('response++++++++======addnewguest', response); // Pass user ID if requitransparent
+      console.log(
+        'response++++++++======addnewguest',
+        response?.response?.data,
+      ); // Pass user ID if requitransparent
       // console.log('Events:.....======+++++', response?.data?.data);
 
       const guestsData = response?.data?.data;
-      console.log('guestsData............', guestsData);
+      // console.log('guestsData............', guestsData);
       setGuest(guestsData);
       console.log('..........', guest);
       // console.log('data========',response.data)

@@ -93,23 +93,23 @@ const SplashScreen = ({navigation}) => {
     setLanguage(newLanguage);
   };
 
-  // const checkToken = async () => {
-  //   try {
-  //     const token = await AsyncStorage.getItem('@UserToken');
-  //     if (token !== null) {
-  //       // Token exists, navigate to HomeScreen
-  //       navigation.navigate('Home');
-  //     } else {
-  //       // Token doesn't exist, navigate to GoogleLoginScreen
-  //       navigation.navigate('Login');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error retrieving token:', error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   checkToken();
-  // }, []);
+  const checkToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('@UserToken');
+      if (token !== null) {
+        // Token exists, navigate to HomeScreen
+        navigation.navigate('Home');
+      } else {
+        // Token doesn't exist, navigate to GoogleLoginScreen
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error retrieving token:', error);
+    }
+  };
+  useEffect(() => {
+    checkToken();
+  }, []);
   return (
     <View style={styles.Container}>
       <TouchableOpacity onPress={toggleLanguage} style={styles.SwitchStyle}>

@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   boxone: {
     width: SW(295),
     // paddingTop: SH(1),
-    fontSize: SF(17),
+    fontSize: SF(15),
     color: Colors.black_text_color,
     fontWeight: '400',
     // backgroundColor: 'red',

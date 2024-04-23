@@ -13,6 +13,7 @@ const BirthdayCard = ({
   onPress,
   onEdit,
   data,
+  isSelected,
 }) => {
   return (
     <View
@@ -22,9 +23,11 @@ const BirthdayCard = ({
         flexGrow: 1,
       }}>
       <TouchableOpacity
-        activeOpacity={1}
+        // activeOpacity={1}
         onPress={onPress}
-        style={styles.container}>
+        // style={styles.container}
+
+        style={[styles.container, isSelected && styles.selectedContainer]}>
         <View style={styles.imageContainer}>
           {imageUrl && <Image source={imageUrl} style={styles.image} />}
         </View>
@@ -44,8 +47,8 @@ const styles = StyleSheet.create({
     // flexDirection: 'row',
     alignItems: 'center',
     // padding: 20,
-
-    backgroundColor: 'red',
+    shadowOpacity: 10,
+    backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderBottomRightRadius: 20,
     elevation: 2,
@@ -93,6 +96,12 @@ const styles = StyleSheet.create({
   },
   editButton: {
     marginLeft: 'auto', // Pushes the button to the right
+  },
+  selectedContainer: {
+    borderColor: 'black', // Change border color when selected
+    shadowOpacity: 20, // Change shadow opacity when selected
+    elevation: 15,
+    backgroundColor: 'gray', // Change elevation when selected
   },
 });
 

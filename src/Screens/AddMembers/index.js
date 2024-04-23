@@ -19,6 +19,7 @@ import {addGuestById, removeContactByID} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 const AddMembers = ({route}) => {
   const {selectedContacts, event} = route.params;
+  console.log('selectedContacts----', selectedContacts);
   console.log('🚀 ~ AddMembers ~ route.params:', route.params);
   console.log('selectedContacts', selectedContacts);
   const navigation = useNavigation();
@@ -142,7 +143,7 @@ const AddMembers = ({route}) => {
       const {id: eventId} = route.params;
       console.log('...........', eventId);
 
-      const response = await addGuestById(route.params.event, requestData);
+      const response = await addGuestById(route.params.id, requestData);
       //   console.log('selectedContactIds--------------', response?.data);
 
       if (response) {
@@ -407,6 +408,7 @@ const styles = StyleSheet.create({
     marginLeft: 55,
     borderTopLeftRadius: 14,
     borderBottomRightRadius: 14,
+    marginBottom: 20,
   },
   continueButtonText: {
     color: '#fff',

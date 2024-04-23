@@ -33,7 +33,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 
 const EditEvent = ({navigation, route}) => {
   const {id} = route.params;
-
+  console.log('idddddd', id);
   const [date, setDate] = useState(new Date());
   const [eventName, setEventName] = useState('');
   const [eventDescription, setEventDescription] = useState('');
@@ -434,6 +434,15 @@ const EditEvent = ({navigation, route}) => {
                   />
                 </View>
               </TouchableOpacity>
+              <Text
+                style={{
+                  marginLeft: 14,
+                  color: 'black',
+                  fontSize: 12,
+                  fontWeight: '500',
+                }}>
+                {address}
+              </Text>
               <Spacing space={SH(30)} />
               <View
                 style={{

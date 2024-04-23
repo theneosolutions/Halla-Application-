@@ -23,9 +23,8 @@ const PaymentDetails = ({route}) => {
   // const {id} = route.params;
   const navigation = useNavigation();
   const {t} = useTranslation();
-  const {pakageid} = route.params;
-
-  console.log('dddppppppp------', pakageid);
+  const {selectedPackage} = route.params;
+  console.log('🚀 ~ PaymentDetails ~ selectedPackage:', selectedPackage);
   //   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // const [selectedContacts, setSelectedContacts] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
@@ -34,8 +33,8 @@ const PaymentDetails = ({route}) => {
   const [selectedContactId, setSelectedContactId] = useState(null);
   const [contacts, setContacts] = useState([]);
   const [packageData, setPackageData] = useState(null);
-  const [price, setPrice] = useState([]);
-  const [guest, setGuest] = useState([]);
+  const [price, setPrice] = useState();
+  const [guest, setGuest] = useState(null);
   const toggleContactSelection = () => {
     setIsChecked(!isChecked);
     setButtonDisabled(!isChecked); // Enable/disable button based on checkbox state
@@ -43,12 +42,14 @@ const PaymentDetails = ({route}) => {
 
   const handleGetPakageId = async () => {
     try {
-      const response = await getPakageById(pakageid);
-      console.log('response---------------paymentmethod', response?.data);
-      setPrice(response?.data?.data?.price);
-      // console.log('price---', price);
+      const response = await getPakageById(selectedPackage?.id);
+      // console.log('response---------------paymentmethod=====', response?.data);
+      console.log('response?.data?.price=====', response?.data?.numberOfGuest);
+      setPrice(response?.data?.price);
+
+      console.log('price---', setPrice);
       setGuest(response?.data?.numberOfGuest);
-      // console.log('numberOfGuest', guest);
+      console.log('numberOfGuest======', guest);
       if (response?.data?.statusCode === 400) {
         // Display error message using Alert
         // Alert.alert('Error', response?.data?.message);
@@ -77,7 +78,7 @@ const PaymentDetails = ({route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity onPress={() => navigation.navigate('TopUp')}>
           <IconF size={SF(20)} name="left" style={styles.headerIcon} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Add guest</Text>
@@ -89,12 +90,12 @@ const PaymentDetails = ({route}) => {
 
       <View style={styles.totalGuestView}>
         <Text style={styles.subHeading}>Total Guests</Text>
-        <Text style={styles.subHeading}>10</Text>
+        <Text style={styles.subHeadingbold}>{price}</Text>
       </View>
       <View style={styles.line} />
       <View style={styles.totalView}>
         <Text style={styles.subHeading}>Total </Text>
-        <Text style={styles.subHeading}>79SAR</Text>
+        <Text style={styles.subHeadingbold}>{guest}SAR</Text>
       </View>
       <View style={styles.AddguestView}></View>
       <View style={styles.agreeWith}>
@@ -120,22 +121,6 @@ const PaymentDetails = ({route}) => {
           {backgroundColor: isChecked ? '#293170' : '#ccc'},
         ]}
         onPress={handleButtonClick}
-        // style={[
-        //   styles.continueButton,
-        //   {backgroundColor: isChecked ? '#293170' : '#ccc'},
-        // ]}
-        // onPress={() => {
-        //   {
-        //     isChecked && (
-        //       <View style={styles.webViewContainer}>
-        //         <WebView
-        //           source={{uri: 'https://example.com'}} // Specify your URI here
-        //           style={styles.webView}
-        //         />
-        //       </View>
-        //     );
-        //   }
-        // }}
         disabled={!isChecked}>
         <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
@@ -177,23 +162,33 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   heading: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '400',
     color: 'black',
   },
   subHeading: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '400',
     color: 'black',
   },
+  subHeadingbold: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: 'black',
+  },
   agreeHeading: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '400',
     color: 'black',
     width: 298,
     paddingVertical: 10,
-
+    justifyContent: 'space-evenly',
     paddingHorizontal: 8,
+  },
+  privacypolicy: {
+    textAlign: 'center',
+    color: 'red',
+    fontSize: 16,
   },
   agreeWith: {
     flexDirection: 'row',
@@ -201,7 +196,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   AddguestView: {
-    paddingVertical: 210,
+    paddingVertical: 180,
     // backgroundColor: 'red',
   },
   totalGuestView: {
@@ -218,18 +213,14 @@ const styles = StyleSheet.create({
   },
   line: {
     borderBottomWidthColor: 'gray',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.9,
     paddingVertical: 8,
     padding: 0,
-    width: 350,
+    width: 360,
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  privacypolicy: {
-    textAlign: 'center',
-    color: 'red',
-    fontSize: 13,
-  },
+
   guestItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -366,20 +357,23 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     height: '7%',
-    width: '70%',
+    width: '80%',
     backgroundColor: '#293170',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 55,
+    alignSelf: 'center',
+    // marginLeft: 45,
     borderTopLeftRadius: 14,
     borderBottomRightRadius: 14,
+    marginBottom: SH(20),
   },
+
   continueButtonText: {
     color: '#fff',
     fontSize: 18,
   },
   checkbox: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 10,
   },
 });

@@ -1,10 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput,TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
-import { useFocusEffect } from '@react-navigation/native';
-import { getFromLocalStorage } from '../../Services/Api';
-import { useNavigation } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {getFromLocalStorage} from '../../Services/Api';
+import {useNavigation} from '@react-navigation/native';
 
 const ChatListingScreen = () => {
   const navigation = useNavigation();
@@ -17,12 +25,15 @@ const ChatListingScreen = () => {
     const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
     const token = await getFromLocalStorage('@UserToken');
     try {
-      const response = await axios.get(`https://backend.halla.sa/api/events/chats/user/${userInfo.id}?order=DESC&page=1&take=100&filter=monthly`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get(
+        `https://backend.halla.sa/api/events/chats/user/${userInfo.id}?order=DESC&page=1&take=100&filter=monthly`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
-      console.log("🚀 ~ fetchData ~ response.data:", response.data)
+      );
+      console.log('🚀 ~ fetchData ~ response.data:', response.data);
       setChatData([...response?.data?.data]);
     } catch (error) {
       console.error('Error fetching chat data:', error);
@@ -34,18 +45,27 @@ const ChatListingScreen = () => {
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [])
+    }, []),
   );
-
+  useEffect(() => {
+    return () => {
+      // Reset the searchText state when the component unmounts
+      setSearchText('');
+    };
+  }, []);
   const chatListData = chatData.length > 0 ? chatData : null;
 
-  const navigateToChatDetail = (chatItem) => {
-    navigation.navigate('ChatScreen', { chatItem });
+  const navigateToChatDetail = chatItem => {
+    navigation.navigate('ChatScreen', {chatItem});
   };
 
-  const renderChatItem = ({ item }) => (
+  const renderChatItem = ({item}) => (
     <TouchableOpacity onPress={() => navigateToChatDetail(item)}>
-      <View style={[styles.chatItem, { borderBottomWidth: 1, borderBottomColor: '#ccc', paddingBottom: 8 }]}>
+      <View
+        style={[
+          styles.chatItem,
+          {borderBottomWidth: 1, borderBottomColor: '#ccc', paddingBottom: 8},
+        ]}>
         <Text style={styles.avatar}>{item?.invites?.name.charAt(0)}</Text>
         <View style={styles.chatInfo}>
           <Text style={styles.username}>{item?.invites?.name}</Text>
@@ -55,7 +75,6 @@ const ChatListingScreen = () => {
         </View>
       </View>
     </TouchableOpacity>
-
   );
 
   return (
@@ -71,7 +90,12 @@ const ChatListingScreen = () => {
           value={searchText}
           onChangeText={text => setSearchText(text)}
         />
-        <Feather name="search" size={24} color="black" style={styles.searchIcon} />
+        <Feather
+          name="search"
+          size={24}
+          color="black"
+          style={styles.searchIcon}
+        />
       </View>
       {isLoading ? (
         <ActivityIndicator size="large" color="#000" />
@@ -80,7 +104,7 @@ const ChatListingScreen = () => {
           data={chatListData}
           renderItem={renderChatItem}
           keyExtractor={item => item?.invites?.id.toString()}
-          contentContainerStyle={{ paddingBottom: 50 }}
+          contentContainerStyle={{paddingBottom: 50}}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         />
@@ -127,7 +151,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: '50%',
-    transform: [{ translateY: -12 }],
+    transform: [{translateY: -12}],
   },
   chatItem: {
     flexDirection: 'row',

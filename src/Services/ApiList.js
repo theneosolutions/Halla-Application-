@@ -1,6 +1,6 @@
 import api from './Api';
 const baseUrl = 'https://backend.halla.sa';
-// const baseUrl = 'https://d319-110-39-18-42.ngrok-free.app';
+// const baseUrl = 'https://halla.sa/api/docs';
 
 export const GOOGLE_MAPS_APIKEY = 'AIzaSyAFZBGvY2p25djzXAG-0p3vq42SzGw9WxQ';
 
@@ -152,7 +152,7 @@ export const addGuestById = async (id, data) => {
 };
 
 export const guestListByID = async id => {
-  const url = `/api/events/guestlist/${id}?order=DESC&page=1&take=10&filter=monthly`;
+  const url = `/api/events/guestlist/${id}?order=DESC&page=1&take=100`;
 
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;

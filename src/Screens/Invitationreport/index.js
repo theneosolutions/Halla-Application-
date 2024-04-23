@@ -49,12 +49,18 @@ const Invitationreport = ({route, ...props}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isShareOptionsVisible, setIsShareOptionsVisible] = useState(false);
 
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
   const DeleteEventFromList = async eventId => {
     try {
       const response = await deleteEventbyId(eventId);
       // console.log('Events:.....======+++++--------', response);
       if (response && response.status === 200) {
         setSingleData({});
+        navigation.navigate('Home');
         // console.log('Event deleted successfully');
       } else if (response && response.status === 404) {
         const confirmDeletion = window.confirm(
@@ -260,20 +266,10 @@ const Invitationreport = ({route, ...props}) => {
             </TouchableOpacity>
             <Text style={styles.headerText}>Invitation Report</Text>
 
-            {/* {isViewVisible && (
-              <View style={styles.modalContentView}>
-                <TouchableOpacity
-                  style={styles.option}
-                  onPress={() => navigation.navigate('EditEvent', {id})}>
-                  <IconF size={SF(20)} name="edit" style={styles.boldstyle} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleDeleteEvent(singleData?.id)}>
-                  <IconM size={SF(20)} name="delete" style={styles.boldstyle} />
-                </TouchableOpacity>
-              </View>
-            )} */}
-            <TouchableOpacity onPress={toggleView} style={styles.iconContainer}>
+            <TouchableOpacity
+              onPress={toggleModal}
+              // onPress={toggleView}
+              style={styles.iconContainer}>
               <Egypto
                 size={20}
                 name="dots-three-vertical"
@@ -656,6 +652,52 @@ const Invitationreport = ({route, ...props}) => {
             </View>
           </View>
         </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={toggleModal}>
+          <View style={styles.modalContainerE}>
+            <View style={styles.modalContentE}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  padding: 10,
+                  width: SW(120),
+                }}
+                onPress={() => {
+                  // Navigate to edit screen or perform edit action
+                  toggleModal();
+                  navigation.navigate('EditEvent', {id});
+                }}>
+                <Text
+                  style={{fontWeight: '500', color: 'black', fontSize: SF(14)}}>
+                  Edit Event
+                </Text>
+                <IconF size={20} name="edit" style={styles.boldstyle} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  padding: 10,
+                  width: SW(120),
+                }}
+                onPress={() => {
+                  // Perform delete action
+                  toggleModal();
+                  handleDeleteEvent(singleData?.id);
+                }}>
+                <Text
+                  style={{fontWeight: '500', color: 'black', fontSize: SF(14)}}>
+                  Delete Event
+                </Text>
+                <IconM size={20} name="delete" style={styles.boldstyle} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </View>
   );
@@ -664,6 +706,23 @@ const Invitationreport = ({route, ...props}) => {
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
+  },
+  modalContainerE: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContentE: {
+    backgroundColor: '#f8f9fc',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: '100%',
+    maxHeight: '50%',
+    padding: 20,
+    elevation: 50,
+    shadowOpacity: 10,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -680,6 +739,10 @@ const styles = StyleSheet.create({
     fontSize: SF(20),
     color: 'black',
   },
+  // modalOverlay: {
+  //   ...StyleSheet.absoluteFillObject,
+  //   backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black overlay
+  // },
   headerIcon: {
     height: SH(50),
     marginLeft: 2,
@@ -832,8 +895,9 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   option: {
-    paddingVertical: 2,
-    paddingHorizontal: 2,
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+
     // borderBottomWidth: 1,
     // borderBottomColor: '#DCC7F8',
   },

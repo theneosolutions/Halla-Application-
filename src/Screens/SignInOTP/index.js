@@ -166,17 +166,17 @@ const styles = StyleSheet.create({
   dontreviewopt: {
     flexDirection: 'row',
     textAlign: 'center',
-    width: SW(220),
+    // width: SW(220),
   },
   lighttextgray: {
-    marginLeft: SF(90),
+    marginLeft: SF(52),
     marginTop: SH(14),
-    color: 'gray',
-    fontWeight: '600',
+    color: 'black',
+    fontWeight: '400',
   },
   underlinetext: {
     textDecorationLine: 'underline',
-    color: 'blue',
+    color: '#293170',
     alignItem: 'center',
     textAlign: 'center',
     marginLeft: SF(5),

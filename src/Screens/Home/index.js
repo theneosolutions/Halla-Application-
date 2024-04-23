@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  BackHandler,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 // import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -58,7 +59,11 @@ const Home = () => {
   const [dataNotFound, setDataNotFound] = useState(false); // State for showing data not found message
   const [username, setUsername] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all'); // State to store selected filter
-
+  const [selectedCard, setSelectedCard] = useState(null);
+  const handleCardPress = filter => {
+    setSelectedCard(filter);
+    // Add logic to perform other actions when a card is selected
+  };
   useEffect(() => {
     setLoading(true);
     handleGetEvents(selectedFilter); // Fetch events initially with 'ALL' filter
@@ -172,7 +177,8 @@ const Home = () => {
 
     let buttonText;
     if (selectedFilter === 'all') {
-      buttonText = 'All Events';
+      buttonText = item.status;
+      // buttonText = 'All Events';
     } else if (selectedFilter === 'new') {
       buttonText = 'New Events';
     } else if (selectedFilter === 'upcoming') {
@@ -305,6 +311,17 @@ const Home = () => {
     );
   };
 
+  useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   return (
     <View style={styles.mainview}>
       {/* <Text
@@ -371,22 +388,26 @@ const Home = () => {
                       title="All Events"
                       imageUrl={images.Newimgone}
                       onPress={() => handleBirthdayCardClick('all')}
+                      isSelected={selectedCard === 'all'}
                     />
                     <BirthdayCard
                       title="New Events"
                       imageUrl={images.allimgtwo}
                       onPress={() => handleBirthdayCardClick('new')}
+                      isSelected={selectedCard === 'new'}
                     />
                     <BirthdayCard
                       title="Upcoming Events"
                       imageUrl={images.Upcommingimgthree}
                       onPress={() => handleBirthdayCardClick('upcoming')}
+                      isSelected={selectedCard === 'upcoming'}
                       data={upcoming}
                     />
                     <BirthdayCard
-                      title="Attende Events"
+                      title="Attended Events"
                       imageUrl={images.Attendedimagefour}
                       onPress={() => handleBirthdayCardClick('attended')}
+                      isSelected={selectedCard === 'attended'}
                     />
                   </View>
                 </ScrollView>

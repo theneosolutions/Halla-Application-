@@ -26,14 +26,14 @@ export const CountryPickerInput = ({
         onPress={() => setShowCountryPicker(true)}>
         <CountryPicker
           onSelect={onSelect}
-          cca2={countryNameCode} // Set default country code
+          cca2={countryNameCode}
           translation="eng"
+          visible={showCountryPicker}
           countryCode={countryNameCode}
           withCallingCode={true}
-          withFlag={true}
           withFilter={true}
-          onClose={() => {}}
-          visible={false} // Set to false to avoid showing the country picker modal
+          withFlag={true}
+          onClose={() => setShowCountryPicker(false)}
         />
         <Text style={styles.countryCodeText}>{callingCode}</Text>
       </TouchableOpacity>
