@@ -1,6 +1,6 @@
 import api from './Api';
-const baseUrl = 'https://backend.halla.sa';
-// const baseUrl = 'https://halla.sa/api/docs';
+// const baseUrl = 'https://backend.halla.sa';
+const baseUrl = 'https://halla.sa';
 
 export const GOOGLE_MAPS_APIKEY = 'AIzaSyAFZBGvY2p25djzXAG-0p3vq42SzGw9WxQ';
 
@@ -96,8 +96,22 @@ export const GetCardInfo = async () => {
 };
 export const getEventWithUserId = async (user, page = 1, take = 100) => {
   const url = `/api/events/byUserId/${user}?order=DESC&page=${page}&take=${take}`;
+  // console.log('+++++++url-----getEventWithUserId', url);
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
+};
+
+export const getEventBySearch = async (search, user) => {
+  console.log('🚀 ~ getEventBySearch ~ user, search:', user, search);
+  const url = `/api/events/byUserId/${user}?search=${search}`;
+  console.log('+++++++url-----getEventBySearch', url);
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+
+  console.log(
+    'responseeeeeee=================================================',
+    res,
+  );
+  // return res;
 };
 export const getEventCategorywithid = async id => {
   const url = `/api/events/categorize/byUserId/${id}?order=DESC&page=1&take=100&filter=monthly`;

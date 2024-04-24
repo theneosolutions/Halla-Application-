@@ -11,7 +11,9 @@ import {
   Alert,
   Modal,
   RefreshControl,
+  TouchableWithoutFeedback,
 } from 'react-native';
+
 import IconF from 'react-native-vector-icons/AntDesign';
 import {Spacing, Search, Button} from '../../Components';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -352,8 +354,27 @@ const Invitationreport = ({route, ...props}) => {
                   }}>
                   <TouchableOpacity
                     onPress={toggleShareOptions}
-                    style={styles.iconContainer}>
-                    <Egypto size={20} name="share" style={styles.headerIcon} />
+                    style={styles.SendIconView}>
+                    <Text
+                      style={{
+                        marginLeft: 3,
+                        marginRight: 1,
+                        marginTop: 8,
+                        color: 'white',
+                        fontSize: 12,
+                      }}>
+                      Send
+                    </Text>
+                    <IconF
+                      size={SF(17)}
+                      name="caretdown"
+                      style={{
+                        marginLeft: 6,
+                        // marginRight: 1,
+                        marginTop: 8,
+                        color: 'white',
+                      }}
+                    />
                   </TouchableOpacity>
                   {/* <DropDownPicker
                     items={[
@@ -405,7 +426,7 @@ const Invitationreport = ({route, ...props}) => {
                         // Implement share functionality
                         // toggleShareOptions();
                       }}>
-                      <Text style={styles.optionText}>Invite</Text>
+                      <Text style={styles.optionText}>Send Invite</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.option}
@@ -413,7 +434,7 @@ const Invitationreport = ({route, ...props}) => {
                         // Implement other share functionality
                         toggleShareOptions();
                       }}>
-                      <Text style={styles.optionText}>Remainder</Text>
+                      <Text style={styles.optionText}>Send Remaind</Text>
                     </TouchableOpacity>
                   </View>
                 )}
@@ -657,46 +678,56 @@ const Invitationreport = ({route, ...props}) => {
           transparent={true}
           visible={isModalVisible}
           onRequestClose={toggleModal}>
-          <View style={styles.modalContainerE}>
-            <View style={styles.modalContentE}>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  padding: 10,
-                  width: SW(120),
-                }}
-                onPress={() => {
-                  // Navigate to edit screen or perform edit action
-                  toggleModal();
-                  navigation.navigate('EditEvent', {id});
-                }}>
-                <Text
-                  style={{fontWeight: '500', color: 'black', fontSize: SF(14)}}>
-                  Edit Event
-                </Text>
-                <IconF size={20} name="edit" style={styles.boldstyle} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  padding: 10,
-                  width: SW(120),
-                }}
-                onPress={() => {
-                  // Perform delete action
-                  toggleModal();
-                  handleDeleteEvent(singleData?.id);
-                }}>
-                <Text
-                  style={{fontWeight: '500', color: 'black', fontSize: SF(14)}}>
-                  Delete Event
-                </Text>
-                <IconM size={20} name="delete" style={styles.boldstyle} />
-              </TouchableOpacity>
+          <TouchableWithoutFeedback onPress={toggleModal}>
+            <View style={styles.modalContainerE}>
+              <View style={styles.modalContentE}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    padding: 10,
+                    width: SW(120),
+                  }}
+                  onPress={() => {
+                    // Navigate to edit screen or perform edit action
+                    toggleModal();
+                    navigation.navigate('EditEvent', {id});
+                  }}>
+                  <Text
+                    style={{
+                      fontWeight: '500',
+                      color: 'black',
+                      fontSize: SF(14),
+                    }}>
+                    Edit Event
+                  </Text>
+                  <IconF size={20} name="edit" style={styles.boldstyle} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    padding: 10,
+                    width: SW(120),
+                  }}
+                  onPress={() => {
+                    // Perform delete action
+                    toggleModal();
+                    handleDeleteEvent(singleData?.id);
+                  }}>
+                  <Text
+                    style={{
+                      fontWeight: '500',
+                      color: 'black',
+                      fontSize: SF(14),
+                    }}>
+                    Delete Event
+                  </Text>
+                  <IconM size={20} name="delete" style={styles.boldstyle} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </Modal>
       </ScrollView>
     </View>
@@ -956,20 +987,34 @@ const styles = StyleSheet.create({
     right: 0,
     marginLeft: 30,
   },
+  SendIconView: {
+    padding: 2,
+    flexDirection: 'row',
+    right: 0,
+    marginLeft: -10,
+    marginRight: 30,
+    backgroundColor: '#293170',
+    width: 74,
+    height: 45,
+    borderRadius: 5,
+  },
   shareOptions: {
     paddingVertical: 2,
     paddingHorizontal: 2,
     backgroundColor: 'white',
-    marginLeft: 32,
-    height: SH(60),
-    width: SW(80),
-    marginTop: 25,
+    marginLeft: 56,
+    height: SH(62),
+    width: SW(90),
+    marginTop: 60,
     elevation: 5,
-    borderRadius: 10,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
   },
   optionText: {
     color: 'black',
-    fontSize: SF(12),
+    fontSize: SF(13),
+    // textAlign: 'center',
+    fontWeight: '500',
   },
 });
 export default Invitationreport;

@@ -33,7 +33,7 @@ import {
   Animated,
 } from 'react-native';
 import Invitationreport from '../../Screens/Invitationreport/index';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import CreateEvent from '../../Screens/CreateEvent/index';
 import ForgotPass from '../../Screens/ForgotPass/index';
@@ -64,13 +64,24 @@ import {
 } from '@react-navigation/native';
 import SignUpOTP from '../../Screens/SignUpOTP/index';
 import SignInOTP from '../../Screens/SignInOTP/index';
+import {getFromLocalStorage} from '../../Services/Api';
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
-const StackNavigation = () => {
-  <AuthStack />;
-};
+
+// const StackNavigation = () => {
+//   <AuthStack />;
+// };
 const AuthStack = () => {
+  const checkStatus = async () => {
+    const status = await getFromLocalStorage('@UserStatus');
+    if (status === 'true') {
+      navigation.navigate('Home');
+    }
+  };
+  useEffect(() => {
+    checkStatus();
+  }, []);
   return (
     <Stack.Navigator>
       <Stack.Screen

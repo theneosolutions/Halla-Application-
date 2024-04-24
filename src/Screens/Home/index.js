@@ -22,7 +22,8 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {
   getEventCategorywithid,
   getProfileWithUserId,
-  getEventWithUserId,
+  getEventBySearch,
+  // getEventWithUserId,
   getEventCategoryByUserId,
 } from '../../Services/ApiList';
 import moment from 'moment';
@@ -42,6 +43,7 @@ import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import notifee from '@notifee/react-native';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
+import Snackbar from 'react-native-snackbar';
 const Home = () => {
   const navigation = useNavigation();
   const {t} = useTranslation();
@@ -50,7 +52,7 @@ const Home = () => {
   const [upcoming, setUpcoming] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [wallet, setWallet] = useState('');
-  const [searchText, setSearchText] = useState('');
+  const [search, setSearch] = useState('');
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
@@ -60,14 +62,29 @@ const Home = () => {
   const [username, setUsername] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all'); // State to store selected filter
   const [selectedCard, setSelectedCard] = useState(null);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
   const handleCardPress = filter => {
     setSelectedCard(filter);
     // Add logic to perform other actions when a card is selected
   };
   useEffect(() => {
     setLoading(true);
-    handleGetEvents(selectedFilter); // Fetch events initially with 'ALL' filter
+    handleGetEvents(selectedFilter);
+    // Fetch events initially with 'ALL' filter
   }, [selectedFilter]);
+
+  // useEffect(() => {
+  //   searchEventsByUserid();
+  // }, [search]);
+
+  // const searchEventsByUserid = async () => {
+  //   setLoading(true);
+  //   const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
+  //   const response = await getEventBySearch(search, userInfo.id);
+  //   // setEvents(response?.data?.data);
+  //   setLoading(false);
+  //   console.log('response====searchEventsByUserid', response.data.data);
+  // };
 
   const handleGetEvents = async filter => {
     try {
@@ -311,17 +328,46 @@ const Home = () => {
     );
   };
 
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     BackHandler.exitApp();
+  //     return true;
+  //   };
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
+  //   return () => backHandler.remove();
+  // }, []);
+
+  const [backPressCount, setBackPressCount] = useState('');
+  const backAction = async () => {
+    const status = await getFromLocalStorage('@UserStatus');
+    const routes = navigation.getState().routes;
+    console.log('🚀 ~ backAction ~ routes:', routes);
+    const activeItem = routes[routes.length - 1]?.name;
+    console.log('🚀 ~ backAction ~ activeItem:', activeItem);
+    if (activeItem === 'Home' && status === 'true') {
+      // console.log('segment', route.name);
+      setBackPressCount(prevCount => prevCount + 1);
+      if (backPressCount === 1) {
+        setCurrentComponent('logoutConfirmation');
+        setBackPressCount(0);
+      } else {
+        setTimeout(() => setBackPressCount(0), 1000);
+      }
+    } else {
+      navigation.goBack();
+    }
+    return true;
+  };
   useEffect(() => {
-    const backAction = () => {
-      BackHandler.exitApp();
-      return true;
-    };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
     );
     return () => backHandler.remove();
-  }, []);
+  }, [backPressCount]);
   return (
     <View style={styles.mainview}>
       {/* <Text
@@ -334,13 +380,14 @@ const Home = () => {
         }}>
         WELCOME {username}
       </Text> */}
+
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search"
+          placeholder="Search By Event Name"
           placeholderTextColor="#000"
-          value={searchText}
-          onChangeText={text => setSearchText(text)}
+          value={search}
+          onChangeText={text => setSearch(text)}
         />
         <Feather
           name="search"

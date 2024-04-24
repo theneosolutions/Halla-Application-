@@ -1,4 +1,12 @@
-import {View, Text, StyleSheet, ActivityIndicator, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+  BackHandler,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import WebView from 'react-native-webview';
 import {getFromLocalStorage} from '../../Services/Api'; // Assuming you have a function to get data from local storage
@@ -8,14 +16,13 @@ const WebViewScreen = ({route}) => {
   const {packageData} = route.params;
   const {price, name, id} = packageData;
   const [userid, setUserId] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   console.log('dddpppppppWEB------', packageData);
   console.log('userid', userid);
-  //   console.log('userid', userIdFromStorage);
+
   useEffect(() => {
-    // Function to get userid from local storage
     const fetchUserIdFromLocalStorage = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
         setLoading(false);
@@ -48,7 +55,22 @@ const WebViewScreen = ({route}) => {
       );
     }
   };
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
   return (
     <View style={styles.container}>
       {loading ? (
@@ -56,6 +78,10 @@ const WebViewScreen = ({route}) => {
           <ActivityIndicator size="large" color="#293170" />
         </View>
       ) : (
+        // <View style={styles.webViewContainer}>
+        //   <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+        //     <Text style={styles.backButtonText}>Back</Text>
+        //   </TouchableOpacity>
         <WebView
           source={{
             uri: `https://zain.d26sw7gpdqxzte.amplifyapp.com/payments?user=${userid}&pakage=${packageData}&amount=${price}&description=test&callbackUrl=https://zain.d26sw7gpdqxzte.amplifyapp.com/payments/payments_redirect`,
@@ -63,6 +89,7 @@ const WebViewScreen = ({route}) => {
           style={styles.webView}
           onNavigationStateChange={handleNavigationStateChange}
         />
+        // </View>
       )}
     </View>
   );
@@ -74,6 +101,11 @@ const styles = StyleSheet.create({
   },
   webView: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    color: 'blue',
+    justifyContent: 'center',
   },
 });
 export default WebViewScreen;

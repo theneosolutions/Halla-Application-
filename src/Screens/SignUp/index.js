@@ -162,6 +162,7 @@ const SignUp = () => {
       console.log('SignUp Response:', response?.data?.message);
       console.log('SignUp ============:', response?.response?.data?.message);
       if (response?.data) {
+        await setItemInLocalStorage('@UserStatus', 'true');
         setMessage('User Register Successfully');
         // setBtnLoading(false);
         setCurrentComponent('signUpSuccess');

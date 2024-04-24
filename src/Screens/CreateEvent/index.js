@@ -41,6 +41,7 @@ const CreateEvent = ({navigation, route}) => {
   const [uploadText, setUploadText] = useState('Upload Image');
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [loadingCreateEvent, setLoadingCreateEvent] = useState(false);
+  const [isImageSelected, setIsImageSelected] = useState(false); // State to track whether an image is selected
 
   const openImagePicker = () => {
     ImageCropPicker.openPicker({
@@ -52,6 +53,7 @@ const CreateEvent = ({navigation, route}) => {
         console.log('imagessss.....', image);
         if (image) {
           setImagePath(image);
+          setIsImageSelected(true);
         } else {
           console.log('User cancelled image selection');
         }
@@ -60,7 +62,10 @@ const CreateEvent = ({navigation, route}) => {
         console.log('Error choosing from gallery:', error);
       });
   };
-
+  const removeImage = () => {
+    setImagePath(null); // Clear the image path
+    setIsImageSelected(false); // Set state to false when image is removed
+  };
   // const createEventData = async () => {
   //   setButtonEnable(true); // Disable the button while API call is in progress
   //   setLoading(true);
@@ -268,19 +273,37 @@ const CreateEvent = ({navigation, route}) => {
               <TouchableOpacity onPress={openImagePicker} activeOpacity={0.6}>
                 <View style={styles.imagepickerview}>
                   {imagePath ? (
-                    <Image
-                      source={{uri: imagePath.path}}
-                      style={{
-                        height: SH(190),
-                        width: '100%',
-                        backgroundColor: 'lightGray',
-                        borderTopLeftRadius: SF(20),
-                        borderBottomRightRadius: SF(20),
-                        overflow: 'hidden',
-                        resizeMode: 'contain',
-                        // position:'absolute',
-                      }}
-                    />
+                    <>
+                      <View style={{position: 'relative'}}>
+                        <TouchableOpacity
+                          style={styles.removeImageButton}
+                          onPress={removeImage}></TouchableOpacity>
+                        <Image
+                          source={{uri: imagePath.path}}
+                          style={{
+                            height: SH(190),
+                            width: '100%',
+                            backgroundColor: 'lightGray',
+                            borderTopLeftRadius: SF(20),
+                            borderBottomRightRadius: SF(20),
+                            overflow: 'hidden',
+                            resizeMode: 'contain',
+                          }}
+                        />
+                        <TouchableOpacity
+                          onPress={removeImage}
+                          style={{
+                            position: 'absolute',
+                            top: 5,
+                            right: 5,
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                            padding: 5,
+                          }}>
+                          <IconF name="close" size={SF(17)} color="black" />
+                        </TouchableOpacity>
+                      </View>
+                    </>
                   ) : (
                     <Text
                       style={{
@@ -338,7 +361,7 @@ const CreateEvent = ({navigation, route}) => {
                   {errors.eventName.message}
                 </Text>
               )}
-              <Text
+              {/* <Text
                 style={{
                   fontSize: SF(15),
                   color: 'black',
@@ -356,7 +379,7 @@ const CreateEvent = ({navigation, route}) => {
                   onChangeText={text => setEventDescription(text)}
                   value={eventDescription}
                 />
-              </View>
+              </View> */}
               {/* <Spacing space={SH(10)} /> */}
               <Text
                 style={{
@@ -378,8 +401,7 @@ const CreateEvent = ({navigation, route}) => {
                   borderColor: '#293170',
 
                   marginLeft: SW(20),
-                  // paddingVertical: SH(18),
-                  // paddingHorizontal: SW(14),
+
                   borderTopLeftRadius: SF(24),
                   borderBottomRightRadius: SF(21),
                 }}>
@@ -588,13 +610,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: SF(17),
     paddingTop: SH(10),
-    // fontFamily: Fonts.Poppins_Medium,
+
     backgroundColor: 'white',
     justifyContent: 'center',
     marginLeft: SH(18),
     borderColor: '#293170',
-    // borderTopLeftRadius: SF(20),
-    // borderBottomRightRadius: SF(20),
+
     borderWidth: 1,
   },
 });
