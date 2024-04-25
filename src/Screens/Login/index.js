@@ -124,7 +124,10 @@ const Login = () => {
         );
         setCurrentComponent('login');
         setLoading(false);
-        navigation.navigate('Home');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
       } else if (response?.response?.data?.message) {
         Snackbar.show({
           text: 'Email or password is invalid',

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,44 +6,29 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Dimensions,
   FlatList,
-  StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  BackHandler,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-// import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {Spacing, Search, Button} from '../../Components';
-import Style from '../../styles/CommonStyle/Style';
-import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import moment from 'moment';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/native';
+import images from '../../index';
+import { getFromLocalStorage } from '../../Services/Api';
+import { useTranslation } from 'react-i18next';
+import { SF, SW, SH, Colors } from '../../utils';
+import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import {
   getEventCategorywithid,
   getProfileWithUserId,
   getEventBySearch,
-  // getEventWithUserId,
   getEventCategoryByUserId,
 } from '../../Services/ApiList';
-import moment from 'moment';
-import MessagingStyles from '../../styles/CommonStyle/MessagingStyles';
-import IconG from 'react-native-vector-icons/Ionicons';
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  useNavigation,
-  useTheme,
-  useFocusEffect,
-} from '@react-navigation/native';
-import images from '../../index';
-import {getFromLocalStorage} from '../../Services/Api';
-import {useTranslation} from 'react-i18next';
-import {SF, SW, SH, Colors} from '../../utils';
-import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
-import notifee from '@notifee/react-native';
+import { Spacing } from '../../Components';
+import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
-import Snackbar from 'react-native-snackbar';
+
 const Home = () => {
   const navigation = useNavigation();
   const {t} = useTranslation();
@@ -177,6 +162,27 @@ const Home = () => {
       } finally {
         setLoadingMore(false);
       }
+    }
+  };
+
+  useEffect(() => {
+    if (search !== '') { 
+      searchEvents();
+    } else {
+      handleGetEvents(selectedFilter);
+    }
+  }, [search]);
+  
+  const searchEvents = async () => {
+    try {
+      setLoading(true);
+      const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
+      const response = await getEventBySearch(search, userInfo.id);
+      console.log("🚀 ~ searchEvents ~ response?.data?.data:", response)
+      setEvents(response?.data?.data || []); // Set events data or empty array if undefined
+      setLoading(false);
+    } catch (error) {
+      console.error('Error searching events:', error);
     }
   };
 
@@ -327,47 +333,7 @@ const Home = () => {
       </TouchableOpacity>
     );
   };
-
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     BackHandler.exitApp();
-  //     return true;
-  //   };
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     backAction,
-  //   );
-  //   return () => backHandler.remove();
-  // }, []);
-
-  const [backPressCount, setBackPressCount] = useState('');
-  const backAction = async () => {
-    const status = await getFromLocalStorage('@UserStatus');
-    const routes = navigation.getState().routes;
-    console.log('🚀 ~ backAction ~ routes:', routes);
-    const activeItem = routes[routes.length - 1]?.name;
-    console.log('🚀 ~ backAction ~ activeItem:', activeItem);
-    if (activeItem === 'Home' && status === 'true') {
-      // console.log('segment', route.name);
-      setBackPressCount(prevCount => prevCount + 1);
-      if (backPressCount === 1) {
-        setCurrentComponent('logoutConfirmation');
-        setBackPressCount(0);
-      } else {
-        setTimeout(() => setBackPressCount(0), 1000);
-      }
-    } else {
-      navigation.goBack();
-    }
-    return true;
-  };
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
-  }, [backPressCount]);
+  
   return (
     <View style={styles.mainview}>
       {/* <Text

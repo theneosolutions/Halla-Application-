@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -8,74 +8,21 @@ import {
   ImageBackground,
   Button,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
-// import usePushNotification from '../utils/PushNotification_helper';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import images from '../../index';
 import styles from './styles';
 import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import en from '../../Language/english';
 import ar from '../../Language/arabic';
-import notifee from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// ///////////////onbutton notification//foreground message //////////
-// const onDisplayNotification = async () => {
-//   try {
-//     if (Platform.OS === 'android') {
-//       const permissionStatus = await notifee.requestPermission();
-
-//     }
-
-//     const channelId = await notifee.createChannel({
-//       id: 'default',
-//       name: 'Default Channel',
-//     });
-
-//     await notifee.displayNotification({
-//       title: 'welcome to app',
-//       body: 'hay  hiiii',
-//       android: {
-//         channelId,
-//           pressAction: {
-//           id: 'default',
-//         },
-//       },
-//     });
-//   } catch (error) {
-//     console.error('Error displaying notification:', error);
-//   }
-// };
-
-// ///////////////////////////////////////
-// const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
-// /////////////////////messageing//////////
-
-// const backgroundImages = [
-//   require('../images/backgroundimgone.jpg'),
-//   require('../images/backgroundimgfour.jpg'),
-//   require('../images/backgroundimgfifth.jpg'),
-//   // Add more images here
-// ];
-
-// // Initialize i18next
-// i18n.use(initReactI18next).init({
-//   resources: {
-//     en: {translation: en},
-//     ar: {translation: ar},
-//   },
-//   lng: 'en', // default language
-//   fallbackLng: 'en',
-//   interpolation: {
-//     escapeValue: false,
-//   },
-// });
 i18n.use(initReactI18next).init({
   resources: {
-    en: {translation: en},
-    ar: {translation: ar},
+    en: { translation: en },
+    ar: { translation: ar },
   },
   lng: 'en', // default language
   fallbackLng: 'en',
@@ -84,9 +31,10 @@ i18n.use(initReactI18next).init({
   },
 });
 
-const SplashScreen = ({navigation}) => {
+const SplashScreen = ({ navigation }) => {
   const [language, setLanguage] = useState('en');
-  const {t} = useTranslation();
+  const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
   const toggleLanguage = () => {
     const newLanguage = language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLanguage);
@@ -98,18 +46,70 @@ const SplashScreen = ({navigation}) => {
       const token = await AsyncStorage.getItem('@UserToken');
       if (token !== null) {
         // Token exists, navigate to HomeScreen
-        navigation.navigate('Home');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
       } else {
         // Token doesn't exist, navigate to GoogleLoginScreen
         navigation.navigate('Login');
       }
     } catch (error) {
       console.error('Error retrieving token:', error);
+    } finally {
+      // Set loading to false once token check is completed
+      setLoading(false);
     }
   };
-  useEffect(() => {
+
+  useLayoutEffect(() => {
     checkToken();
   }, []);
+
+  // Display loading indicator with overlay while checking token
+  if (loading) {
+    return (
+      <View style={styles.Container}>
+        <TouchableOpacity onPress={toggleLanguage} style={styles.SwitchStyle}>
+          {language === 'en' ? (
+            <>
+              <Image
+                source={require('../../images/engLang.png')}
+                style={styles.SwitchImage}
+              />
+              <Text style={styles.textStyle}>Eng</Text>
+            </>
+          ) : (
+            <>
+              <Image
+                source={require('../../images/arabLang.png')}
+                style={styles.SwitchImage}
+              />
+              <Text style={styles.textStyle}>عربى</Text>
+            </>
+          )}
+        </TouchableOpacity>
+
+        <View style={styles.logoContainer}>
+          <Image source={images.halalogo} style={styles.imgstyle} />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.touchablestyle}
+            onPress={() => navigation.navigate('RegistrationScreen')}>
+            <Text style={styles.btntext}>{t('started')}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.overlayContainer}>
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.Container}>
       <TouchableOpacity onPress={toggleLanguage} style={styles.SwitchStyle}>
@@ -146,4 +146,5 @@ const SplashScreen = ({navigation}) => {
     </View>
   );
 };
+
 export default SplashScreen;

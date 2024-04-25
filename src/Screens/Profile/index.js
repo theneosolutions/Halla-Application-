@@ -62,14 +62,17 @@ const Profile = props => {
   };
   const clearLocalStorageData = async () => {
     try {
-      await AsyncStorage.removeItem('profileData');
-
+      await AsyncStorage.removeItem('@UserToken');
+      await AsyncStorage.removeItem('@UserInfo');
       // Other keys to remove if any
       // await AsyncStorage.removeItem('otherKey');
       // ...
       console.log('Local storage data cleared');
       setModalVisible(false);
-      navigation.navigate('Login');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
     } catch (error) {
       console.error('Error clearing local storage:', error);
     }

@@ -3,8 +3,24 @@ import {Fonts, SF, SH, SW, Colors} from '../../utils';
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: 'white',
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  overlayContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    width: 100,
+    height: 100,
+    marginLeft: -50,
+    marginTop: -50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 10,
+    padding: 10,
   },
   SwitchStyle: {
     flexDirection: 'row',

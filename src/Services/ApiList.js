@@ -106,12 +106,7 @@ export const getEventBySearch = async (search, user) => {
   const url = `/api/events/byUserId/${user}?search=${search}`;
   console.log('+++++++url-----getEventBySearch', url);
   const res = await api(baseUrl, url, {}, 'GET', true, false);
-
-  console.log(
-    'responseeeeeee=================================================',
-    res,
-  );
-  // return res;
+  return res;
 };
 export const getEventCategorywithid = async id => {
   const url = `/api/events/categorize/byUserId/${id}?order=DESC&page=1&take=100&filter=monthly`;
