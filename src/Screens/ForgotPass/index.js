@@ -41,7 +41,7 @@ const ForgotPass = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.touchablestyleW}
-          onPress={() => navigation.navigate('Forgotemail')}>
+          onPress={() => navigation.navigate('ForgotPhone')}>
           <View style={{flexDirection: 'row'}}>
             <AntDesign
               size={SF(20)}

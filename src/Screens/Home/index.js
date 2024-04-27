@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,14 +9,15 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  BackHandler,
 } from 'react-native';
 import moment from 'moment';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import images from '../../index';
-import { getFromLocalStorage } from '../../Services/Api';
-import { useTranslation } from 'react-i18next';
-import { SF, SW, SH, Colors } from '../../utils';
+import {getFromLocalStorage} from '../../Services/Api';
+import {useTranslation} from 'react-i18next';
+import {SF, SW, SH, Colors} from '../../utils';
 import BirthdayCard from '../../Components/commonComponents/BirthdayCard';
 import {
   getEventCategorywithid,
@@ -24,13 +25,14 @@ import {
   getEventBySearch,
   getEventCategoryByUserId,
 } from '../../Services/ApiList';
-import { Spacing } from '../../Components';
+import {Spacing} from '../../Components';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
-
+import Snackbar from 'react-native-snackbar';
 const Home = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const {t} = useTranslation();
   const [loading, setLoading] = useState(true);
   const [card, setCard] = useState([]);
@@ -43,21 +45,57 @@ const Home = () => {
   const [pageCount, setPageCount] = useState(1);
   const [take, setTake] = useState(10);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [dataNotFound, setDataNotFound] = useState(false); // State for showing data not found message
+  const [dataNotFound, setDataNotFound] = useState(false);
   const [username, setUsername] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all'); // State to store selected filter
+  const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedCard, setSelectedCard] = useState(null);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [backPressCount, setBackPressCount] = useState(0); // State to track back press count
+
   const handleCardPress = filter => {
     setSelectedCard(filter);
-    // Add logic to perform other actions when a card is selected
   };
   useEffect(() => {
     setLoading(true);
-    handleGetEvents(selectedFilter);
-    // Fetch events initially with 'ALL' filter
-  }, [selectedFilter]);
 
+    handleGetEvents(selectedFilter);
+  }, [selectedFilter]);
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove(); // Cleanup the event listener when component unmounts
+  }, [isFocused, backPressCount]);
+  const handleBackPress = () => {
+    if (!isFocused) return; // Don't handle back press if the screen is not focused
+
+    // Your back press logic here
+    if (backPressCount === 0) {
+      setBackPressCount(1);
+      Snackbar.show({
+        text: 'Press again to exit',
+        duration: Snackbar.LENGTH_SHORT,
+        // Styling for Snackbar
+        backgroundColor: '#293170', // Example background color
+        textColor: 'white', // Example text color
+        action: {
+          text: 'OK',
+          textColor: 'white',
+          onPress: () => {
+            // Do something when action button is pressed
+          },
+        },
+      });
+      setTimeout(() => setBackPressCount(0), 2000); // Reset back press count after 2 seconds
+      return true; // Prevent default behavior (exit app)
+    } else {
+      // Perform app exit
+      BackHandler.exitApp();
+      return true;
+    }
+  };
   // useEffect(() => {
   //   searchEventsByUserid();
   // }, [search]);
@@ -81,10 +119,7 @@ const Home = () => {
         selectedFilter,
       );
 
-      console.log(
-        '🚀 ~ handleGetEvents ~ response?.data?.data:',
-        response?.data,
-      );
+      console.log('homeeeeee==============:', response?.data?.data);
       setEvents(response?.data?.data || []); // Set events data or empty array if undefined
 
       if (response?.data) {
@@ -121,7 +156,7 @@ const Home = () => {
       try {
         const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
         const response = await getProfileWithUserId(Gettingtoken.id);
-        // console.log('response++++++++++', response?.data?.username);
+
         setUsername(response?.data?.username);
         setWallet(response.data.wallet);
       } catch (error) {
@@ -166,19 +201,19 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (search !== '') { 
+    if (search !== '') {
       searchEvents();
     } else {
       handleGetEvents(selectedFilter);
     }
   }, [search]);
-  
+
   const searchEvents = async () => {
     try {
       setLoading(true);
       const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
       const response = await getEventBySearch(search, userInfo.id);
-      console.log("🚀 ~ searchEvents ~ response?.data?.data:", response)
+      console.log('🚀 ~ searchEvents ~ response?.data?.data:', response);
       setEvents(response?.data?.data || []); // Set events data or empty array if undefined
       setLoading(false);
     } catch (error) {
@@ -272,44 +307,63 @@ const Home = () => {
                 width: '91%',
                 borderTopWidth: 1,
                 borderColor: '#293170',
-                paddingVertical: 1,
-                paddingHorizontal: 2,
+                // paddingVertical: 1,
+                // paddingHorizontal: 2,
               }}>
-              <View
-                style={{
-                  width: 120,
-                  flexDirection: 'row',
-                  width: 60,
-                  justifyContent: 'space-between',
-                  paddingVertical: 5,
-                  paddingHorizontal: 2,
-                }}>
-                <MCIcon
-                  size={SF(20)}
-                  name="account-multiple-plus"
-                  style={{...styles.boldstyle, marginRight: 3}}
-                />
-                <MCIcon
-                  size={SF(20)}
-                  name="account-multiple-check-outline"
-                  style={{...styles.boldstyle, marginRight: 3}}
-                />
-                <MCIcon
-                  size={SF(20)}
-                  name="account-multiple-remove"
-                  style={{...styles.boldstyle, marginRight: 3}}
-                />
-                <MCIcon
-                  size={SF(20)}
-                  name="android-messages"
-                  style={{...styles.boldstyle, marginRight: 3}}
-                />
-              </View>
+              {item.stats.map(list => {
+                return (
+                  <View
+                    style={{
+                      width: '55%',
+                      backgroundColor: 'white',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      paddingVertical: 5,
+                      marginRight: 15,
+                      // paddingHorizontal: 2,
+                    }}>
+                    <View style={{flexDirection: 'row'}}>
+                      <MCIcon
+                        size={SF(20)}
+                        name="account-multiple-plus"
+                        style={{...styles.boldstyle, marginRight: 3}}
+                      />
+                      <Text>{list.GuestNotInvited}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <MCIcon
+                        size={SF(20)}
+                        name="account-multiple-check-outline"
+                        style={{...styles.boldstyle, marginRight: 3}}
+                      />
+                      <Text>{list.GuestInvited}</Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row'}}>
+                      <MCIcon
+                        size={SF(20)}
+                        name="account-multiple-remove"
+                        style={{...styles.boldstyle, marginRight: 3}}
+                      />
+                      <Text>{list.GuestConfirmed}</Text>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                      <MCIcon
+                        size={SF(20)}
+                        name="android-messages"
+                        style={{...styles.boldstyle, marginRight: 3}}
+                      />
+                      <Text>{list.GuestFailed}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+
               {/* Render button text based on the selected category */}
               <TouchableOpacity
                 style={{
                   height: 35,
-                  width: 120,
+                  width: 100,
                   backgroundColor: '#293170',
                   color: 'white',
                   marginLeft: 'auto',
@@ -333,7 +387,7 @@ const Home = () => {
       </TouchableOpacity>
     );
   };
-  
+
   return (
     <View style={styles.mainview}>
       {/* <Text

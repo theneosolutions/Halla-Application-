@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     marginLeft: SF(60),
     textAlign: 'center',
     marginTop: SH(14),
-    color: 'gray',
-    fontWeight: '500',
+    color: 'black',
+    fontWeight: '400',
   },
   underlinetext: {
     textDecorationLine: 'underline',
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: SF(5),
     marginTop: SH(14),
+    fontWeight: '600',
   },
   textinputstyle: {
     borderBottomWidth: 1.5,
@@ -102,6 +103,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     alignSelf: 'center',
     paddingVertical: 15,
+  },
+  textStyles: {
+    color: '#293170',
+    fontSize: SF(16),
   },
 });
 export default styles;

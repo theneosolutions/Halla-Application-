@@ -126,7 +126,7 @@ const Login = () => {
         setLoading(false);
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Home' }],
+          routes: [{name: 'Home'}],
         });
       } else if (response?.response?.data?.message) {
         Snackbar.show({

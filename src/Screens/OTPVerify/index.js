@@ -38,11 +38,11 @@ const OTPVerify = ({navigation, route}) => {
   return (
     <View style={styles.Container}>
       <View style={styles.firstView}>
-        <Text style={styles.boldstyle}>{t('EnterYourCode')}</Text>
+        {/* <Text style={styles.boldstyle}>{t('EnterYourCode')}</Text> */}
         {/* <Text style={styles.lighttext}>{t('OTPtext')}</Text> */}
         <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
-
+      <Text style={styles.textStyles}>Enter OTP sent to your email,below</Text>
       <View style={styles.optView}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           {otp.map((digit, index) => (
@@ -63,7 +63,7 @@ const OTPVerify = ({navigation, route}) => {
         {/* <Text style={styles.codeExpireStyle}>{t('CodeExpires')}</Text> */}
 
         <View style={styles.dontreviewopt}>
-          <Text style={styles.lighttextgray}>{t('dontrecevidOTP')}</Text>
+          <Text style={styles.lighttextgray}>OTP not received?</Text>
           <TouchableOpacity>
             <Text style={styles.underlinetext}>{t('ResendOTP')}</Text>
           </TouchableOpacity>

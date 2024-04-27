@@ -30,7 +30,6 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const Invitationreport = ({route, ...props}) => {
   const {id} = route.params;
-
   const {t} = useTranslation();
   const navigation = useNavigation();
   const [singleData, setSingleData] = useState({});
@@ -51,19 +50,16 @@ const Invitationreport = ({route, ...props}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isShareOptionsVisible, setIsShareOptionsVisible] = useState(false);
 
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
   const DeleteEventFromList = async eventId => {
     try {
       const response = await deleteEventbyId(eventId);
-      // console.log('Events:.....======+++++--------', response);
+
       if (response && response.status === 200) {
         setSingleData({});
         navigation.navigate('Home');
-        // console.log('Event deleted successfully');
       } else if (response && response.status === 404) {
         const confirmDeletion = window.confirm(
           'Are you sure you want to delete this contact?',
@@ -86,20 +82,16 @@ const Invitationreport = ({route, ...props}) => {
   const handleRefresh = () => {
     setRefreshing(true);
 
-    // Fetch data again
     handleGetByUserId();
 
     setRefreshing(false);
   };
-  // console.log('singleData', singleData);
+
   useEffect(() => {
-    // Fetch data from the EventId API
     const fetchData = async () => {
       try {
         const response = await EventId(id);
-        // console.log('response?.data?.id===++++', response?.data?.id);
-        // const Events = response?.data?.id;
-        // console.log('EventId', Events);
+
         if (response?.data?.id) {
           setSingleData(response.data);
         }
@@ -111,15 +103,9 @@ const Invitationreport = ({route, ...props}) => {
 
     fetchData();
 
-    // Cleanup function
-    return () => {
-      // Cleanup logic if needed
-    };
+    return () => {};
   }, [id]);
 
-  const handleEditEvent = async () => {
-    // console.log('first');
-  };
   useFocusEffect(
     useCallback(() => {
       handleGetByUserId(id);
@@ -130,7 +116,7 @@ const Invitationreport = ({route, ...props}) => {
     try {
       setLoading(true);
       const response = await EventId(id);
-      // console.log('Events:.....===eventid===', response?.data);
+      console.log('Events:.....===eventid===', response?.data?.stats);
       if (response?.data) {
         setSingleData(response.data);
         if (response.data.stats && response.data.stats.length > 0) {
@@ -177,7 +163,8 @@ const Invitationreport = ({route, ...props}) => {
   const handleSendInvites = async () => {
     try {
       const response = await SendInvites(id);
-      // console.log('response', response);
+      console.log('🚀 ~ handleSendInvites ~ response:----', response);
+
       setTimeout(() => {
         setInviteLoading(false);
         Alert.alert('Success', 'Your invitations are sent.');
@@ -197,7 +184,7 @@ const Invitationreport = ({route, ...props}) => {
   const openContactslist = () => {
     if (singleData && singleData?.invites) {
       const invitesCount = singleData?.invites?.length;
-      // console.log('singleData=======', singleData);
+
       console.log('🚀 ~ openContactslist ~ invitesCount:', invitesCount);
       if (invitesCount === 0) {
         navigation.navigate('AddGuest', {id});
@@ -218,7 +205,7 @@ const Invitationreport = ({route, ...props}) => {
       handleSendInvites();
     }
   };
-  // console.log('singleData--------------------=======', singleData);
+
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
   };
@@ -248,135 +235,137 @@ const Invitationreport = ({route, ...props}) => {
     setShowModal(false);
   };
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <ScrollView
-        // style={{backgroundColor: 'red'}}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.scrollViewContainer}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }>
-        <View
-          style={{
-            ...styles.Container,
-            backgroundColor: 'transparent',
-            marginBottom: 0,
-          }}>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-              <IconF size={SF(20)} name="left" style={styles.headerIcon} />
-            </TouchableOpacity>
-            <Text style={styles.headerText}>Invitation Report</Text>
-
-            <TouchableOpacity
-              onPress={toggleModal}
-              // onPress={toggleView}
-              style={styles.iconContainer}>
-              <Egypto
-                size={20}
-                name="dots-three-vertical"
-                style={styles.headerIcon}
-              />
-            </TouchableOpacity>
-          </View>
-          {isViewVisible && (
-            <View style={styles.modalContentDotView}>
-              <TouchableOpacity
-                style={styles.option}
-                onPress={() => navigation.navigate('EditEvent', {id})}>
-                <IconF size={SF(20)} name="edit" style={styles.boldstyle} />
+    <TouchableWithoutFeedback onPress={() => setIsShareOptionsVisible(false)}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <ScrollView
+          // style={{backgroundColor: 'red'}}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.scrollViewContainer}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }>
+          <View
+            style={{
+              ...styles.Container,
+              backgroundColor: 'transparent',
+              marginBottom: 0,
+            }}>
+            <View style={styles.headerContainer}>
+              <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <IconF size={SF(20)} name="left" style={styles.headerIcon} />
               </TouchableOpacity>
+              <Text style={styles.headerText}>Invitation Report</Text>
+
               <TouchableOpacity
-                onPress={() => handleDeleteEvent(singleData?.id)}>
-                <IconM size={SF(20)} name="delete" style={styles.boldstyle} />
+                onPress={toggleModal}
+                // onPress={toggleView}
+                style={styles.iconContainer}>
+                <Egypto
+                  size={20}
+                  name="dots-three-vertical"
+                  style={styles.headerIcon}
+                />
               </TouchableOpacity>
             </View>
-          )}
-          {loading ? (
-            <ActivityIndicator
-              style={styles.loader}
-              size="large"
-              color="#000"
-            />
-          ) : (
-            <>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  width: '96%',
-                  height: 100,
-                  margin: 5,
-                  backgroundColor: '#ffff',
-                  marginBottom: 10,
-                }}>
+            {isViewVisible && (
+              <View style={styles.modalContentDotView}>
+                <TouchableOpacity
+                  style={styles.option}
+                  onPress={() => navigation.navigate('EditEvent', {id})}>
+                  <IconF size={SF(20)} name="edit" style={styles.boldstyle} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleDeleteEvent(singleData?.id)}>
+                  <IconM size={SF(20)} name="delete" style={styles.boldstyle} />
+                </TouchableOpacity>
+              </View>
+            )}
+            {loading ? (
+              <ActivityIndicator
+                style={styles.loader}
+                size="large"
+                color="#000"
+              />
+            ) : (
+              <>
                 <View
                   style={{
-                    flexDirection: 'column',
-                    marginTop: 5,
-                    // alignItems: 'center',
-                    // justifyContent: 'center',
+                    flexDirection: 'row',
+                    width: '96%',
+                    height: 100,
+                    margin: 5,
+                    backgroundColor: '#ffff',
+                    marginBottom: 10,
                   }}>
-                  <Text
+                  <View
                     style={{
-                      textAlign: 'start',
-                      fontSize: 17,
-                      fontWeight: '600',
-                      color: 'black',
-                      marginTop: 15,
-                      marginLeft: 10,
+                      flexDirection: 'column',
+                      marginTop: 5,
+                      // alignItems: 'center',
+                      // justifyContent: 'center',
                     }}>
-                    Invitation Report
-                  </Text>
-                  <Text
-                    style={{
-                      textAlign: 'start',
-                      fontSize: 14,
-                      fontWeight: '600',
-                      color: 'black',
-                      marginLeft: 10,
-                      // marginBottom: 10,
-                    }}>
-                    Your event invitation report is here
-                  </Text>
-                </View>
-                {/* Right side containing dropdown */}
-                <View
-                  style={{
-                    width: '16%',
-                    // backgroundColor: 'red',
-                    // marginLeft: 'auto',
-                    height: 15,
-                    marginTop: 15,
-                    color: 'white',
-                    position: 'absolute',
-                    right: 0,
-                    marginLeft: 120,
-                  }}>
-                  <TouchableOpacity
-                    onPress={toggleShareOptions}
-                    style={styles.SendIconView}>
                     <Text
                       style={{
-                        marginLeft: 3,
-                        marginRight: 1,
-                        marginTop: 8,
-                        color: 'white',
-                        fontSize: 12,
+                        textAlign: 'start',
+                        fontSize: 17,
+                        fontWeight: '600',
+                        color: 'black',
+                        marginTop: 15,
+                        marginLeft: 10,
                       }}>
-                      Send
+                      Invitation Report
                     </Text>
-                    <IconF
-                      size={SF(17)}
-                      name="caretdown"
+                    <Text
                       style={{
-                        marginLeft: 6,
-                        // marginRight: 1,
-                        marginTop: 8,
-                        color: 'white',
-                      }}
-                    />
-                  </TouchableOpacity>
-                  {/* <DropDownPicker
+                        textAlign: 'start',
+                        fontSize: 14,
+                        fontWeight: '600',
+                        color: 'black',
+                        marginLeft: 10,
+                        // marginBottom: 10,
+                      }}>
+                      Your event invitation report is here
+                    </Text>
+                  </View>
+                  {/* Right side containing dropdown */}
+                  <View
+                    style={{
+                      width: '16%',
+                      // backgroundColor: 'red',
+                      // marginLeft: 'auto',
+                      height: 15,
+                      marginTop: 15,
+                      color: 'white',
+                      position: 'absolute',
+                      right: 0,
+                      marginLeft: 120,
+                    }}>
+                    <TouchableOpacity
+                      onPress={toggleShareOptions}
+                      style={styles.SendIconView}>
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          marginRight: 1,
+                          marginTop: 8,
+                          color: 'white',
+                          fontSize: 14,
+                          fontWeight: '700',
+                        }}>
+                        Send
+                      </Text>
+                      <IconF
+                        size={SF(16)}
+                        name="caretdown"
+                        style={{
+                          marginLeft: 6,
+                          // marginRight: 1,
+                          marginTop: 8,
+                          color: 'white',
+                        }}
+                      />
+                    </TouchableOpacity>
+                    {/* <DropDownPicker
                     items={[
                       {label: 'Remainder', value: 'Remainder'},
                       {label: 'Invitation', value: 'Invitation'},
@@ -404,333 +393,400 @@ const Invitationreport = ({route, ...props}) => {
                     placeholder="Send"
                     iconStyle={{color: 'white'}}
                   /> */}
-                  {inviteLoading && (
-                    <ActivityIndicator
-                      style={{
-                        position: 'absolute',
-                        top: 15,
-                        right: 40,
-                        zIndex: 1000000,
-                      }}
-                      size="small"
-                      color="white"
-                    />
+                    {inviteLoading && (
+                      <ActivityIndicator
+                        style={{
+                          position: 'absolute',
+                          top: 15,
+                          right: 40,
+                          zIndex: 1000000,
+                        }}
+                        size="small"
+                        color="white"
+                      />
+                    )}
+                  </View>
+                  {isShareOptionsVisible && (
+                    <View style={styles.shareOptions}>
+                      <TouchableOpacity
+                        style={styles.option}
+                        onPress={() => {
+                          handleSendInvites();
+                          // Implement share functionality
+                          // toggleShareOptions();
+                        }}>
+                        <Text style={styles.optionText}>Send Invite</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.option}
+                        onPress={() => {
+                          // Implement other share functionality
+                          toggleShareOptions();
+                        }}>
+                        <Text style={styles.optionText}>Send Remaind</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
+                  {/* Subheading */}
+
+                  {/* Display selected option in a separate column */}
+                  {selectedOption && (
+                    <View style={SplashStyl.selectedOptionContainer}>
+                      <Text>Selected Option:</Text>
+                      <Text>{selectedOption}</Text>
+                    </View>
                   )}
                 </View>
-                {isShareOptionsVisible && (
-                  <View style={styles.shareOptions}>
-                    <TouchableOpacity
-                      style={styles.option}
-                      onPress={() => {
-                        handleSendInvites();
-                        // Implement share functionality
-                        // toggleShareOptions();
-                      }}>
-                      <Text style={styles.optionText}>Send Invite</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.option}
-                      onPress={() => {
-                        // Implement other share functionality
-                        toggleShareOptions();
-                      }}>
-                      <Text style={styles.optionText}>Send Remaind</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-                {/* Subheading */}
-
-                {/* Display selected option in a separate column */}
-                {selectedOption && (
-                  <View style={SplashStyl.selectedOptionContainer}>
-                    <Text>Selected Option:</Text>
-                    <Text>{selectedOption}</Text>
-                  </View>
-                )}
-              </View>
-              <Spacing space={SH(60)} />
-              {/* ////////////////boxrow1///////////////////// */}
-              <View style={styles.RowView}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                  }}>
-                  <View style={SplashStyl.insideboxview}>
-                    <Text style={SplashStyl.boxtext}>Invited</Text>
-                    <View style={SplashStyl.imageView}>
-                      <Image
-                        source={images.blueiconone}
-                        style={SplashStyl.imagestyle}
-                      />
-                      {/* Badge */}
-                      <View style={styles.badgeContainer}>
-                        <Text style={styles.badgeText}>
-                          {eventStats?.GuestInvited}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                {/* box2 */}
-                <View style={SplashStyl.insideboxview}>
-                  <Text style={SplashStyl.boxtext}> Messages</Text>
-                  <View style={SplashStyl.imageView}>
-                    <Image
-                      source={images.messagesicon}
-                      style={SplashStyl.imagestyle}
-                    />
-                    {/* Badge */}
-                    <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>
-                        {eventStats?.GuestMessages}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                {/* box3 */}
-                <View style={SplashStyl.insideboxview}>
-                  <Text style={SplashStyl.boxtext}>confirmed</Text>
-                  <View style={SplashStyl.imageView}>
-                    <Image
-                      source={images.confirmed}
-                      style={SplashStyl.imagestyle}
-                    />
-                    {/* Badge */}
-                    <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>
-                        {eventStats?.GuestConfirmed}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                {/* box4 */}
-                <View style={SplashStyl.insideboxview}>
-                  <Text style={SplashStyl.boxtext}>Scanned</Text>
-                  <View style={SplashStyl.imageView}>
-                    <Image
-                      source={images.scanned}
-                      style={SplashStyl.imagestyle}
-                    />
-                    {/* Badge */}
-                    <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>
-                        {eventStats?.GuestScanned}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              {/* ////////////////////box1end//////// */}
-              {/* <Spacing space={SH(20)} /> */}
-              {/* ////////////////boxrow1///////////////////// */}
-              <View style={styles.RowView}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                  }}>
-                  <View style={SplashStyl.insideboxview}>
-                    <Text style={SplashStyl.boxtext}>Waiting</Text>
-                    <View style={SplashStyl.imageView}>
-                      <Image
-                        source={images.waitng}
-                        style={SplashStyl.imagestyle}
-                      />
-                      {/* Badge */}
-                      <View style={styles.badgeContainer}>
-                        <Text style={styles.badgeText}>
-                          {eventStats?.GuestNotInvited}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                {/* box2 */}
-                <View style={SplashStyl.insideboxview}>
-                  <Text style={SplashStyl.boxtext}> Rejected</Text>
-                  <View style={SplashStyl.imageView}>
-                    <Image
-                      source={images.rejected}
-                      style={SplashStyl.imagestyle}
-                    />
-                    {/* Badge */}
-                    <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>
-                        {eventStats?.GuestRejected}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                {/* box3 */}
-                <View style={SplashStyl.insideboxview}>
-                  <Text style={SplashStyl.boxtext}>Not Invited</Text>
-
-                  <View style={SplashStyl.imageView}>
-                    <Image
-                      source={images.notinivted}
-                      style={SplashStyl.imagestyle}
-                    />
-                    {/* Badge */}
-                    <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>
-                        {eventStats?.GuestNotInvited}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                {/* box4 */}
-                <View style={SplashStyl.insideboxview}>
-                  <Text style={SplashStyl.boxtext}>Failed</Text>
-
-                  <View style={SplashStyl.imageView}>
-                    <Image
-                      source={images.Failedicon}
-                      style={SplashStyl.imagestyle}
-                    />
-                    {/* Badge */}
-                    <View style={styles.badgeContainer}>
-                      <Text style={styles.badgeText}>
-                        {eventStats?.GuestFailed}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-              <TouchableOpacity onPress={openContactslist}>
-                <View style={styles.addGuestButton}>
-                  <Image
-                    source={images.gridicons_add}
-                    style={{height: 40, width: 40, marginRight: 10}}
-                  />
-                  <Text style={styles.addGuestButtonText}>Add new Guest</Text>
-                </View>
-              </TouchableOpacity>
-              <View
-                style={{
-                  height: SH(100),
-                  width: SW(100),
-                  marginBottom: 200,
-                }}>
-                <View style={styles.slide}>
+                <Spacing space={SH(60)} />
+                {/* ////////////////boxrow1///////////////////// */}
+                <View style={styles.RowView}>
                   <View
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      justifyContent: 'space-evenly',
                     }}>
-                    <Text
-                      style={{
-                        color: 'black',
-                        fontWeight: '600',
-                        fontSize: 12,
-                        marginRight: 30,
-                      }}>
-                      {singleData?.name}
-                    </Text>
-                    <Text
-                      style={{
-                        color: 'black',
-                        fontWeight: '600',
-                        fontSize: 12,
-                        marginLeft: 35,
-                      }}>
-                      {singleData?.eventDate}
-                    </Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('InvitesDetail', {
+                          eventId: id,
+                          invitesCurrentStatus: 'invited', // Assuming `status` holds the current status of invites
+                        })
+                      }>
+                      <View style={SplashStyl.insideboxview}>
+                        <Text style={SplashStyl.boxtext}>Invited</Text>
+                        <View style={SplashStyl.imageView}>
+                          <Image
+                            source={images.blueiconone}
+                            style={SplashStyl.imagestyle}
+                          />
+                          {/* Badge */}
+                          <View style={styles.badgeContainer}>
+                            <Text style={styles.badgeText}>
+                              {eventStats?.GuestInvited}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                  <Image
-                    source={{uri: singleData?.image}}
-                    style={styles.images}
-                  />
+
+                  {/* box2 */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('InvitesMessages', {
+                        eventId: id,
+                        invitesCurrentStatus: 'Messages', // Assuming `status` holds the current status of invites
+                      })
+                    }>
+                    <View style={SplashStyl.insideboxview}>
+                      <Text style={SplashStyl.boxtext}> Messages</Text>
+                      <View style={SplashStyl.imageView}>
+                        <Image
+                          source={images.messagesicon}
+                          style={SplashStyl.imagestyle}
+                        />
+                        {/* Badge */}
+                        <View style={styles.badgeContainer}>
+                          <Text style={styles.badgeText}>
+                            {eventStats?.GuestMessages}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  {/* box3 */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('InvitesDetail', {
+                        eventId: id,
+                        invitesCurrentStatus: 'confirmed', // Assuming `status` holds the current status of invites
+                      })
+                    }>
+                    <View style={SplashStyl.insideboxview}>
+                      <Text style={SplashStyl.boxtext}>confirmed</Text>
+                      <View style={SplashStyl.imageView}>
+                        <Image
+                          source={images.confirmed}
+                          style={SplashStyl.imagestyle}
+                        />
+                        {/* Badge */}
+                        <View style={styles.badgeContainer}>
+                          <Text style={styles.badgeText}>
+                            {eventStats?.GuestConfirmed}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  {/* box4 */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('InvitesDetail', {
+                        eventId: id,
+                        invitesCurrentStatus: 'Scanned', // Assuming `status` holds the current status of invites
+                      })
+                    }>
+                    <View style={SplashStyl.insideboxview}>
+                      <Text style={SplashStyl.boxtext}>Scanned</Text>
+                      <View style={SplashStyl.imageView}>
+                        <Image
+                          source={images.scanned}
+                          style={SplashStyl.imagestyle}
+                        />
+                        {/* Badge */}
+                        <View style={styles.badgeContainer}>
+                          <Text style={styles.badgeText}>
+                            {eventStats?.GuestScanned}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                {/* ////////////////////box1end//////// */}
+                {/* <Spacing space={SH(20)} /> */}
+                {/* ////////////////boxrow1///////////////////// */}
+                <View style={styles.RowView}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('InvitesDetail', {
+                          eventId: id,
+                          invitesCurrentStatus: 'pending', // Assuming `status` holds the current status of invites
+                        })
+                      }>
+                      <View style={SplashStyl.insideboxview}>
+                        <Text style={SplashStyl.boxtext}>Waiting</Text>
+                        <View style={SplashStyl.imageView}>
+                          <Image
+                            source={images.waitng}
+                            style={SplashStyl.imagestyle}
+                          />
+                          {/* Badge */}
+                          <View style={styles.badgeContainer}>
+                            <Text style={styles.badgeText}>
+                              {eventStats?.GuestNotInvited}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                  {/* box2 */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('InvitesDetail', {
+                        eventId: id,
+                        invitesCurrentStatus: 'rejected', // Assuming `status` holds the current status of invites
+                      })
+                    }>
+                    <View style={SplashStyl.insideboxview}>
+                      <Text style={SplashStyl.boxtext}> Rejected</Text>
+                      <View style={SplashStyl.imageView}>
+                        <Image
+                          source={images.rejected}
+                          style={SplashStyl.imagestyle}
+                        />
+                        {/* Badge */}
+                        <View style={styles.badgeContainer}>
+                          <Text style={styles.badgeText}>
+                            {eventStats?.GuestRejected}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  {/* box3 */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('InvitesDetail', {
+                        eventId: id,
+                        invitesCurrentStatus: 'NotInvited', // Assuming `status` holds the current status of invites
+                      })
+                    }>
+                    <View style={SplashStyl.insideboxview}>
+                      <Text style={SplashStyl.boxtext}>Not Invited</Text>
+
+                      <View style={SplashStyl.imageView}>
+                        <Image
+                          source={images.notinivted}
+                          style={SplashStyl.imagestyle}
+                        />
+                        {/* Badge */}
+                        <View style={styles.badgeContainer}>
+                          <Text style={styles.badgeText}>
+                            {eventStats?.GuestNotInvited}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  {/* box4 */}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('InvitesDetail', {
+                        eventId: id,
+                        invitesCurrentStatus: 'failed', // Assuming `status` holds the current status of invites
+                      })
+                    }>
+                    <View style={SplashStyl.insideboxview}>
+                      <Text style={SplashStyl.boxtext}>Failed</Text>
+
+                      <View style={SplashStyl.imageView}>
+                        <Image
+                          source={images.Failedicon}
+                          style={SplashStyl.imagestyle}
+                        />
+                        {/* Badge */}
+                        <View style={styles.badgeContainer}>
+                          <Text style={styles.badgeText}>
+                            {eventStats?.GuestFailed}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity onPress={openContactslist}>
+                  <View style={styles.addGuestButton}>
+                    <Image
+                      source={images.gridicons_add}
+                      style={{height: 40, width: 40, marginRight: 10}}
+                    />
+                    <Text style={styles.addGuestButtonText}>Add new Guest</Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    height: SH(100),
+                    width: SW(100),
+                    marginBottom: 200,
+                  }}>
+                  <View style={styles.slide}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text
+                        style={{
+                          color: 'black',
+                          fontWeight: '600',
+                          fontSize: 12,
+                          marginRight: 30,
+                        }}>
+                        {singleData?.name}
+                      </Text>
+                      <Text
+                        style={{
+                          color: 'black',
+                          fontWeight: '600',
+                          fontSize: 12,
+                          marginLeft: 35,
+                        }}>
+                        {singleData?.eventDate}
+                      </Text>
+                    </View>
+                    <Image
+                      source={{uri: singleData?.image}}
+                      style={styles.images}
+                    />
+                  </View>
+                </View>
+              </>
+            )}
+          </View>
+
+          <Modal visible={showModal} animationType="slide" transparent>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalHeading}>
+                  Do You Want To
+                  <Text style={styles.boldheading}>Delete</Text> An Event
+                </Text>
+
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => {
+                      DeleteEventFromList(id);
+                      closeModal();
+                    }}>
+                    <Text style={styles.buttonText}>Delete Event</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={closeModal}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-            </>
-          )}
-        </View>
-
-        <Modal visible={showModal} animationType="slide" transparent>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalHeading}>
-                Do You Want To
-                <Text style={styles.boldheading}>Delete</Text> An Event
-              </Text>
-
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={() => {
-                    DeleteEventFromList(id);
-                    closeModal();
-                  }}>
-                  <Text style={styles.buttonText}>Delete Event</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={closeModal}>
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
             </View>
-          </View>
-        </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={toggleModal}>
-          <TouchableWithoutFeedback onPress={toggleModal}>
-            <View style={styles.modalContainerE}>
-              <View style={styles.modalContentE}>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 10,
-                    width: SW(120),
-                  }}
-                  onPress={() => {
-                    // Navigate to edit screen or perform edit action
-                    toggleModal();
-                    navigation.navigate('EditEvent', {id});
-                  }}>
-                  <Text
+          </Modal>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isModalVisible}
+            onRequestClose={toggleModal}>
+            <TouchableWithoutFeedback onPress={toggleModal}>
+              <View style={styles.modalContainerE}>
+                <View style={styles.modalContentE}>
+                  <TouchableOpacity
                     style={{
-                      fontWeight: '500',
-                      color: 'black',
-                      fontSize: SF(14),
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      padding: 10,
+                      width: SW(120),
+                    }}
+                    onPress={() => {
+                      // Navigate to edit screen or perform edit action
+                      toggleModal();
+                      navigation.navigate('EditEvent', {id});
                     }}>
-                    Edit Event
-                  </Text>
-                  <IconF size={20} name="edit" style={styles.boldstyle} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 10,
-                    width: SW(120),
-                  }}
-                  onPress={() => {
-                    // Perform delete action
-                    toggleModal();
-                    handleDeleteEvent(singleData?.id);
-                  }}>
-                  <Text
+                    <Text
+                      style={{
+                        fontWeight: '500',
+                        color: 'black',
+                        fontSize: SF(14),
+                      }}>
+                      Edit Event
+                    </Text>
+                    <IconF size={20} name="edit" style={styles.boldstyle} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
                     style={{
-                      fontWeight: '500',
-                      color: 'black',
-                      fontSize: SF(14),
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      padding: 10,
+                      width: SW(120),
+                    }}
+                    onPress={() => {
+                      // Perform delete action
+                      toggleModal();
+                      handleDeleteEvent(singleData?.id);
                     }}>
-                    Delete Event
-                  </Text>
-                  <IconM size={20} name="delete" style={styles.boldstyle} />
-                </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontWeight: '500',
+                        color: 'black',
+                        fontSize: SF(14),
+                      }}>
+                      Delete Event
+                    </Text>
+                    <IconM size={20} name="delete" style={styles.boldstyle} />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-      </ScrollView>
-    </View>
+            </TouchableWithoutFeedback>
+          </Modal>
+        </ScrollView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -742,7 +798,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContentE: {

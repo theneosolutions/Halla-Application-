@@ -58,12 +58,16 @@ import AddMembers from '../../Screens/AddMembers/index';
 import TopUp from '../../Screens/TopUp/index';
 import PaymentDetails from '../../Screens/PaymentDetails/index';
 import WebViewScreen from '../../Screens/PaymentDetails/WebViewScreen';
+import InvitesDetail from '../../Screens/InvitesDetail/index';
+import InvitesMessages from '../../Screens/InvitesMessages/index';
 import {
   useFocusEffect,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import SignUpOTP from '../../Screens/SignUpOTP/index';
 import SignInOTP from '../../Screens/SignInOTP/index';
+import ForgotPassSMSOTP from '../../Screens/ForgotPassSMSOTP/index';
+import ForgotPhone from '../../Screens/ForgotPhone/index';
 import {getFromLocalStorage} from '../../Services/Api';
 const Tab = createBottomTabNavigator();
 
@@ -99,6 +103,7 @@ const AuthStack = () => {
         component={Login}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="ForgotPhone" component={ForgotPhone} />
       <Stack.Screen name="SignInOTP" component={SignInOTP} />
       <Stack.Screen
         name="ImagePicker"
@@ -127,6 +132,12 @@ const AuthStack = () => {
         component={ForgotPass}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="ForgotPassSMSOTP"
+        component={ForgotPassSMSOTP}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen
         name="Forgotemail"
         component={Forgotemail}
@@ -159,6 +170,8 @@ const AuthStack = () => {
         component={Invitationreport}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="InvitesMessages" component={InvitesMessages} />
+      <Stack.Screen name="InvitesDetail" component={InvitesDetail} />
       <Stack.Screen
         name="AddNewGuest"
         component={AddNewGuest}

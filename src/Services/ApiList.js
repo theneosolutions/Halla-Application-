@@ -78,7 +78,7 @@ export const createEventInfo = async data => {
 export const EditEventInfo = async (id, data) => {
   const url = `/api/events/${id}`;
   const res = await api(baseUrl, url, data, 'PATCH', true, false);
-  console.log('res---------APILISt', res);
+  // console.log('res---------APILISt', res);
   return res;
 };
 
@@ -91,7 +91,7 @@ export const createCardInfo = async data => {
 export const GetCardInfo = async () => {
   const url = `/api/cards?order=ASC&page=1&take=10`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
-  console.log('res-------------', res);
+  // console.log('res-------------', res);
   return res;
 };
 export const getEventWithUserId = async (user, page = 1, take = 100) => {
@@ -102,9 +102,15 @@ export const getEventWithUserId = async (user, page = 1, take = 100) => {
 };
 
 export const getEventBySearch = async (search, user) => {
-  console.log('🚀 ~ getEventBySearch ~ user, search:', user, search);
+  // console.log('🚀 ~ getEventBySearch ~ user, search:', user, search);
   const url = `/api/events/byUserId/${user}?search=${search}`;
-  console.log('+++++++url-----getEventBySearch', url);
+  // console.log('+++++++url-----getEventBySearch', url);
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  return res;
+};
+
+export const getEventDetailInfo = async (status, eventId) => {
+  const url = `/api/events/get-contact-list/${eventId}?status=${status}`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
   return res;
 };
@@ -150,6 +156,7 @@ export const addEventGuests = async (event, data) => {
 export const SendInvites = async id => {
   const url = `/api/events/send-invites/${id}`;
   const res = await api(baseUrl, url, {}, 'POST', true, false);
+  console.log('🚀 ~ SendInvites ~ url:-----------', url);
   return res;
 };
 
@@ -197,5 +204,13 @@ export const deleteEventbyId = async id => {
 export const getEventCategoryByUserId = async (id, page, take, filter) => {
   const url = `/api/events/categorize/byUserId/${id}?order=DESC&page=${page}&take=${take}&filter=${filter}`;
   const res = await api(baseUrl, url, {}, 'GET', true, false);
+  console.log('🚀 ~ getEventCategoryByUserId ~ res:====-----===--', res);
+  console.log('🚀 ~ getEventCategoryByUserId ~ url:_____++++++_____+++++', url);
+  return res;
+};
+export const getEventUserChat = async (userId, eventId) => {
+  const url = `/api/events/chats/user/${userId}/event/${eventId}`;
+  const res = await api(baseUrl, url, {}, 'GET', true, false);
+  // console.log('🚀 ~ getEventUserChat ~ url:=======', url);
   return res;
 };
