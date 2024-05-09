@@ -44,33 +44,7 @@ const RegistrationScreen = ({ navigation }) => {
         <Image source={images.halalogo} style={styles.imgstyle} />
       </View>
       <View style={styles.buttonContainer}>
-        {Platform.OS === 'ios' ? (
-          <>
-            <TouchableOpacity
-              style={styles.touchablestyleIcon}
-              onPress={() => navigation.navigate('AppleLogin')}>
-              <View>
-                <IconF
-                  size={SF(20)}
-                  name="apple"
-                  style={styles.Iconstyle}
-                  color={'white'}
-                />
-                <Text style={styles.btntext}>continue_with_apple</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.touchablestyle}
-              onPress={() => navigation.navigate('PhoneOrEmailLogin')}>
-              <View>
-                <IconF size={SF(20)} name="phone" color={'white'} />
-                <Text style={styles.btntext}>
-                  {'continue_with_phone_or_email'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </>
-        ) : (
+        
           <View style={{ width: '90%' }}>
             <TouchableOpacity
               style={styles.touchablestyleIcon}
@@ -78,11 +52,11 @@ const RegistrationScreen = ({ navigation }) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  paddingHorizontal: '10%',
+                  // paddingHorizontal: '10%',
                   justifyContent: 'center',
                 }}>
                 <IconF
-                  size={SF(20)}
+                  size={SF(18)}
                   name="phone"
                   style={styles.Iconstyle}
                   color={'white'}
@@ -105,7 +79,7 @@ const RegistrationScreen = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
+        
       </View>
       <View style={{ flexDirection: 'end' }}>
         <Image

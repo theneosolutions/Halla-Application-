@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:20
   },
   overlayContainer: {
     position: 'absolute',
@@ -29,8 +30,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: '4%',
     paddingHorizontal: 2,
-    // backgroundColor: '#f2f2f4',
-    shadowOpacity: 20,
+    backgroundColor: '#f2f2f4',
+    // shadowOpacity: 20,
     capacity: 20,
     margin: '2%',
     marginTop: '5%',

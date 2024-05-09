@@ -13,14 +13,14 @@ pod 'FirebaseCoreInternal', :modular_headers => true
 pod 'GoogleUtilities', :modular_headers => true
 pod 'FirebaseCore', :modular_headers => true
 
-pod 'FirebaseStorage', :modular_headers => true
+# pod 'FirebaseStorage', :modular_headers => true
 pod 'FirebaseAppCheckInterop', :modular_headers => true
 pod 'GTMSessionFetcher', :modular_headers => true
 pod 'FirebaseCoreExtension', :modular_headers => true
 pod 'FirebaseAuthInterop', :modular_headers => true
 pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 # pod 'lottie-ios', :path => '../node_modules/lottie-ios'
-pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+# pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
 # pod 'lottie-ios', '~> 4.4.1'
 $RNFirebaseAsStaticFramework = true
 
@@ -44,7 +44,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'MazoomA' do
+target 'Halla' do
   config = use_native_modules!
 
   use_react_native!(
@@ -58,7 +58,7 @@ target 'MazoomA' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'MazoomATests' do
+  target 'HallaTests' do
     inherit! :complete
     # Pods for testing
   end

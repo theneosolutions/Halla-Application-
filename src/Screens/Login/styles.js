@@ -3,6 +3,8 @@ import {Fonts, SF, SH, SW, Colors} from '../../utils';
 
 const styles = StyleSheet.create({
   MinViewScreen: {
+    flex:1,
+    marginTop:20,
     alignItems: 'center',
     height: '100%',
     width: '100%',

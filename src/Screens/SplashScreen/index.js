@@ -50,10 +50,7 @@ const SplashScreen = ({ navigation }) => {
           index: 0,
           routes: [{ name: 'Home' }],
         });
-      } else {
-        // Token doesn't exist, navigate to GoogleLoginScreen
-        navigation.navigate('Login');
-      }
+      } 
     } catch (error) {
       console.error('Error retrieving token:', error);
     } finally {
@@ -77,7 +74,7 @@ const SplashScreen = ({ navigation }) => {
                 source={require('../../images/engLang.png')}
                 style={styles.SwitchImage}
               />
-              <Text style={styles.textStyle}>Eng</Text>
+              <Text style={styles.textStyle}>EN</Text>
             </>
           ) : (
             <>
@@ -85,7 +82,7 @@ const SplashScreen = ({ navigation }) => {
                 source={require('../../images/arabLang.png')}
                 style={styles.SwitchImage}
               />
-              <Text style={styles.textStyle}>عربى</Text>
+              <Text style={styles.textStyle}>AR</Text>
             </>
           )}
         </TouchableOpacity>
@@ -119,7 +116,7 @@ const SplashScreen = ({ navigation }) => {
               source={require('../../images/engLang.png')}
               style={styles.SwitchImage}
             />
-            <Text style={styles.textStyle}>Eng</Text>
+            <Text style={styles.textStyle}>EN</Text>
           </>
         ) : (
           <>
@@ -127,7 +124,7 @@ const SplashScreen = ({ navigation }) => {
               source={require('../../images/arabLang.png')}
               style={styles.SwitchImage}
             />
-            <Text style={styles.textStyle}>عربى</Text>
+            <Text style={styles.textStyle}>AR</Text>
           </>
         )}
       </TouchableOpacity>

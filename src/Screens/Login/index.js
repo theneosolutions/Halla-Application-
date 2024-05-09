@@ -402,7 +402,7 @@ const Login = () => {
                 </Text>
               ) : null}
 
-              <View style={{width: 150, marginLeft: 'auto'}}>
+              <View style={{width: 180, marginLeft: 'auto'}}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('ForgotPass')}>
                   <Text style={styles.ForgetPasswordStyles}>
