@@ -1,251 +1,164 @@
-import React, {useState, useMemo, useEffect} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-  StyleSheet,
-  Modal,
-  ActivityIndicator,
-  FlatList,
-} from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import {
-  Button,
-  Container,
-  Input,
-  Spacing,
-  // CountryPickerInput,
-} from '../../Components';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
+import { Spacing } from '../../Components';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {onGoogleButtonPress} from '../../SocailLogins/index';
 import Snackbar from 'react-native-snackbar';
 import Feather from 'react-native-vector-icons/Feather';
-import ConfirmationPopup from '../../utils/ConfirmationPopUp';
-import {CountryPickerInput} from '../../Components/commonComponents/CountryPickerInput';
-// import {
-//   NotificationServices,
-//   requestUserPermission,
-// } from '../../utils/PushNotification_helper';
+import { CountryPickerInput } from '../../Components/commonComponents/CountryPickerInput';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
-import {SH, SF, SW, Colors} from '../../utils';
-import {useNavigation, useTheme} from '@react-navigation/native';
-import images from '../../index';
-import {useTranslation} from 'react-i18next';
-import {signInPhone, signInEmail} from '../../Services/ApiList';
-const specialCharacters = /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
-import {setItemInLocalStorage} from '../../Services/Api';
-import Languages from '../../Language/i18n';
+import { SH, SF } from '../../utils';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { signInPhone, signInEmail } from '../../Services/ApiList';
+import { setItemInLocalStorage } from '../../Services/Api';
 import styles from './styles';
-import Icon from 'react-native-vector-icons/EvilIcons';
+
+const INITIAL_STATE = {
+  email: '',
+  password: '',
+  phoneNumber: '',
+  callingCode: '+996',
+  countryNameCode: 'SA'
+};
 
 const Login = () => {
-  const {Colors} = useTheme();
-  const {t, i18n} = useTranslation();
+  const { Colors } = useTheme();
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation();
-  // const [phoneNumber, setPhoneNumber] = useState('');
-  const [passwordVisibility, setpasswordVisibility] = useState(true);
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [TextInputPassword, setTextInputPassword] = useState('');
-  // const [callingCode, setCallingCode] = useState('');
-  const [selectedOption, setSelectedOption] = useState('email');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
-  const [submitted, setSubmitted] = useState(false);
-  const [buttonEnable, setButtonEnable] = useState(false);
-  const [passwordPateren, setPasswordPateren] = useState(false);
-  const [currentComponent, setCurrentComponent] = useState('');
-  const [message, setMessage] = useState('');
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [focusedInput, setFocusedInput] = useState(null); // State to track focused input
 
-  const [callingCode, setCallingCode] = useState('+996');
-  const [showCountryPickerModal, setShowCountryPickerModal] = useState('');
-  const [countryNameCode, setCountryNameCode] = useState('GB');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const onCountrySelect = value => {
-    setCountryNameCode(value.cca2);
-    setCallingCode('+' + value.callingCode);
+  const [formData, setFormData] = useState(INITIAL_STATE);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('email');
+  const [buttonEnable, setButtonEnable] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    const { email, password, phoneNumber } = formData;
+    if (selectedOption === 'email') {
+      setButtonEnable(email.trim() !== '' && password !== '');
+    } else if (selectedOption === 'phoneNumber') {
+      setButtonEnable(phoneNumber.length === 12);
+    }
+  }, [formData, selectedOption]);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevState => !prevState);
   };
+
+  const signInWithEmailAndPassword = async () => {
+    try {
+      setBtnLoading(true);
+      setSubmitted(true);
+
+      const data = {
+        emailOrUsername: formData?.email.trim(),
+        password: formData?.password,
+      };
+
+      const response = await signInEmail(data);
+
+      if (response.error) {
+        console.error('Error:', response.error);
+        console.log('Status code:', response.status);
+        Snackbar.show({
+          text: response.error,
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: 'red',
+        });
+      } else {
+        const { accessToken, user } = response.data;
+        // Store user token and info in local storage
+        await Promise.all([
+          setItemInLocalStorage('@UserToken', accessToken),
+          setItemInLocalStorage('@UserInfo', JSON.stringify(user)),
+        ]);
+        // Navigate to Home screen
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
+      }
+    } catch (error) {
+      const { message } = error;
+      Snackbar.show({
+        text: typeof message == 'string' ? message : message[0],
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'red',
+      });
+
+    } finally {
+      setBtnLoading(false);
+      setSubmitted(false);
+    }
+  };
+
+
+  const handleSignInPhoneNumber = async () => {
+    setBtnLoading(true);
+    setSubmitted(true);
+    if (formData?.phoneNumber === '' || formData?.callingCode === '' || formData?.phoneNumber.length < 10) {
+      // Show Snackbar if phone number or calling code field is empty
+      Snackbar.show({
+        text: 'Phone number is required',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'red',
+      });
+      setBtnLoading(false);
+      return false;
+    }
+
+    setBtnLoading(true);
+    setSubmitted(true);
+    try {
+      const data = {
+        callingCode: formData?.callingCode,
+        phoneNumber: formData?.phoneNumber,
+      };
+      const response = await signInPhone(data);
+      if (response.error) {
+        Snackbar.show({
+          text: response.error,
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: 'red',
+        });
+      } else {
+        console.log('Response data:', response.data);
+        navigation.navigate('SignInOTP', { phoneNumber, callingCode });
+      }
+    } catch (error) {
+      const { message } = error;
+      Snackbar.show({
+        text: typeof message == 'string' ? message : message[0],
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'red',
+      });
+
+      console.error('Error signing in:', error);
+    } finally {
+      setBtnLoading(false);
+      setSubmitted(false);
+    }
+  };
+
+
+  const onCountrySelect = value => {
+    console.log("🚀 ~ onCountrySelect ~ value:", value)
+    setFormData(prevState => ({
+      ...prevState,
+      countryNameCode: value.cca2,
+      callingCode: '+' + value.callingCode,
+    }));
+  };
+
   const handleFocus = input => {
     setFocusedInput(input);
   };
 
   const handleBlur = () => {
     setFocusedInput(null);
-  };
-  useEffect(() => {
-    if (selectedOption === 'email') {
-      setButtonEnable(email !== '' && password !== '');
-    } else if (selectedOption === 'phoneNumber') {
-      setButtonEnable(phoneNumber.length === 12);
-    }
-  }, [email, password, phoneNumber]);
-
-  const backtoscreen = () => {
-    setCurrentComponent('');
-    navigation.navigate('Home');
-  };
-  const onChangeText = text => {
-    if (text === 'TextInputPassword')
-      setpasswordVisibility(!passwordVisibility);
-  };
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const signInWithEmailAndPassword = async () => {
-    setBtnLoading(true);
-    const data = {
-      emailOrUsername: email.trim(),
-      password: password,
-    };
-    try {
-      const response = await signInEmail(data);
-      console.log('Response from signInEmail..: ', response);
-      if (response?.data) {
-        const {accessToken, id, email} = response?.data;
-        setItemInLocalStorage('@UserToken', accessToken);
-        setItemInLocalStorage(
-          '@UserInfo',
-          JSON.stringify(response?.data?.user),
-        );
-        setCurrentComponent('login');
-        setLoading(false);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Home'}],
-        });
-      } else if (response?.response?.data?.message) {
-        Snackbar.show({
-          text: 'Email or password is invalid',
-          duration: Snackbar.LENGTH_SHORT,
-          backgroundColor: 'red',
-        });
-      }
-      setBtnLoading(false);
-    } catch (error) {
-      Snackbar.show({
-        text: 'Something went wrong please try again',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: 'red',
-      });
-      setBtnLoading(false);
-      console.log('Error signing in:', error);
-    }
-  };
-  const handleProceed = () => {
-    navigation.navigate('GoogleLogin');
-  };
-  const closeModalAndNavigate = () => {
-    setSuccessModalVisible(false);
-    navigation.navigate('Home', {});
-  };
-
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const countries = require('../EditProfile//countryCodes.json')['countries'];
-  const [modalVisible, setModalVisible] = useState(false);
-  const openCountryCodePicker = () => {
-    setModalVisible(true);
-  };
-
-  const onSelectCountry = country => {
-    setSelectedCountry(country);
-    setModalVisible(false);
-  };
-  const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => onSelectCountry(item)}>
-      <View
-        style={{
-          flexDirection: 'row',
-
-          margin: 2,
-        }}>
-        <Text>{item.emoji}</Text>
-        <Text>{item.phone}</Text>
-      </View>
-
-      {item.code && <Text>{item.code}</Text>}
-    </TouchableOpacity>
-  );
-
-  const handleSignInPhoneNu = async () => {
-    if (!phoneNumber || !callingCode) {
-      // Show Snackbar if phone number or calling code field is empty
-      Snackbar.show({
-        text: 'Phone number is required',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: '#293170',
-      });
-      return false;
-    }
-
-    setBtnLoading(true);
-    try {
-      const data = {
-        callingCode: callingCode,
-        phoneNumber: phoneNumber,
-      };
-      console.log('data----', data);
-      const response = await signInPhone(data);
-      console.log('response', response);
-      if (response) {
-        // setMessage(response?.data?.message);
-        // setCurrentComponent('signUpSuccess');
-        navigation.navigate('SignInOTP', {phoneNumber, callingCode});
-      }
-      setBtnLoading(false);
-
-      // if (data.callingCode && data.phoneNumber) {
-      //   // Call the API
-
-      //   console.log('response.........rrrrrrrQQQ', response);
-      //   if (response) {
-      //     setCurrentComponent('signUpSuccess');
-      //     navigation.navigate('Home');
-      //   }
-      //   // setUserData(response?.data);
-      //   if (response?.data) {
-      //     setMessage('User Registered Successfully');
-      //     setCurrentComponent('signUpSuccess');
-      //     navigation.navigate('Home');
-      //   } else if (response?.response?.data?.message) {
-      //     setMessage(response?.response?.data?.message);
-      //     setCurrentComponent('signUpError');
-      //     setBtnLoading(false);
-      //     setLoading(false);
-      //   }
-      // } else {
-      //   setBtnLoading(false);
-      //   setLoading(false);
-      //   // Handle incomplete fields
-      //   Alert.alert(
-      //     'Please complete both calling code and phone number fields',
-      //   );
-      //   // setBtnLoading(false);
-      //   // setLoading(false);
-      // }
-    } catch (error) {
-      console.error('SignUp Error:', error);
-      setMessage('An error occurred during sign up');
-      setCurrentComponent('signUpError');
-      setLoading(false);
-      setBtnLoading(false);
-    }
-    // setBtnLoading(true);
-    setLoading(false);
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -334,20 +247,23 @@ const Login = () => {
                   <TextInput
                     style={styles.input}
                     placeholder={t('Email_Error')}
-                    value={email}
+                    value={formData.email}
                     color={'black'}
                     placeholderTextColor={'black'}
-                    onFocus={() => handleFocus('email')} // Add onFocus event
+                    onFocus={() => handleFocus('email')}
                     onBlur={handleBlur}
-                    onChangeText={text => {
-                      setEmail(text), setSubmitted(true);
-                    }}
+                    onChangeText={text =>
+                      setFormData(prevState => ({
+                        ...prevState,
+                        email: text,
+                      }))
+                    }
                   />
                 </View>
               </TouchableOpacity>
 
-              {submitted && email == '' ? (
-                <Text style={{fontSize: 12, color: 'red'}}>
+              {submitted && formData.email === '' ? (
+                <Text style={{ fontSize: 12, color: 'red' }}>
                   {t('Email_Error')}
                 </Text>
               ) : null}
@@ -356,33 +272,35 @@ const Login = () => {
               <TouchableOpacity
                 style={[
                   styles.touchablestyleW,
-                  focusedInput === 'password' && styles.focusedInput, // Apply focusedInput style when password field is focused
+                  focusedInput === 'password' && styles.focusedInput,
                 ]}
                 onPress={() => handleFocus('password')}
                 onBlur={handleBlur}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    padding: SW(6),
-                    paddingLeft: SW(5),
-                    width: '100%',
+                    width: '98%',
+                    padding: SH(3),
                   }}>
                   <FontAwesome
                     name="lock"
-                    size={SF(17)}
+                    size={SF(18)}
                     style={styles.iconStyleeye}
                   />
                   <TextInput
                     style={styles.input}
                     placeholder={t('Enteryourpassword')}
-                    value={password}
+                    value={formData.password}
                     color={'black'}
                     placeholderTextColor={'black'}
-                    onFocus={() => handleFocus('password')} // Add onFocus event
+                    onFocus={() => handleFocus('password')}
                     onBlur={handleBlur}
-                    onChangeText={text => {
-                      setPassword(text), setPasswordPateren(true);
-                    }}
+                    onChangeText={text =>
+                      setFormData(prevState => ({
+                        ...prevState,
+                        password: text,
+                      }))
+                    }
                     secureTextEntry={showPassword}
                   />
                   <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -396,15 +314,14 @@ const Login = () => {
                 </View>
               </TouchableOpacity>
 
-              {submitted && password == '' ? (
-                <Text style={{fontSize: 12, color: 'red'}}>
+              {submitted && formData.password === '' ? (
+                <Text style={{ fontSize: 12, color: 'red' }}>
                   Enter your password
                 </Text>
               ) : null}
 
-              <View style={{width: 180, marginLeft: 'auto'}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('ForgotPass')}>
+              <View style={{ width: 160, marginLeft: 'auto', marginVertical: 5 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPass')}>
                   <Text style={styles.ForgetPasswordStyles}>
                     {t('ForgotPassword')}
                   </Text>
@@ -424,7 +341,7 @@ const Login = () => {
                   </View>
                 </TouchableOpacity>
               ) : (
-                <View style={{...styles.touchablestyle}}>
+                <View style={{ ...styles.touchablestyleDisable }}>
                   <View style={styles.signInView}>
                     <Text style={styles.btntext}>{t('SignIn')}</Text>
                   </View>
@@ -435,66 +352,18 @@ const Login = () => {
           {selectedOption === 'phonenumber' && (
             <>
               <Spacing space={30} />
-              {/* <TouchableOpacity style={styles.touchablestyleW}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: wp(80),
-                    paddingVertical: SH(8),
-                  }}>
-                  <TouchableOpacity
-                    onPress={openCountryCodePicker}
-                    style={{
-                      borderRadius: 10,
-                      backgroundColor: 'white',
-                      elevation: 5,
-                      marginHorizontal: wp(2),
-                      paddingVertical: wp(2),
-                      alignSelf: 'center',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginLeft: wp(3),
-                        paddingRight: wp(2),
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'center',
-                      }}>
-                      <Icon
-                        name="chevron-down"
-                        size={30}
-                        color={'black'}
-                        style={{marginTop: hp(-1.2)}}
-                      />
-                      <Text style={{color: 'black'}}>
-                        {selectedCountry ? selectedCountry.emoji : '🇺🇸'}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  style={{height: 40}}
-                  onRequestClose={() => setModalVisible(false)}>
-                  <View style={styles.modalCallingCodeContainer}>
-                    <FlatList
-                      data={countries}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderItem={renderItem}
-                    />
-                  </View>
-                </Modal>
-              </TouchableOpacity> */}
               <CountryPickerInput
-                countryNameCode={countryNameCode}
-                callingCode={callingCode}
+                countryNameCode={formData.countryNameCode}
+                callingCode={formData.callingCode}
                 onSelect={onCountrySelect}
-                onChangeText={setPhoneNumber}
+                onChangeText={phoneNumber =>
+                  setFormData(prevState => ({
+                    ...prevState,
+                    phoneNumber: phoneNumber,
+                  }))
+                }
               />
-              {submitted && phoneNumber == '' ? (
+              {submitted && formData.phoneNumber === '' ? (
                 <Text
                   style={{
                     color: 'red',
@@ -503,55 +372,32 @@ const Login = () => {
                   }}>
                   {t('NUMBER_ERROR')}
                 </Text>
-              ) : submitted && phoneNumber.length <= 10 ? (
+              ) : submitted && formData.phoneNumber.length < 10 ? (
                 <Text
                   style={{
                     color: 'red',
                     fontSize: SF(12),
                   }}>
-                  must contain 10 numbers
+                 Phone number must contain 10 numbers
                 </Text>
               ) : null}
               <Spacing space={30} />
-              {/* {buttonEnable ? ( */}
+
               <TouchableOpacity
                 style={styles.touchablestyle}
-                onPress={() => {
-                  handleSignInPhoneNu();
-                }}>
+                onPress={handleSignInPhoneNumber}>
                 <View style={styles.signInView}>
-                  {/* {btnLoading ? (
+                    {btnLoading ? (
                       <ActivityIndicator color="#FFF" />
-                    ) : ( */}
-                  <Text style={styles.btntext}>{t('SignIn')}</Text>
-                  {/* )} */}
-                </View>
-              </TouchableOpacity>
-              {/* ) : (
-                <View
-                  style={{...styles.touchablestyle}}>
-                  <View style={styles.signInView}>
-                    <Text style={styles.btntext}>{t('SignIn')}</Text>
+                    ) : (
+                      <Text style={styles.btntext}>{t('SignIn')}</Text>
+                    )}
                   </View>
-                </View>
-              )} */}
+              </TouchableOpacity>
             </>
           )}
 
           <Spacing space={SH(30)} />
-
-          {/* <TouchableOpacity onPress={onGoogleLogin}>
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <Text style={styles.Signuptext}>{t('signupwith')}</Text>
-              <Image
-                source={images.google}
-                size={SF(27)}
-                style={styles.googleStyle}
-              />
-              <Text style={styles.googletext}>{t('Google')}</Text>
-            </View>
-            <Spacing space={SH(20)} />
-          </TouchableOpacity> */}
 
           <View style={styles.NotRegisterView}>
             <Text style={styles.NotRegisterText}>{t('Notregister')}</Text>
@@ -567,22 +413,7 @@ const Login = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <Modal
-            animationType="slide"
-            transparent={true}
-            visible={currentComponent == 'login'}
-            onRequestClose={() => {
-              setCurrentComponent('');
-            }}>
-            <ConfirmationPopup
-              title={'User Successfully Login'}
-              message={message}
-              confirmBtn={'Proceed'}
-              cancelBtn={'cancel'}
-              callback={backtoscreen}
-              setCurrentComponent={setCurrentComponent}
-            />
-          </Modal> */}
+
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>

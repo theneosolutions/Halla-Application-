@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   countryPickerInputContainer: {
     width: SW(310),
     alignSelf: 'center',
-    height: SH(60),
+    height: SH(50),
     alignItems: 'center',
     flexDirection: 'row',
     borderWidth: 0.8,
@@ -68,29 +68,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: SH(30),
-    width: SW(30),
+    width: SW(50),
   },
   countryCodeText: {
     color: 'black',
-    fontSize: 10,
     fontWeight: '500',
-    // backgroundColor: 'red',
-    paddingHorizontal: 1, // Add padding for space between calling code and text
+    paddingHorizontal: 1,
   },
   phoneInputText: {
     marginHorizontal: 30,
     color: 'black',
-    fontSize: SF(12),
-    width: '60%', // Adjust the width as needed
-    alignSelf: 'center', // Align the input horizontally
-    marginVertical: 5, // Add vertical margin
-    paddingHorizontal: 2, // Add horizontal padding
-    paddingVertical: 8, // Add vertical padding
+    width: '70%',
+    alignSelf: 'center',
     borderColor: '#293170',
-    // borderWidth: 0.6,
     backgroundColor: 'white',
-    borderTopRightRadius: 15, // Adjust the border radius to match the container
+    borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
-    // elevation: 5, // Adjust the border radius to match the container
   },
 });

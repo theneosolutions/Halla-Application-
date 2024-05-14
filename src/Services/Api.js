@@ -1,6 +1,35 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Configure Axios base URL
+axios.defaults.baseURL = 'https://halla.sa';
+
+// Add a request interceptor to handle token injection
+axios.interceptors.request.use(
+  async config => {
+    const token = await AsyncStorage.getItem('@UserToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor to handle global error responses
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    // Log and handle errors
+    console.error('Error in response:', error);
+    return Promise.reject(error);
+  }
+);
+
 export const setItemInLocalStorage = async (key, value) => {
   console.log('setItem=======', key, value);
   try {
@@ -10,6 +39,7 @@ export const setItemInLocalStorage = async (key, value) => {
     console.error('Error setting item in local storage:', error);
   }
 };
+
 export const getFromLocalStorage = async key => {
   console.log('getItem=======', key);
   try {
@@ -21,50 +51,39 @@ export const getFromLocalStorage = async key => {
   }
 };
 
-const getDefaultHeaders = () => ({
-  'Content-Type': 'application/json',
-});
-async function makeRequest(
-  baseUrl,
-  url,
-  body = {},
-  method,
-  token = false,
-  isFormData = false,
-) {
-  let headers = getDefaultHeaders();
-  if (isFormData) {
-    headers['Content-Type'] = 'multipart/form-data';
+// Function to make a request
+async function makeRequest(baseUrl, url, body = {}, method, token = false, isFormData = false) {
+  try {
+    const headers = {
+      'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+    };
+
+    if (token) {
+      const userToken = await AsyncStorage.getItem('@UserToken');
+      headers.Authorization = `Bearer ${userToken}`;
+    }
+
+    const config = {
+      url: `${baseUrl}${url}`,
+      method: method,
+      headers: headers,
+      params: method === 'GET' ? body : undefined,
+      data: method !== 'GET' ? body : undefined,
+    };
+
+    const response = await axios(config);
+    return {
+      data: response.data,
+      status: response.status,
+    };
+  } catch (error) {
+    // Log and handle errors
+    console.error('Error in makeRequest:', error);
+    return {
+      error: error.response ? error.response.data : 'Network Error',
+      status: error.response ? error.response.status : 500,
+    };
   }
-  if (token) {
-    console.log('>>>>>token', token, userToken);
-    const userToken = await getFromLocalStorage('@UserToken');
-    headers['Authorization'] = `Bearer ${userToken}`;
-    console.log('cool', userToken);
-  }
-  const fullUrl = `${baseUrl}${url}`;
-  const config = {
-    url: fullUrl,
-    method: method,
-    headers: headers,
-    params: method === 'GET' ? body : undefined,
-    data: method !== 'GET' ? body : undefined,
-  };
-  console.log('🚀 ~ config:', config);
-  return axios(config).then(
-    res => {
-      return {
-        ...res,
-        apiSuccess: true,
-      };
-    },
-    err => {
-      // showErrorToast('Slow or no internet connnection', 2000);
-      return {
-        ...err,
-        apiSuccess: false,
-      };
-    },
-  );
 }
+
 export default makeRequest;

@@ -100,13 +100,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconStylemail: {
-    paddingTop: 10,
+    paddingTop: 8,
     marginLeft: 10,
     color: '#293170',
   },
   iconStyleeye: {
     paddingTop: 12,
-    marginLeft: 10,
+    marginLeft: 18,
+    marginRight:3,
     color: '#293170',
   },
   touchablestyleP: {
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
 
   iconStyle: {
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 13,
     // padding: SH(30),
   },
   googletext: {
@@ -202,10 +203,18 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: SF(20),
     //marginTop: SH(250),
   },
+  touchablestyleDisable: {
+    alignSelf: 'center',
+    width: SW(320),
+    backgroundColor: Colors.gray_text_color,
+    borderTopLeftRadius: SF(20),
+    borderBottomRightRadius: SF(20),
+    //marginTop: SH(250),
+  },
   input: {
     width: '80%',
     paddingHorizontal: 2,
-    paddingVertical: 1,
+    paddingVertical: 5,
     margin: SH(3),
     color: 'black',
   },
@@ -248,7 +257,7 @@ const styles = StyleSheet.create({
   },
   emailView: {
     flexDirection: 'row',
-    width: '98%',
+    width: '100%',
     padding: SH(5),
   },
   googleStyle: {
