@@ -7,6 +7,7 @@ function Languages(language) {
   console.log('language', language);
   // return;
   i18n.use(initReactI18next).init({
+    compatibilityJSON: 'v3',
     resources: {
       en: {translation: en},
       ar: {translation: ar},

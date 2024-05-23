@@ -20,6 +20,7 @@ import ar from '../../Language/arabic';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 i18n.use(initReactI18next).init({
+  compatibilityJSON: 'v3',
   resources: {
     en: { translation: en },
     ar: { translation: ar },
