@@ -31,8 +31,16 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Please allow to use your camera to update profile pictures and add media</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Please allow to access your contacts</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please allow location usage for event destination</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Please allow location usage for event destination</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow to use your library to update profile pictures and add media</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -53,6 +61,11 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
