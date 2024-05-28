@@ -29,6 +29,7 @@ const ConfimrPassword = ({navigation}) => {
   const [password2, setpassword2] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [buttonEnable, setButtonEnable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPasswordone(!showPasswordone);
@@ -48,7 +49,7 @@ const ConfimrPassword = ({navigation}) => {
       });
       return false;
     }
-    setBtnLoading(true);
+    setIsLoading(true);
     const token = await getFromLocalStorage('@UserToken');
     const data = {
       password1: password1,
@@ -58,6 +59,7 @@ const ConfimrPassword = ({navigation}) => {
     console.log('data=======', data);
     const response = await resetpass(data);
     console.log('resetPassword==========', response);
+    setIsLoading(false);
     navigation.navigate('ResetPassDone');
   };
   // navigation.navigate('ResetPassDone');
@@ -129,7 +131,7 @@ const ConfimrPassword = ({navigation}) => {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={t('Change password')}
+                  placeholder={t('Confirm password')}
                   value={password2}
                   onChangeText={setpassword2}
                   placeholderTextColor={'black'}
@@ -162,7 +164,7 @@ const ConfimrPassword = ({navigation}) => {
                 //     password1 === password2 ? '#293170' : 'lightgray',
                 // },
               ]}
-              // disabled={password1 !== password2}
+              disabled={isLoading}
               onPress={HandleUpdatePassword}>
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>

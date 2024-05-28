@@ -3,10 +3,11 @@
  */
 import React, {useEffect, useRef} from 'react';
 import socketIOClient from 'socket.io-client';
+import { baseUrl } from './Services/ApiList';
 // import {ANDROID, IOS} from '../constants/constants';
 // import {isIOS} from '../helper';
 
-const SOCKET_DEV = 'https://backend.halla.sa';
+const SOCKET_DEV = baseUrl; //'https://backend.halla.sa';
 
 export const SocketContext = React.createContext({socket: null});
 

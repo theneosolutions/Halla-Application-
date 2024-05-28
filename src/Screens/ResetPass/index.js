@@ -13,7 +13,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {SH, SF, SW, Colors} from '../../utils';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
-import {resetpass} from '../../Services/ApiList';
+import {resetPass} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import styles from './styles';
 import Snackbar from 'react-native-snackbar';
@@ -56,7 +56,7 @@ const ResetPass = ({navigation, route}) => {
       otp: parseFloat(otp.join('')),
     };
     console.log('data=======', data);
-    const response = await resetpass(data);
+    const response = await resetPass(data);
     console.log('resetPassword==========', response);
     navigation.navigate('ResetPassDone');
   };

@@ -13,6 +13,7 @@ import axios from 'axios';
 import {useFocusEffect} from '@react-navigation/native';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useNavigation} from '@react-navigation/native';
+import { baseUrl } from '../../Services/ApiList';
 
 const ChatListingScreen = () => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const ChatListingScreen = () => {
     const token = await getFromLocalStorage('@UserToken');
     try {
       const response = await axios.get(
-        `https://backend.halla.sa/api/events/chats/user/${userInfo.id}?order=DESC&page=1&take=100&filter=monthly`,
+        `${baseUrl}/events/chats/user/${userInfo.id}?order=DESC&page=1&take=100&filter=monthly`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

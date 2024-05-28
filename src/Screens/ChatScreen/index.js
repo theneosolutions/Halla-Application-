@@ -20,6 +20,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {getFromLocalStorage} from '../../Services/Api';
 import axios from 'axios';
 import {SocketContext} from '../../socket';
+import { baseUrl } from '../../Services/ApiList';
 
 const ChatDetailScreen = ({route}) => {
   const {chatItem} = route.params;
@@ -58,7 +59,7 @@ const ChatDetailScreen = ({route}) => {
     const token = await getFromLocalStorage('@UserToken');
     try {
       const response = await axios.get(
-        `https://backend.halla.sa/api/events/chats/messages/user/${chatItem.usersId}/event/${chatItem.eventId}/contact/${chatItem.invites.id}?order=ASC&page=1&take=10&filter=monthly`,
+        `${baseUrl}/events/chats/messages/user/${chatItem.usersId}/event/${chatItem.eventId}/contact/${chatItem.invites.id}?order=ASC&page=1&take=10&filter=monthly`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
