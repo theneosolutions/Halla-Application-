@@ -159,28 +159,32 @@ const SignUp = () => {
       setUserData(response?.data);
       setButtonEnable(true);
       console.log('signUpResponse======================', response);
-      console.log('SignUp Response:', response?.data?.message);
-      console.log('SignUp ============:', response?.response?.data?.message);
+      console.log('SignUp Response:', response);
+      console.log('SignUp ============:', response?.data?.message);
       if (response?.data) {
         await setItemInLocalStorage('@UserStatus', 'true');
         setMessage('User Register Successfully');
         // setBtnLoading(false);
-        setCurrentComponent('signUpSuccess');
-      } else if (response?.response?.data?.message) {
-        setMessage(response?.response?.data?.message);
+        // setCurrentComponent('signUpSuccess');
+        navigation.navigate('SignUpOTP', {signUpType: 'email', email: data.email});
+      } else if (response?.data?.message) {
+        setMessage(response?.data?.message);
         setCurrentComponent('signUpError');
       }
       setBtnLoading(false);
       // setButtonEnable(false);
     } catch (error) {
       setBtnLoading(false);
-      console.error('SignUp Error:', error);
+      // console.error('SignUp Error:', error?.message[0]);
+      setMessage(error?.message[0]);
+      setCurrentComponent('signUpError');
     }
     setButtonEnable(false);
   };
   const handleProceed = () => {
     // Navigate to the GoogleLogin screen
-    navigation.navigate('Login');
+    // navigation.navigate('Login');
+    navigation.navigate('SignUpOTP', {signUpType: 'email', email: email.trim()});
   };
   const backtoscreen = () => {
     setCurrentComponent('');
@@ -239,7 +243,7 @@ const SignUp = () => {
       if (response?.data?.message) {
         // setMessage(response?.data?.message);
         // setCurrentComponent('signUpSuccess');
-        navigation.navigate('SignUpOTP', {phoneNumber, callingCode});
+        navigation.navigate('SignUpOTP', {signUpType: 'phone', phoneNumber, callingCode});
       }
 
       // console.log(
@@ -742,7 +746,7 @@ const SignUp = () => {
             setCurrentComponent('');
           }}>
           <ConfirmationPopup
-            // title={'Email Already In Use'}
+            // title={message}
             message={message}
             confirmBtn={'Try Again'}
             cancelBtn={'cancel'}
