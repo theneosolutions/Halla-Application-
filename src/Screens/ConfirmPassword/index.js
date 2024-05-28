@@ -16,7 +16,7 @@ import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
 import {getFromLocalStorage} from '../../Services/Api';
 import styles from './styles';
-import {updatepass} from '../../Services/ApiList';
+import {updatePass} from '../../Services/ApiList';
 import Snackbar from 'react-native-snackbar';
 const ConfimrPassword = ({navigation}) => {
   //   const {email, otp} = route.params;
@@ -57,7 +57,7 @@ const ConfimrPassword = ({navigation}) => {
       password: password,
     };
     console.log('data=======', data);
-    const response = await resetpass(data);
+    const response = await updatePass(data);
     console.log('resetPassword==========', response);
     setIsLoading(false);
     navigation.navigate('ResetPassDone');

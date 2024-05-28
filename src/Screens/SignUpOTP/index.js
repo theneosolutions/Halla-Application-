@@ -14,12 +14,12 @@ import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SH, SF, SW, Colors} from '../../utils';
 import {useTranslation} from 'react-i18next';
 import Languages from '../../Language/i18n';
-import {otpVerify, otpResend} from '../../Services/ApiList';
+import {otpVerify, otpResend, otpEmailVerify} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
 import Snackbar from 'react-native-snackbar';
 const SignUpOTP = ({navigation, route}) => {
-  const {phoneNumber, callingCode} = route.params;
-  console.log('emailOOOO', phoneNumber);
+  const {signUpType} = route.params;
+  console.log('emailOOOO', route.params?.phoneNumber);
   const {t, i18n} = useTranslation();
   const [otp, setOTP] = useState(['', '', '', '']);
   const otpTextInputRefs = useRef([]);
@@ -36,23 +36,37 @@ const SignUpOTP = ({navigation, route}) => {
 
   const handleSignUpOTPVerify = async () => {
     setBtnLoading(true);
-
+    let data;
     try {
       const otpValue = parseInt(otp.join(''));
       // console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', typeof otpValue);
       // console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', otpValue);
-      const data = {
-        callingCode: callingCode,
-        phoneNumber: phoneNumber,
-        otp: otpValue,
-      };
-      console.log('🚀 ~ handleSignUpOTPVerify ~ data:', data);
-      const response = await otpVerify(data);
-      console.log('response.......', response?.data?.data);
-      if (response?.data) {
-        navigation.navigate('Login');
+
+      if(signUpType == 'email') {
+        data = {
+          email: route.params.email,
+          otp: otpValue,
+        };
+
+        const response = await otpEmailVerify(data);
+
+        if (response?.data) {
+          navigation.navigate('Login');
+        }
+        
+      } else {
+         data = {
+          callingCode: callingCode,
+          phoneNumber: phoneNumber,
+          otp: otpValue,
+        };
+
+        const response = await otpVerify(data);
+
+        if (response?.data) {
+          navigation.navigate('Login');
+        }
       }
-      navigation.navigate('Login');
 
       // Show error message
       // Alert.alert('Error', response.data.message.join(', '));

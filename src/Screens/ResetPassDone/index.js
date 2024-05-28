@@ -4,6 +4,8 @@ import images from '../../index';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
+import { clearLocalStorageData } from '../../Services/ApiList';
+
 const ResetPassDone = ({navigation}) => {
   const {t, i18n} = useTranslation();
   return (
@@ -28,7 +30,7 @@ const ResetPassDone = ({navigation}) => {
         }}>
         <TouchableOpacity
           style={styles.touchablestyle}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={()=> clearLocalStorageData(navigation)}>
           <Text style={styles.btntext}>{t('Continue')}</Text>
         </TouchableOpacity>
       </View>

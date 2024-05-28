@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './Api';
 
 export const baseUrl = 'https://backendcode.halla.sa'; //'https://halla.sa';
@@ -33,6 +34,23 @@ const makeApiRequest = async (url, data, method, token = false, isFormData = fal
   }
 };
 
+export const clearLocalStorageData = async (navigation) => {
+  try {
+    await AsyncStorage.removeItem('@UserToken');
+    await AsyncStorage.removeItem('@UserInfo');
+    // Other keys to remove if any
+    // await AsyncStorage.removeItem('otherKey');
+    // ...
+    console.log('Local storage data cleared');
+    navigation?.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  } catch (error) {
+    console.error('Error clearing local storage:', error);
+  }
+};
+
 
 
 export const signUp = async data => makeApiRequest('/auth/sign-up', data, 'POST');
@@ -42,7 +60,8 @@ export const signInEmail = async data => makeApiRequest('/auth/sign-in', data, '
 export const signInPhone = async data => makeApiRequest('/auth/sign-in/phone', data, 'POST');
 export const confirmEmail = async data => makeApiRequest('/auth/forgot-password', data, 'POST');
 export const resetPass = async data => makeApiRequest('/auth/reset-password', data, 'POST');
-export const updatePass = async data => makeApiRequest('/auth/update-password', data, 'POST', true);
+export const updatePass = async data => makeApiRequest('/auth/update-password', data, 'PATCH', true);
+export const otpEmailVerify = async data => makeApiRequest('/auth/otp/verify/email', data, 'POST');
 export const otpVerify = async data => makeApiRequest('/auth/otp/verify', data, 'POST');
 export const otpResend = async data => makeApiRequest('/auth/otp/resend', data, 'POST');
 export const imageLink = async data => makeApiRequest('/events/upload-event-image', data, 'POST', true, true);
