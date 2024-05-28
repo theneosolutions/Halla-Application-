@@ -1,8 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from './ApiList';
 
 // Configure Axios base URL
-axios.defaults.baseURL = 'https://halla.sa';
+axios.defaults.baseURL = baseUrl
 
 // Add a request interceptor to handle token injection
 axios.interceptors.request.use(
