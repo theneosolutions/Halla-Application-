@@ -126,7 +126,7 @@ const Login = () => {
         });
       } else {
         console.log('Response data:', response.data);
-        navigation.navigate('SignInOTP', { phoneNumber, callingCode });
+        navigation.navigate('SignInOTP', { phoneNumber: formData?.phoneNumber, callingCode: formData?.callingCode });
       }
     } catch (error) {
       const { message } = error;

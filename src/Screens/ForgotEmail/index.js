@@ -13,7 +13,7 @@ import {
 import images from '../../index';
 import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SH, SF, SW, Colors} from '../../utils';
-import {confirmemail} from '../../Services/ApiList';
+import {confirmEmail} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
@@ -63,7 +63,7 @@ const Forgotemail = ({navigation}) => {
     };
     console.log('data=======', data);
     try {
-      const response = await confirmemail(data);
+      const response = await confirmEmail(data);
 
       console.log('confirmemail==========', response);
       navigation.navigate('OTPVerify', {email});
