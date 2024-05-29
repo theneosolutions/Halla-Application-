@@ -224,6 +224,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomRightRadius: 20,
   },
+  noRecordImageStyle: {
+    height: SH(160),
+    width: SW(160),
+  },
   scanText: {
     alignItems: 'center',
     color: 'white',

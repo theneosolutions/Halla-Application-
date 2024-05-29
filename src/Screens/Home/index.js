@@ -485,10 +485,10 @@ const Home = () => {
                 <ActivityIndicator size="large" color="#000" />
               ) : events && events?.length < 1 ? (
                 <TouchableOpacity
-                  onPress={() => handleGetEvents(selectedFilter)}>
-                  {/* // style={{...styles.scanstyle, marginTop: 50}}> */}
+                  onPress={() => handleGetEvents(selectedFilter)} 
+                  style={{...styles.scanstyle, width: '80%', marginTop:50}}>
                   <Image
-                    style={{...styles.scanstyle, marginTop: 50}}
+                    style={styles.noRecordImageStyle}
                     source={images.emptyerror}
                   />
                   {/* <Text style={styles.scanText}>No Events found.Try again</Text> */}
