@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {getFromLocalStorage} from '../../Services/Api';
-import {createEventInfo, GetCardInfo, ImageLink} from '../../Services/ApiList';
+import {createEventInfo, getCardInfo, imageLink} from '../../Services/ApiList';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {SH, SF, SW, Colors} from '../../utils';
 import {useNavigation} from '@react-navigation/native';
@@ -31,7 +31,7 @@ const Card = props => {
     GetCardDataInfo();
   }, []);
   const GetCardDataInfo = async () => {
-    const response = await GetCardInfo();
+    const response = await getCardInfo();
     console.log('response++++++', response?.data?.data);
     if (!response) {
       // Alert.alert('Event is not created');
@@ -59,7 +59,7 @@ const Card = props => {
       name: 'image.jpg', // You can change the name as needed
     });
     try {
-      const response = await ImageLink(data);
+      const response = await imageLink(data);
       if (response.data) {
         console.log('🚀 ~ handleImageUpload ~ response.data:', response.data);
         const data = {

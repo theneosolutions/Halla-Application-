@@ -27,7 +27,7 @@ import {SF, SW, SH, Colors} from '../../utils';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import IconF from 'react-native-vector-icons/AntDesign';
-import {EventId} from '../../Services/ApiList';
+import {eventId} from '../../Services/ApiList';
 
 const Scan = () => {
   const [events, setEvents] = useState([]);
@@ -48,7 +48,7 @@ const Scan = () => {
     // Fetch data from the EventId API
     const fetchData = async () => {
       try {
-        const response = await EventId();
+        const response = await eventId();
         if (response?.data) {
           setEvents(response.data);
         }

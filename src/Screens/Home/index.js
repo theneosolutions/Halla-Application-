@@ -310,7 +310,7 @@ const Home = () => {
                 // paddingVertical: 1,
                 // paddingHorizontal: 2,
               }}>
-              {item.stats.map(list => {
+              {item.stats?.map(list => {
                 return (
                   <View
                     style={{

@@ -20,10 +20,10 @@ import IconF from 'react-native-vector-icons/AntDesign';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import DatePicker from 'react-native-date-picker';
 import {
-  ImageLink,
-  createEventInfo,
-  EventId,
-  EditEventInfo,
+  // imageLink,
+  // createEventInfo,
+  eventId,
+  editEventInfo,
 } from '../../Services/ApiList';
 import {getFromLocalStorage, setItemInLocalStorage} from '../../Services/Api';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
@@ -70,7 +70,7 @@ const EditEvent = ({navigation, route}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await EventId(id);
+        const response = await eventId(id);
         console.log('response?.data?.id===++++', response?.data);
         // const Events = response?.data?.id;
         // console.log('EventId', Events);
@@ -102,7 +102,7 @@ const EditEvent = ({navigation, route}) => {
     // console.log(':::::: editField::::: ', editField);
     try {
       // Call the EditEventInfo API with the appropriate data
-      const res = await EditEventInfo(id, {
+      const res = await editEventInfo(id, {
         name: eventName,
         eventDescription: eventDescription,
         eventDate: selectedDateTime,

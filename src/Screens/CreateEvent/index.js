@@ -18,7 +18,7 @@ import MessagingStyles from '../../styles/CommonStyle/MessagingStyles';
 import IconF from 'react-native-vector-icons/AntDesign';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import DatePicker from 'react-native-date-picker';
-import {ImageLink, createEventInfo} from '../../Services/ApiList';
+import {imageLink, createEventInfo} from '../../Services/ApiList';
 import {getFromLocalStorage, setItemInLocalStorage} from '../../Services/Api';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
 import * as yup from 'yup';
@@ -174,7 +174,7 @@ const CreateEvent = ({navigation, route}) => {
     });
     console.log('data', data);
     try {
-      const response = await ImageLink(data);
+      const response = await imageLink(data);
       console.log('response...........', response);
       if (response.data) {
         console.log('🚀 ~ handleImageUpload ~ response.data:', response.data);

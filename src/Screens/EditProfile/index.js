@@ -20,7 +20,7 @@ import {
   setUserProfileData,
   getProfileWithUserId,
   setProfileDataUsername,
-  ImageLink,
+  imageLink,
 } from '../../Services/ApiList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageCropPicker from 'react-native-image-crop-picker';
@@ -165,7 +165,7 @@ const EditDetail = props => {
         type: 'image/jpeg',
         name: 'image.jpg',
       });
-      const response = await ImageLink(data);
+      const response = await imageLink(data);
       setProfilePhoto(imagePath.path);
       console.log('Image upload response:', response.data.link);
       const res = await setUserProfileData({profilePhoto: response.data.link});

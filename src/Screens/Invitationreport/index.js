@@ -25,7 +25,7 @@ import {useNavigation, useTheme} from '@react-navigation/native';
 import images from '../../index';
 import {useTranslation} from 'react-i18next';
 import SplashStyl from '../../styles/CommonStyle/SplashStyl';
-import {EventId, SendInvites, deleteEventbyId} from '../../Services/ApiList';
+import {eventId, sendInvites, deleteEventbyId} from '../../Services/ApiList';
 import {useFocusEffect} from '@react-navigation/native';
 
 const Invitationreport = ({route, ...props}) => {
@@ -90,7 +90,7 @@ const Invitationreport = ({route, ...props}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await EventId(id);
+        const response = await eventId(id);
 
         if (response?.data?.id) {
           setSingleData(response.data);
@@ -162,7 +162,7 @@ const Invitationreport = ({route, ...props}) => {
 
   const handleSendInvites = async () => {
     try {
-      const response = await SendInvites(id);
+      const response = await sendInvites(id);
       console.log('🚀 ~ handleSendInvites ~ response:----', response);
 
       setTimeout(() => {

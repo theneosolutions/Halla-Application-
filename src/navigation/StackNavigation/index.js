@@ -280,6 +280,7 @@ const TabNavigator = ({navigation, route}) => {
 
   return (
     <Tab.Navigator
+    initialRouteName='ScanList'
       screenOptions={{
         tabBarStyle: {
           backgroundColor: 'transparent',
@@ -288,7 +289,8 @@ const TabNavigator = ({navigation, route}) => {
           elevation: 0,
           height: 54
         },
-      }}>
+      }}
+      >
       <Tab.Screen
         name="Home"
         component={Home}
