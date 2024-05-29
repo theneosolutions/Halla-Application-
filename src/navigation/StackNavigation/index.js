@@ -63,6 +63,7 @@ import InvitesMessages from '../../Screens/InvitesMessages/index';
 import {
   useFocusEffect,
   getFocusedRouteNameFromRoute,
+  useNavigation,
 } from '@react-navigation/native';
 import SignUpOTP from '../../Screens/SignUpOTP/index';
 import SignInOTP from '../../Screens/SignInOTP/index';
@@ -77,10 +78,11 @@ const Stack = createNativeStackNavigator();
 //   <AuthStack />;
 // };
 const AuthStack = () => {
+  const navigation = useNavigation();
   const checkStatus = async () => {
     const status = await getFromLocalStorage('@UserStatus');
     if (status === 'true') {
-      navigation.navigate('Home');
+      navigation?.navigate('Home');
     }
   };
   useEffect(() => {
@@ -263,7 +265,7 @@ const AuthStack = () => {
   );
 };
 const TabNavigator = ({navigation, route}) => {
-  const [maxWidth, setMaxWidth] = useState(Dimensions.get('window').width);
+  const [maxWidth, setMaxWidth] = useState(Dimensions.get('window').width * 100);
   const returnpathDown = getPathDown(maxWidth, 60, 50);
   const [activeTab, setActiveTab] = useState('Home');
 
@@ -284,6 +286,7 @@ const TabNavigator = ({navigation, route}) => {
           borderTopWidth: 0,
           position: 'absolute',
           elevation: 0,
+          height: 54
         },
       }}>
       <Tab.Screen
