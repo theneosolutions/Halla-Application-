@@ -54,7 +54,7 @@ export const clearLocalStorageData = async (navigation) => {
 
 
 export const signUp = async data => makeApiRequest('/auth/sign-up', data, 'POST');
-export const loginWithGoogle = async idToken => makeApiRequest('/auth/google', { idToken }, 'POST');
+export const loginWithGoogle = async data => makeApiRequest('/auth/google', data, 'POST');
 export const signUpPhoneNu = async data => makeApiRequest('/auth/sign-up/phone', data, 'POST');
 export const signInEmail = async data => makeApiRequest('/auth/sign-in', data, 'POST');
 export const signInPhone = async data => makeApiRequest('/auth/sign-in/phone', data, 'POST');

@@ -69,7 +69,6 @@ import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { LoginWithGoogle } from '../Services/ApiList';
 
 GoogleSignin.configure({
   webClientId:

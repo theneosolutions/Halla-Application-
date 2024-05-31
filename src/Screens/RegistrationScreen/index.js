@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { onGoogleButtonPress } from '../../SocailLogins/index';
 import {setItemInLocalStorage} from '../../Services/Api';
 import styles from './styles';
+import { loginWithGoogle } from '../../Services/ApiList';
+
 const RegistrationScreen = ({ navigation }) => {
   const { t, i18n } = useTranslation();
   const [backgroundIndex, setBackgroundIndex] = useState(0);
@@ -16,25 +18,17 @@ const RegistrationScreen = ({ navigation }) => {
 
   const onGoogleLogin = () => {
     onGoogleButtonPress()
-      .then(res => {
-        console.log('Google sign-in successful:', res);
-        if (res?.data) {
-          const {accessToken, id, email} = res?.data;
-          setItemInLocalStorage('@UserToken', accessToken);
-          setItemInLocalStorage(
-            '@UserInfo',
-            JSON.stringify(res?.data?.user),
-          );
-          navigation.navigate('Home');
-          
-        } else if (res?.response?.data?.message) {
-          console.log("🚀 ~ onGoogleLogin ~ res?.response?.data?.message:", res?.response?.data?.message)
+      .then(async (idToken) => {
+        if (idToken) {
+          const response = await loginWithGoogle({ idToken })
+          if(response?.data?.accessToken) {
+            setItemInLocalStorage('@UserToken', response?.accessToken);
+            navigation.navigate('Home');
+          }
         }
-        // Handle successful response here
       })
       .catch(err => {
         console.log('Error during Google sign-in:', err.message);
-        // Handle error here
       });
   };
 
