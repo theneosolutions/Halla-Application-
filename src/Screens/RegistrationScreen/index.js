@@ -15,20 +15,25 @@ const RegistrationScreen = ({ navigation }) => {
   const { t, i18n } = useTranslation();
   const [backgroundIndex, setBackgroundIndex] = useState(0);
   const [opacity] = useState(new Animated.Value(1));
+  const [loading, setLoading] = useState(false);
 
   const onGoogleLogin = () => {
+    setLoading(true);
     onGoogleButtonPress()
       .then(async (idToken) => {
         if (idToken) {
           const response = await loginWithGoogle({ idToken })
           if(response?.data?.accessToken) {
-            setItemInLocalStorage('@UserToken', response?.accessToken);
+            setItemInLocalStorage('@UserToken', response?.data?.accessToken),
+            setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user)),
+            setLoading(false);
             navigation.navigate('Home');
           }
         }
       })
       .catch(err => {
         console.log('Error during Google sign-in:', err.message);
+        setLoading(false);
       });
   };
 
@@ -62,7 +67,8 @@ const RegistrationScreen = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.touchablestyleIcon}
-              onPress={onGoogleLogin}>
+              onPress={onGoogleLogin}
+              disabled={loading}>
               <Image
                 source={images.google}
                 size={SF(27)}
