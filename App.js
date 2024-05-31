@@ -39,11 +39,11 @@ const App = () => {
   }, []);
   return (
     //<Provider store={store}>
-    //<SafeAreaView style={{flex: 1}}>
-    <NavigationContainer>
-      <StackNavigation />
-    </NavigationContainer>
-    //</SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
+      <NavigationContainer>
+        <StackNavigation />
+      </NavigationContainer>
+    </SafeAreaView>
     //</Provider>
   );
 };

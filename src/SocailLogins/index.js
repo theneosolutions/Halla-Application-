@@ -80,14 +80,9 @@ export const onGoogleButtonPress = () => {
   return new Promise(async (resolve, reject) => {
     try {
       await GoogleSignin.signOut();
-      // Check if your device supports Google Play
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      // Get the users ID token
       const { idToken } = await GoogleSignin.signIn();
-      // Make a POST request to your API endpoint with the ID token
-      const response = await LoginWithGoogle(idToken);
-      // Resolve with the response data if successful
-      resolve(response);
+      resolve(idToken);
     } catch (err) {
       // Handle different error scenarios
       if (err.code === statusCodes.SIGN_IN_CANCELLED) {

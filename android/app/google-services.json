@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "275688306512-ppmoscb8ub8durnuott5r6mtph13c49o.apps.googleusercontent.com",
+          "client_id": "275688306512-agasggoepot0ean2ht1fqrsenc478r55.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.halla",
-            "certificate_hash": "5042fe6e495b52ce392435a91117b66e774f8087"
+            "certificate_hash": "9e92e77449153b83405e37f672928490e4fb71c9"
+          }
+        },
+        {
+          "client_id": "275688306512-k056dfqi70shns8idh3uh7o7pdlpu3rm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.halla",
+            "certificate_hash": "d2bff102c36d34db3da2e8a471dd75bc20a96197"
           }
         },
         {
@@ -37,6 +45,13 @@
             {
               "client_id": "275688306512-3gl98v3c5gpq2fldt75ubpudgn9dmcd0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "275688306512-erev2jnfmqrs4iqs73nv47i2mmhattk5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.halla"
+              }
             }
           ]
         }

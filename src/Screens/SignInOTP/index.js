@@ -61,6 +61,13 @@ const SignInOTP = ({navigation, route}) => {
   const isOTPComplete = () => {
     return otp.every(digit => digit !== ''); // Check if every digit of OTP is filled
   };
+
+  const resendOTPhandler = async () => {
+    const data = {};
+    
+    const response = await otpResend(data);
+    console.log('OTP =========>', response)
+  }
   return (
     <View style={styles.Container}>
       <View style={styles.firstView}>
@@ -88,7 +95,7 @@ const SignInOTP = ({navigation, route}) => {
 
         <View style={styles.dontreviewopt}>
           <Text style={styles.lighttextgray}>{t('dontrecevidOTP')}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={resendOTPhandler}>
             <Text style={styles.underlinetext}>{t('ResendOTP')}</Text>
           </TouchableOpacity>
         </View>
