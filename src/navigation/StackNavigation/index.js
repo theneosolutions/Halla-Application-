@@ -280,7 +280,7 @@ const TabNavigator = ({navigation, route}) => {
 
   return (
     <Tab.Navigator
-    initialRouteName='ScanList'
+      initialRouteName='Home'
       screenOptions={{
         tabBarStyle: {
           backgroundColor: 'transparent',

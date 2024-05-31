@@ -252,7 +252,7 @@ const SignUp = () => {
       // );
       // setButtonEnable(true);
       // if (data.callingCode && data.phoneNumber) {
-      setUserData(response?.data);
+      // setUserData(response?.data);
       // console.log('ssss', setUserData);
       // if (response?.data) {
       // setMessage('User Registered Successfully');
@@ -271,9 +271,8 @@ const SignUp = () => {
       //   // Handle incomplete fields
       // }
     } catch (error) {
-      console.error('SignUp Error:', error);
-      // setMessage('An error occurred during sign up');
-      // setCurrentComponent('signUpError');
+      setMessage(error?.message);
+      setCurrentComponent('signUpError');
       setButtonEnable(false);
       // setLoading(false);
       // setBtnLoading(true);

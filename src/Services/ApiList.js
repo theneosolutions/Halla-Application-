@@ -8,7 +8,7 @@ export const GOOGLE_MAPS_APIKEY = 'AIzaSyAFZBGvY2p25djzXAG-0p3vq42SzGw9WxQ';
 const makeApiRequest = async (url, data, method, token = false, isFormData = false) => {
   try {
     const response = await api(baseUrl, url, data, method, token, isFormData);
-    console.log("🚀 ~ makeApiRequest ~ response:", response);
+    console.log("makeApiRequest ~ response:", response);
 
     // Check if the response contains an error object
     if (response.error) {
@@ -62,7 +62,7 @@ export const confirmEmail = async data => makeApiRequest('/auth/forgot-password'
 export const resetPass = async data => makeApiRequest('/auth/reset-password', data, 'POST');
 export const updatePass = async data => makeApiRequest('/auth/update-password', data, 'PATCH', true);
 export const otpEmailVerify = async data => makeApiRequest('/auth/otp/verify/email', data, 'POST');
-export const otpVerify = async data => makeApiRequest('/auth/otp/verify', data, 'POST');
+export const otpVerify = async data => makeApiRequest('/auth/otp/verify/phone', data, 'POST');
 export const otpResend = async data => makeApiRequest('/auth/otp/resend', data, 'POST');
 export const imageLink = async data => makeApiRequest('/events/upload-event-image', data, 'POST', true, true);
 export const createEventInfo = async data => makeApiRequest('/events', data, 'POST', true);

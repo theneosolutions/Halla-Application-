@@ -17,6 +17,7 @@ import Languages from '../../Language/i18n';
 import {otpVerify, otpResend} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
 import Snackbar from 'react-native-snackbar';
+import { setItemInLocalStorage } from '../../Services/Api';
 const SignInOTP = ({navigation, route}) => {
   const {phoneNumber, callingCode} = route.params;
   console.log('emailOOOO', phoneNumber);
@@ -47,13 +48,21 @@ const SignInOTP = ({navigation, route}) => {
       };
       console.log('🚀 ~ handleSignUpOTPVerify ~ data:', data);
       const response = await otpVerify(data);
-      navigation.navigate('Home');
-      console.log('response', response);
+
+      if (response?.data) {
+        setItemInLocalStorage('@UserToken', response?.data?.accessToken),
+        setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user)),
+        navigation.navigate('Home');
+      }
 
       // Show error message
       // Alert.alert('Error', response.data.message.join(', '));
     } catch (error) {
-      //   console.error('OTP Verification Error:', error);
+      Snackbar.show({
+        text: error.message[0],
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: 'red',
+      });
       //   Alert.alert('Error', 'An error occurred during OTP verification');
     }
     setBtnLoading(false);

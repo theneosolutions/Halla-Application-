@@ -26,7 +26,7 @@ axios.interceptors.response.use(
   },
   error => {
     // Log and handle errors
-    console.error('Error in response:', error);
+    // console.error('Error in response:', error);
     return Promise.reject(error);
   }
 );
@@ -79,7 +79,7 @@ async function makeRequest(baseUrl, url, body = {}, method, token = false, isFor
     };
   } catch (error) {
     // Log and handle errors
-    console.error('Error in makeRequest:', error);
+    // console.error('Error in makeRequest:', error);
     return {
       error: error.response ? error.response.data : 'Network Error',
       status: error.response ? error.response.status : 500,

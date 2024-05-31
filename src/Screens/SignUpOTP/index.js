@@ -17,9 +17,10 @@ import Languages from '../../Language/i18n';
 import {otpVerify, otpResend, otpEmailVerify} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
 import Snackbar from 'react-native-snackbar';
+import { setItemInLocalStorage } from '../../Services/Api';
 const SignUpOTP = ({navigation, route}) => {
   const {signUpType} = route.params;
-  console.log('emailOOOO', route.params?.phoneNumber);
+console.warn('signUpType', signUpType)
   const {t, i18n} = useTranslation();
   const [otp, setOTP] = useState(['', '', '', '']);
   const otpTextInputRefs = useRef([]);
@@ -43,6 +44,7 @@ const SignUpOTP = ({navigation, route}) => {
       // console.log('🚀 ~ handleSignUpOTPVerify ~ otpValue:', otpValue);
 
       if(signUpType == 'email') {
+        console.log('--------- email')
         data = {
           email: route.params.email,
           otp: otpValue,
@@ -56,23 +58,28 @@ const SignUpOTP = ({navigation, route}) => {
         
       } else {
          data = {
-          callingCode: callingCode,
-          phoneNumber: phoneNumber,
+          callingCode: route.params.callingCode,
+          phoneNumber: route.params.phoneNumber,
           otp: otpValue,
         };
-
         const response = await otpVerify(data);
 
         if (response?.data) {
-          navigation.navigate('Login');
+          setItemInLocalStorage('@UserToken', response?.data?.accessToken),
+          setItemInLocalStorage('@UserInfo', JSON.stringify(response?.data?.user)),
+          navigation.navigate('Home');
         }
       }
 
       // Show error message
       // Alert.alert('Error', response.data.message.join(', '));
     } catch (error) {
-      //   console.error('OTP Verification Error:', error);
-      //   Alert.alert('Error', 'An error occurred during OTP verification');
+        Snackbar.show({
+          text: error.message[0],
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: 'red',
+        });
+        // Alert.alert('Error', 'An error occurred during OTP verification');
     }
     setBtnLoading(false);
   };

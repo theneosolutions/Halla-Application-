@@ -80,6 +80,7 @@ const EditDetail = props => {
 
         if (response?.data) {
           setProfileData(response.data);
+          setSelectedCountry(response.callingCode)
           setPhoneNumber(response?.data?.phoneNumber);
           setUsername(response?.data?.firstName);
           setEmail(response?.data?.email);
@@ -111,7 +112,7 @@ const EditDetail = props => {
     console.log(':::::: editField::::: ', editField);
     try {
       if (editField === 'phoneNumber') {
-        const res = await setUserProfileData({phoneNumber: editValue});
+        const res = await setUserProfileData({callingCode: selectedCountry.phone , phoneNumber: editValue});
         console.log('testing', res.data);
         setPhoneNumber(editValue);
       } else if (editField === 'email') {
