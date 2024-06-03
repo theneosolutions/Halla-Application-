@@ -13,15 +13,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {SH, SF, SW, Colors} from '../../utils';
 import Languages from '../../Language/i18n';
 import {useTranslation} from 'react-i18next';
-import {resetPass} from '../../Services/ApiList';
+import {resetPass, resetPassViaPhone} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 import styles from './styles';
 import Snackbar from 'react-native-snackbar';
 const ResetPass = ({navigation, route}) => {
-  const {email, otp} = route.params;
+  const {forgotType } = route.params;
 
-  console.log('email=========', email);
-  console.log('otp=========', otp);
+  console.log('email=========', route.params?.email);
+  console.log('otp=========', route.params?.otp);
   const [password1, setPassword1] = useState('');
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -39,6 +39,8 @@ const ResetPass = ({navigation, route}) => {
   const {t, i18n} = useTranslation();
 
   const resetpassword = async () => {
+    let data;
+    console.log('data=========00=', data)
     if (!password1 || !password2) {
       // Show Snackbar if phone number or calling code field is empty
       Snackbar.show({
@@ -49,21 +51,39 @@ const ResetPass = ({navigation, route}) => {
       return false;
     }
     const token = await getFromLocalStorage('@UserToken');
-    const data = {
-      password1: password1,
-      password2: password2,
-      email: email,
-      otp: parseFloat(otp.join('')),
-    };
-    console.log('data=======', data);
-    const response = await resetPass(data);
-    console.log('resetPassword==========', response);
-    navigation.navigate('ResetPassDone');
+    if (forgotType == 'email') {
+      data = {
+        password1: password1,
+        password2: password2,
+        email: route.params?.email,
+        otp: parseFloat(route.params?.otp.join('')),
+      };
+      console.log('data=======', data);
+      const response = await resetPass(data);
+      console.log('resetPassword==========', response);
+      navigation.navigate('ResetPassDone');
+    }
+
+    if (forgotType == 'phone') {
+      data = {
+        password1: password1,
+        password2: password2,
+        callingCode: route.params?.callingCode,
+        phoneNumber: route.params?.phoneNumber,
+        otp: route.params?.otp,
+      };
+console.log('data==========', data)
+      const response = await resetPassViaPhone(data);
+      console.log('resetPassViaPhone==========', response);
+      navigation.navigate('ResetPassDone');
+    }
   };
   const otpverifyfunction = () => {
     resetpassword();
     navigation.navigate('ResetPassDone');
   };
+
+  console.log('route.params', route.params)
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.Container}>

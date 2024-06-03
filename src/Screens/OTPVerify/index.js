@@ -73,7 +73,7 @@ const OTPVerify = ({navigation, route}) => {
         style={styles.touchablestyle}
         onPress={() => {
           if (isOTPComplete()) {
-            navigation.navigate('ResetPass', {email, otp});
+            navigation.navigate('ResetPass', {forgotType:'email',  email, otp});
           } else {
             // Show error message if OTP is not complete
             Snackbar.show({

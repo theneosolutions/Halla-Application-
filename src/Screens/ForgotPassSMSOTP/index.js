@@ -14,7 +14,7 @@ import FontC from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SH, SF, SW, Colors} from '../../utils';
 import {useTranslation} from 'react-i18next';
 import Languages from '../../Language/i18n';
-import {otpVerify, otpResend} from '../../Services/ApiList';
+import {otpVerify, forgotPasswordOtpVerifyPhone} from '../../Services/ApiList';
 import {Spacing} from '../../Components/index';
 import Snackbar from 'react-native-snackbar';
 const ForgotPassOTP = ({navigation, route}) => {
@@ -47,12 +47,13 @@ const ForgotPassOTP = ({navigation, route}) => {
         otp: otpValue,
       };
       console.log('🚀 ~ handleSignUpOTPVerify ~ data:', data);
-      const response = await otpVerify(data);
-      console.log('response.......', response?.data?.data);
+      const response = await forgotPasswordOtpVerifyPhone(data);
+      console.log('response.......', response?.data);
       if (response?.data) {
-        navigation.navigate('Login');
+        // navigation.navigate('ResetPass');
+        navigation.navigate('ResetPass', {forgotType:'phone', callingCode, phoneNumber, otp: otpValue});
       }
-      navigation.navigate('Login');
+      // navigation.navigate('Login');
     } catch (error) {
       //   console.error('OTP Verification Error:', error);
       //   Alert.alert('Error', 'An error occurred during OTP verification');

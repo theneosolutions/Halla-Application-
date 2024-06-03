@@ -59,11 +59,13 @@ export const signUpPhoneNu = async data => makeApiRequest('/auth/sign-up/phone',
 export const signInEmail = async data => makeApiRequest('/auth/sign-in', data, 'POST');
 export const signInPhone = async data => makeApiRequest('/auth/sign-in/phone', data, 'POST');
 export const confirmEmail = async data => makeApiRequest('/auth/forgot-password', data, 'POST');
+export const resetPassViaPhone = async data => makeApiRequest('/auth/reset-password/phone', data, 'POST');
 export const resetPass = async data => makeApiRequest('/auth/reset-password', data, 'POST');
 export const updatePass = async data => makeApiRequest('/auth/update-password', data, 'PATCH', true);
 export const otpEmailVerify = async data => makeApiRequest('/auth/otp/verify/email', data, 'POST');
 export const otpVerify = async data => makeApiRequest('/auth/otp/verify/phone', data, 'POST');
 export const otpResend = async data => makeApiRequest('/auth/otp/resend', data, 'POST');
+export const forgotPasswordOtpVerifyPhone = async data => makeApiRequest('/auth/forgot-password/phone/otp/verify', data, 'POST');
 export const imageLink = async data => makeApiRequest('/events/upload-event-image', data, 'POST', true, true);
 export const createEventInfo = async data => makeApiRequest('/events', data, 'POST', true);
 export const editEventInfo = async (id, data) => makeApiRequest(`/events/${id}`, data, 'PATCH', true);

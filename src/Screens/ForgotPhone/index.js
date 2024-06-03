@@ -204,7 +204,7 @@ const ForgotPhone = () => {
       if (response) {
         // setMessage(response?.data?.message);
         // setCurrentComponent('signUpSuccess');
-        navigation.navigate('ForgotPassSMSOTP', {phoneNumber, callingCode});
+        navigation.navigate('ForgotPassSMSOTP', {forgotType: 'phone', phoneNumber, callingCode});
       }
       setBtnLoading(false);
 
@@ -255,8 +255,16 @@ const ForgotPhone = () => {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={styles.ScrollViewStyles}>
           <View style={styles.AccountView}>
-            <Text style={styles.Loginheader}>Enter PhoneNumber</Text>
+            <Text style={styles.Loginheader}>Enter Phone Number</Text>
           </View>
+
+
+          {/* <View style={styles.firstHalfView}>
+            <Text style={styles.forgotstyle}>Forgot Password</Text>
+            <View style={styles.imageview}>
+              <Image source={images.halalogo} style={styles.imgstyle} />
+            </View>
+          </View> */}
 
           <Spacing space={50} />
 
@@ -327,6 +335,22 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     textAlign: 'center',
     // fontFamily: Fonts.Poppins_Medium,
+  },
+
+  firstHalfView: {
+    height: SH(350),
+
+    width: '100%',
+    justifyContent: 'center',
+    alignItem: 'center',
+    // backgroundColor: 'gray',
+  },
+  forgotstyle: {
+    color: '#293170',
+    fontWeight: '800',
+    textAlign: 'center',
+    fontSize: SF(20),
+    margin: 5,
   },
   focusedInput: {
     borderWidth: 1, // Add border
