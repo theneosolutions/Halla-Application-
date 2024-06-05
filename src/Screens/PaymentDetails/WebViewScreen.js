@@ -84,7 +84,8 @@ const WebViewScreen = ({route}) => {
         //   </TouchableOpacity>
         <WebView
           source={{
-            uri: `https://zain.d26sw7gpdqxzte.amplifyapp.com/payments?user=${userid}&pakage=${packageData}&amount=${price}&description=test&callbackUrl=https://zain.d26sw7gpdqxzte.amplifyapp.com/payments/payments_redirect`,
+            uri: `https://zain.d26sw7gpdqxzte.amplifyapp.com/payments?user=${userid}&package=${packageData}&amount=${price}&description=test&callbackUrl=https://zain.d26sw7gpdqxzte.amplifyapp.com/payments/payments_redirect`,
+            // uri: `https://zain.d26sw7gpdqxzte.amplifyapp.com/payments?user=${userid}&package=${packageData}&amount=${price}&description=test&callbackUrl=https://zain.d26sw7gpdqxzte.amplifyapp.com/payments/payments_redirect`
           }} // Specify the URL you want to open
           style={styles.webView}
           onNavigationStateChange={handleNavigationStateChange}

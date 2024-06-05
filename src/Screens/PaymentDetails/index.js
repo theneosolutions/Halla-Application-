@@ -17,7 +17,7 @@ import Egypto from 'react-native-vector-icons/Entypo';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {SH, SW, SF} from '../../utils';
-import {getPakageById} from '../../Services/ApiList';
+import {getPackageById} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 const PaymentDetails = ({route}) => {
   // const {id} = route.params;
@@ -42,7 +42,7 @@ const PaymentDetails = ({route}) => {
 
   const handleGetPakageId = async () => {
     try {
-      const response = await getPakageById(selectedPackage?.id);
+      const response = await getPackageById(selectedPackage?.id);
       // console.log('response---------------paymentmethod=====', response?.data);
       console.log('response?.data?.price=====', response?.data?.numberOfGuest);
       setPrice(response?.data?.price);

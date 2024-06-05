@@ -189,9 +189,8 @@ const CreateEvent = ({navigation, route}) => {
           address: route.params?.address,
           latitude: route.params?.latitude,
           longitude: route.params?.longitude,
-          address: route.params?.address,
           status: 'draft',
-          cardId: 1,
+          cardId: 1, // default card id tbd remove it
           image: response.data.link,
         };
         console.log('🚀 ~ handleImageUpload ~ data:', data);

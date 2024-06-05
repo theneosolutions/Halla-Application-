@@ -82,7 +82,7 @@ const Invitationreport = ({route, ...props}) => {
   const handleRefresh = () => {
     setRefreshing(true);
 
-    handleGetByUserId();
+    handleGetByUserId(id);
 
     setRefreshing(false);
   };
@@ -113,10 +113,11 @@ const Invitationreport = ({route, ...props}) => {
   );
 
   const handleGetByUserId = async id => {
+    console.log('id', id)
     try {
       setLoading(true);
-      const response = await EventId(id);
-      console.log('Events:.....===eventid===', response?.data?.stats);
+      const response = await eventId(id);
+      console.log('Events:.....===eventid===', response?.data);
       if (response?.data) {
         setSingleData(response.data);
         if (response.data.stats && response.data.stats.length > 0) {

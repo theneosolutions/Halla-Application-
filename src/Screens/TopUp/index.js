@@ -17,7 +17,7 @@ import Egypto from 'react-native-vector-icons/Entypo';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {SH, SW, SF} from '../../utils';
-import {getpakage} from '../../Services/ApiList';
+import {getPackage} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 const TopUp = ({route}) => {
   const navigation = useNavigation();
@@ -96,7 +96,7 @@ const TopUp = ({route}) => {
   const handleGetPakage = async () => {
     setLoading(true);
     try {
-      const response = await getpakage();
+      const response = await getPackage();
       console.log(
         'response---------------+++Topupppp====',
         response?.data?.data,
