@@ -29,6 +29,7 @@ import {Spacing} from '../../Components';
 import HomeTabStyle from '../../styles/CommonStyle/HomeTab';
 import styles from './styles';
 import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Snackbar from 'react-native-snackbar';
 const Home = () => {
   const navigation = useNavigation();
@@ -50,7 +51,42 @@ const Home = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedCard, setSelectedCard] = useState(null);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [isCancelVisible, setIsCancelVisible] = useState(false);
   const [backPressCount, setBackPressCount] = useState(0); // State to track back press count
+
+  const onSearchHandler = (value) => {
+    setSearch(value);
+    setIsCancelVisible(false);
+  }
+
+  const searchEvents = async () => {
+    setIsCancelVisible(true);
+    try {
+      setLoading(true);
+      const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
+      const response = await getEventBySearch(search, userInfo.id);
+      console.log('🚀 ~ searchEvents ~ response?.data?.data:', response);
+      setEvents(response?.data?.data || []); // Set events data or empty array if undefined
+      setLoading(false);
+      // setIsCancelVisible(false);
+    } catch (error) {
+      console.error('Error searching events:', error);
+    }
+  };
+
+  const cancelSearchEvents = () => {
+    setSearch('');
+    handleGetEvents(selectedFilter)
+    setIsCancelVisible(false);
+  }
+
+  //   useEffect(() => {
+  //   if (search !== '') {
+  //     searchEvents();
+  //   } else {
+  //     handleGetEvents(selectedFilter);
+  //   }
+  // }, [search]);
 
   const handleCardPress = filter => {
     setSelectedCard(filter);
@@ -144,10 +180,11 @@ const Home = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([
-      // handleGetByUserId(),
-      // handleGetdataByUserId()
-    ]);
+    cancelSearchEvents();
+    // await Promise.all([
+    //   // handleGetByUserId(),
+    //   // handleGetdataByUserId()
+    // ]);
     setRefreshing(false);
   };
 
@@ -200,26 +237,9 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    if (search !== '') {
-      searchEvents();
-    } else {
-      handleGetEvents(selectedFilter);
-    }
-  }, [search]);
 
-  const searchEvents = async () => {
-    try {
-      setLoading(true);
-      const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await getEventBySearch(search, userInfo.id);
-      console.log('🚀 ~ searchEvents ~ response?.data?.data:', response);
-      setEvents(response?.data?.data || []); // Set events data or empty array if undefined
-      setLoading(false);
-    } catch (error) {
-      console.error('Error searching events:', error);
-    }
-  };
+
+
 
   const DisplayingHome = () => {
     navigation.navigate('CreateEvent', {
@@ -407,14 +427,28 @@ const Home = () => {
           placeholder="Search By Event Name"
           placeholderTextColor="#000"
           value={search}
-          onChangeText={text => setSearch(text)}
+          onChangeText={text => onSearchHandler(text)}
         />
-        <Feather
-          name="search"
-          size={24}
-          color="black"
-          style={styles.searchIcon}
-        />
+        {isCancelVisible ?
+          <TouchableOpacity onPress={cancelSearchEvents} disabled={loading}>
+            <Entypo
+              name="circle-with-cross"
+              size={24}
+              color="black"
+              style={styles.searchIcon}
+            />
+          </TouchableOpacity>
+        :
+          <TouchableOpacity onPress={searchEvents} disabled={loading}>
+            <Feather
+              name="search"
+              size={24}
+              color="black"
+              style={styles.searchIcon}
+            />
+          </TouchableOpacity>
+        }
+
       </View>
       <View style={HomeTabStyle.Container}>
         <View style={{marginBottom: 120}}>

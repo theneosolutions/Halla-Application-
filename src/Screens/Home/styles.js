@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     right: 15,
-    top: '50%',
+    // top: '50%',
     color: 'black',
     transform: [{translateY: -12}],
   },
