@@ -428,6 +428,7 @@ const Home = () => {
           placeholderTextColor="#000"
           value={search}
           onChangeText={text => onSearchHandler(text)}
+          returnKeyType="search"
         />
         {isCancelVisible ?
           <TouchableOpacity onPress={cancelSearchEvents} disabled={loading}>

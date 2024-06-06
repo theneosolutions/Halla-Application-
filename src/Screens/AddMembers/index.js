@@ -18,12 +18,12 @@ import {SH, SW, SF} from '../../utils';
 import {addGuestById, removeContactByID} from '../../Services/ApiList';
 import {getFromLocalStorage} from '../../Services/Api';
 const AddMembers = ({route}) => {
-  const {selectedContacts, event} = route.params;
+  const {selectedContacts, id} = route.params;
   console.log('selectedContacts----', selectedContacts);
   console.log('🚀 ~ AddMembers ~ route.params:', route.params);
   console.log('selectedContacts', selectedContacts);
   const navigation = useNavigation();
-  console.log('eventeeeeeee', event);
+  console.log('eventeeeeeee', id);
   const {t} = useTranslation();
   const [guest, setGuest] = useState([...selectedContacts]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -53,9 +53,9 @@ const AddMembers = ({route}) => {
   };
   const toggleDropdown = () => {
     setIsDropdownOpen(prevState => !prevState);
-    navigation.navigate('AddGuest', {event});
+    navigation.navigate('AddGuest', {id});
   };
-  console.log('iddddddd', event);
+  console.log('iddddddd', id);
 
   const DeleteContactFromList = async (eventId, contactId) => {
     try {
@@ -140,11 +140,11 @@ const AddMembers = ({route}) => {
       };
       console.log('Selected Contacts:-------', contacts);
       //   console.log('requestData', requestData);
-      const {id: eventId} = route.params;
-      console.log('...........', eventId);
+      const eventId = route.params?.id;
+
 
       const response = await addGuestById(route.params.id, requestData);
-      //   console.log('selectedContactIds--------------', response?.data);
+        console.log('selectedContactIds--------------', response?.data);
 
       if (response) {
         // console.log('Data:', response.data);
