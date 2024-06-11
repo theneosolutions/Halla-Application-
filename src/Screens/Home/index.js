@@ -514,6 +514,8 @@ const Home = () => {
                   </View>
                 </ScrollView>
               </View>
+            </View>
+          </ScrollView>
 
               {/* Show data not found message */}
               {loading ? (
@@ -533,6 +535,7 @@ const Home = () => {
                   data={events}
                   renderItem={renderItem}
                   keyExtractor={item => item.id.toString()}
+                  style={{height:'100%', backgroundColor: 'pink'}}
                   ListFooterComponent={
                     currentPage < pageCount ? (
                       <TouchableOpacity
@@ -548,8 +551,6 @@ const Home = () => {
                   }
                 />
               )}
-            </View>
-          </ScrollView>
         </View>
       </View>
     </View>

@@ -271,8 +271,8 @@ const TabNavigator = ({navigation, route}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      const routeName = getFocusedRouteNameFromRoute(route);
-      console.log('🚀 ~ React.useCallback ~ routeName:', routeName);
+      const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+
       // Set the active tab name
       setActiveTab(routeName);
     }, [route]),

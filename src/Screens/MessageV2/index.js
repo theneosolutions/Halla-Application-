@@ -9,11 +9,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import axios from 'axios';
 import {useFocusEffect} from '@react-navigation/native';
 import {getFromLocalStorage} from '../../Services/Api';
 import {useNavigation} from '@react-navigation/native';
-import { baseUrl } from '../../Services/ApiList';
+import { getChatMessages } from '../../Services/ApiList';
 
 const ChatListingScreen = () => {
   const navigation = useNavigation();
@@ -26,18 +25,13 @@ const ChatListingScreen = () => {
     const userInfo = JSON.parse(await getFromLocalStorage('@UserInfo'));
     const token = await getFromLocalStorage('@UserToken');
     try {
-      const response = await axios.get(
-        `${baseUrl}/events/chats/user/${userInfo.id}?order=DESC&page=1&take=100&filter=monthly`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      
+      const response = await getChatMessages(userInfo.id, 'draft');
       console.log('🚀 ~ fetchData ~ response.data:', response.data);
-      setChatData([...response?.data?.data]);
+      console.log('🚀 ~ fetchData ~ response.data:');
+      // setChatData([...response?.data?.data]);
     } catch (error) {
-      console.error('Error fetching chat data:', error);
+      console.error('Error fetching chat data:', error.message[0]);
     } finally {
       setIsLoading(false);
     }
