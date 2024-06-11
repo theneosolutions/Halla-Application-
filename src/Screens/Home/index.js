@@ -252,7 +252,6 @@ const Home = () => {
     if (item.type === 'draft') {
       return null;
     }
-
     let buttonText;
     if (selectedFilter === 'all') {
       buttonText = item.status;
@@ -383,7 +382,7 @@ const Home = () => {
               <TouchableOpacity
                 style={{
                   height: 35,
-                  width: 100,
+                  width: 120,
                   backgroundColor: '#293170',
                   color: 'white',
                   marginLeft: 'auto',
@@ -451,108 +450,113 @@ const Home = () => {
         }
 
       </View>
-      <View style={HomeTabStyle.Container}>
-        <View style={{marginBottom: 120}}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            nestedScrollEnabled={true}
-            contentContainerStyle={{
-              paddingVertical: 5,
-              overflow: 'hidden',
-            }}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={handleRefresh}
-              />
-            }>
-            <View style={{flex: 1}}>
-              <Spacing space={SH(10)} />
 
-              <View style={styles.maincontainer}>
-                <View>
-                  <Text style={styles.availablestyle}>Available Balance</Text>
-                  <Text style={styles.invitationstyle}>{wallet}</Text>
-                </View>
+      <View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}
+          contentContainerStyle={{
+            paddingVertical: 5,
+            overflow: 'hidden',
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+            />
+          }>
+          <View style={{flex: 1}}>
+            <Spacing space={SH(10)} />
 
-                <View style={styles.topbtnview} onPress={DisplayingHome}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('TopUp')}>
-                    <Text style={styles.topstyle}>Top Up</Text>
-                  </TouchableOpacity>
-                </View>
+            <View style={styles.maincontainer}>
+              <View>
+                <Text style={styles.availablestyle}>Available Balance</Text>
+                <Text style={styles.invitationstyle}>{wallet}</Text>
               </View>
 
-              <View style={{flex: 1}}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={styles.cardRow}>
-                    <BirthdayCard
-                      title="All Events"
-                      imageUrl={images.Newimgone}
-                      onPress={() => handleBirthdayCardClick('all')}
-                      isSelected={selectedCard === 'all'}
-                    />
-                    <BirthdayCard
-                      title="New Events"
-                      imageUrl={images.allimgtwo}
-                      onPress={() => handleBirthdayCardClick('new')}
-                      isSelected={selectedCard === 'new'}
-                    />
-                    <BirthdayCard
-                      title="Upcoming Events"
-                      imageUrl={images.Upcommingimgthree}
-                      onPress={() => handleBirthdayCardClick('upcoming')}
-                      isSelected={selectedCard === 'upcoming'}
-                      data={upcoming}
-                    />
-                    <BirthdayCard
-                      title="Attended Events"
-                      imageUrl={images.Attendedimagefour}
-                      onPress={() => handleBirthdayCardClick('attended')}
-                      isSelected={selectedCard === 'attended'}
-                    />
-                  </View>
-                </ScrollView>
+              <View style={styles.topbtnview} onPress={DisplayingHome}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('TopUp')}>
+                  <Text style={styles.topstyle}>Top Up</Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
 
-              {/* Show data not found message */}
-              {loading ? (
-                <ActivityIndicator size="large" color="#000" />
-              ) : events && events?.length < 1 ? (
-                <TouchableOpacity
-                  onPress={() => handleGetEvents(selectedFilter)} 
-                  style={{...styles.scanstyle, width: '80%', marginTop:50}}>
-                  <Image
-                    style={styles.noRecordImageStyle}
-                    source={images.emptyerror}
+            <View style={{flex: 1}}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.cardRow}>
+                  <BirthdayCard
+                    title="All Events"
+                    imageUrl={images.Newimgone}
+                    onPress={() => handleBirthdayCardClick('all')}
+                    isSelected={selectedCard === 'all'}
                   />
-                  {/* <Text style={styles.scanText}>No Events found.Try again</Text> */}
-                </TouchableOpacity>
-              ) : (
-                <FlatList
-                  data={events}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.id.toString()}
-                  style={{height:'100%', backgroundColor: 'pink'}}
-                  ListFooterComponent={
-                    currentPage < pageCount ? (
-                      <TouchableOpacity
-                        onPress={loadMoreData}
-                        style={styles.scanstyle}>
-                        {loadingMore ? (
-                          <ActivityIndicator color={'#fff'} />
-                        ) : (
-                          <Text style={styles.scanText}>Load more </Text>
-                        )}
-                      </TouchableOpacity>
-                    ) : null
-                  }
-                />
-              )}
-        </View>
+                  <BirthdayCard
+                    title="New Events"
+                    imageUrl={images.allimgtwo}
+                    onPress={() => handleBirthdayCardClick('new')}
+                    isSelected={selectedCard === 'new'}
+                  />
+                  <BirthdayCard
+                    title="Upcoming Events"
+                    imageUrl={images.Upcommingimgthree}
+                    onPress={() => handleBirthdayCardClick('upcoming')}
+                    isSelected={selectedCard === 'upcoming'}
+                    data={upcoming}
+                  />
+                  <BirthdayCard
+                    title="Attended Events"
+                    imageUrl={images.Attendedimagefour}
+                    onPress={() => handleBirthdayCardClick('attended')}
+                    isSelected={selectedCard === 'attended'}
+                  />
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        </ScrollView>
       </View>
+
+      <View>
+        {/* Show data not found message */}
+        {loading ? (
+          <ActivityIndicator size="large" color="#000" />
+        ) : events && events?.length < 1 ? (
+          <TouchableOpacity
+            onPress={() => handleGetEvents(selectedFilter)} 
+            style={{...styles.scanstyle, width: '80%', marginTop:50}}>
+            <Image
+              style={styles.noRecordImageStyle}
+              source={images.emptyerror}
+            />
+            {/* <Text style={styles.scanText}>No Events found.Try again</Text> */}
+          </TouchableOpacity>
+        ) : (
+          <FlatList
+            data={events}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+            ListFooterComponent={
+              currentPage < pageCount ? (
+                <TouchableOpacity
+                  onPress={loadMoreData}
+                  style={styles.scanstyle}>
+                  {loadingMore ? (
+                    <ActivityIndicator color={'#fff'} />
+                  ) : (
+                    <Text style={styles.scanText}>Load more </Text>
+                  )}
+                </TouchableOpacity>
+              ) : null
+            }
+            contentContainerStyle={{
+              flexGrow:1,
+              paddingBottom: 420
+            }}
+          />
+        )}
+      </View>
+                    
     </View>
   );
 };
