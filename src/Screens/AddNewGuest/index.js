@@ -15,7 +15,7 @@ import Egypto from 'react-native-vector-icons/Entypo';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {SH, SW, SF} from '../../utils';
-import {guestListByID, removeContactByID} from '../../Services/ApiList';
+import {guestListById, removeContactById} from '../../Services/ApiList';
 
 const AddNewGuest = props => {
   const navigation = useNavigation();
@@ -37,7 +37,7 @@ const AddNewGuest = props => {
     setLoading(true);
     try {
       // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await guestListByID(id);
+      const response = await guestListById(id);
       console.log(
         'response++++++++======addnewguest',
         response?.response?.data,
@@ -62,7 +62,7 @@ const AddNewGuest = props => {
   const DeleteContactFromList = async (eventId, contactId) => {
     try {
       // const Gettingtoken = JSON.parse(await getFromLocalStorage('@UserInfo'));
-      const response = await removeContactByID(eventId, contactId); // Pass user ID if requitransparent
+      const response = await removeContactById(eventId, contactId); // Pass user ID if requitransparent
       console.log('Events:.....======+++++--------', response);
       if (response && response.status === 200) {
         // Filter out the removed contact from the guest list
