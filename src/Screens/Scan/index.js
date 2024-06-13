@@ -29,7 +29,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import IconF from 'react-native-vector-icons/AntDesign';
 import {eventId} from '../../Services/ApiList';
 
-const Scan = () => {
+const Scan = ({route}) => {
   const [events, setEvents] = useState([]);
   const onSuccess = e => {
     Linking.openURL(e.data).catch(err =>
@@ -48,7 +48,7 @@ const Scan = () => {
     // Fetch data from the EventId API
     const fetchData = async () => {
       try {
-        const response = await eventId();
+        const response = await eventId(route.params?.id);
         if (response?.data) {
           setEvents(response.data);
         }

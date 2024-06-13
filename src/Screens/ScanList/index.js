@@ -100,7 +100,7 @@ const ScanList = () => {
                   }}
                 />
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Scan')}
+                  onPress={() => navigation.navigate('Scan', {id: item.id})}
                   style={styles.scanstyle}>
                   <Text style={styles.scanText}>Scan</Text>
                 </TouchableOpacity>

@@ -90,3 +90,4 @@ export const deleteEventById = async id => makeApiRequest(`/events/${id}`, {}, '
 export const getEventCategoryByUserId = async (id, page, take, filter) => makeApiRequest(`/events/categorize/byUserId/${id}?order=DESC&page=${page}&take=${take}&filter=${filter}`, {}, 'GET', true);
 export const getEventUserChat = async (userId, eventId) => makeApiRequest(`/events/chats/user/${userId}/event/${eventId}`, {}, 'GET', true);
 export const getChatMessages = async (userId, filter) => makeApiRequest(`/events/chats/user/${userId}?order=DESC&page=1&take=100&filter=${filter}`, {}, 'GET', true);
+export const invitationScan = async (url) => makeApiRequest(`${url}`, {}, 'GET', true);
