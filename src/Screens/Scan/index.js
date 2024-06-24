@@ -27,15 +27,26 @@ import {SF, SW, SH, Colors} from '../../utils';
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import IconF from 'react-native-vector-icons/AntDesign';
-import {eventId} from '../../Services/ApiList';
+import {baseUrl, eventId, invitationScan} from '../../Services/ApiList';
+import Snackbar from 'react-native-snackbar';
 
 const Scan = ({route}) => {
   const [events, setEvents] = useState([]);
+  const [checkStatus, setCheckStatus] = useState(false);
+  const [invitationURL, setInviationURL] = useState(null);
   const onSuccess = e => {
-    Linking.openURL(e.data).catch(err =>
-      console.error('An error occurred', err),
-    );
+    if(e.data && checkStatus == false) {
+      setCheckStatus(true);
+      const apiURL = e.data;
+      const url = apiURL.split(baseUrl);
+
+      setInviationURL(url[1]);
+    }
+    // Linking.openURL(e.data).catch(err =>
+    //   console.error('An error occurred', err),
+    // );
   };
+
   const cameraRef = useRef(null);
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -64,6 +75,47 @@ const Scan = ({route}) => {
       // Cleanup logic if needed
     };
   }, []);
+
+  const resetQrScanHandler = () => {
+    setTimeout(() => {
+      setCheckStatus(false);
+      setInviationURL(null);
+    }, 6000);
+  }
+
+  const getScanQrStatus = async () => {
+    try {
+      const response = await invitationScan(invitationURL);
+
+      if(response?.data?.message) {
+        Snackbar.show({
+          text: `${response.data.message}`,
+          duration: Snackbar.LENGTH_LONG,
+          backgroundColor: 'green',
+        });
+        resetQrScanHandler();
+      } 
+    } catch (e) {
+      Snackbar.show({
+        text: `${e.message}`,
+        duration: Snackbar.LENGTH_LONG,
+        backgroundColor: 'red',
+        
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Fetch data from the EventId API
+    if(checkStatus) {
+      getScanQrStatus();
+    }
+
+    // Cleanup function
+    return () => {
+      // Cleanup logic if needed
+    };
+  }, [checkStatus]);
 
   const handleEventPress = event => {
     // Handle event press here, you can navigate to event details screen or perform any action
@@ -109,7 +161,7 @@ const Scan = ({route}) => {
           <QRCodeScanner
             onRead={onSuccess}
             bottomContent={
-              <TouchableOpacity style={Scanstyle.buttonTouchable}>
+              <TouchableOpacity style={Scanstyle.buttonTouchable} onPress={() => navigation.goBack()}>
                 <Text style={Scanstyle.buttonText}>OK. Got it!</Text>
               </TouchableOpacity>
             }
